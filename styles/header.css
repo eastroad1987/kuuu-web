@@ -1,0 +1,143 @@
+/* Main Header Container */
+.header {
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #fff;
+  border-bottom: 1px solid #f0f0f0;
+  z-index: 1000;
+}
+
+/* Logo Styling */
+.header-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: #333;
+  text-decoration: none;
+  letter-spacing: 0.5px;
+}
+
+/* Navigation Container */
+/* .nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.main-nav {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 16px;
+}
+.main-nav-categories {
+  display: flex;
+  gap: 32px;
+} */
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+/* Main Navigation */
+.main-nav {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 16px;
+}
+.main-nav-categories {
+  display: flex;
+  gap: 32px;
+}
+
+/* Navigation Links */
+.nav-link {
+  font-size: 15px;
+  color: #444;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 8px 0;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+/* Hover Effect for Links */
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #000;
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover {
+  color: #000;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* Responsive Design */
+/* @media (max-width: 768px) {
+  .nav-container {
+    flex-direction: column;
+    padding: 15px;
+  }
+
+  .main-nav {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+  .main-nav-categories {
+    display: none;
+  }
+
+  .nav-link {
+    display: block;
+    text-align: center;
+  }
+} */
+
+
+.hamburger-button {
+  @apply p-2 focus:outline-none;
+}
+
+.hamburger {
+  @apply w-6 h-5 relative flex flex-col justify-between;
+}
+
+.line {
+  @apply w-full h-0.5 bg-gray-800 transition-all duration-300;
+}
+
+.hamburger.open .line:nth-child(1) {
+  @apply transform rotate-45 translate-y-2;
+}
+
+.hamburger.open .line:nth-child(2) {
+  @apply opacity-0;
+}
+
+.hamburger.open .line:nth-child(3) {
+  @apply transform -rotate-45 -translate-y-2.5;
+}
