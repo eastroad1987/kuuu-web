@@ -1,0 +1,39 @@
+.side-menu-content {
+  @apply flex flex-col;
+}
+
+.side-menu-header {
+  @apply p-4 border-b border-gray-100 flex justify-end;
+}
+
+.close-button {
+  @apply text-2xl text-gray-500 hover:text-gray-700 focus:outline-none;
+}
+
+.side-menu-links {
+  @apply p-4 overflow-y-auto;
+}
+
+.menu-item {
+  @apply mb-4;
+}
+
+.menu-link {
+  @apply block py-2 text-gray-700 hover:text-gray-900 font-medium;
+}
+
+.menu-link.active {
+  @apply text-blue-600;
+}
+
+.submenu {
+  @apply ml-4 mt-2 space-y-2;
+}
+
+.submenu-link {
+  @apply block py-1 text-gray-600 hover:text-gray-800;
+}
+
+.submenu-link.active {
+  @apply text-blue-500;
+}
