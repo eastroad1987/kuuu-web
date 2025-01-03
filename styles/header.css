@@ -4,13 +4,21 @@
   left: 0;
   width: 100%;
   background-color: #fff;
-  border-bottom: 1px solid #f0f0f0;
   z-index: 1000;
+}
+.header.title {
+  font-size: 4rem;
+  font-family: "Waltograph", cursive;
+  color: rgba(255, 192, 203, 1); /* Inner lighter pink */
+  text-shadow:
+    0px 0px 5px rgba(255, 182, 193, 0.7),
+    3px 3px 6px rgba(255, 105, 135, 1),
+    -3px -3px 6px rgba(255, 105, 135, 1); /* Additional depth */ 
 }
 
 /* Logo Styling */
 .header-logo {
-  font-family: 'Playfair Display', serif;
+  font-family: "Playfair Display", serif;
   font-size: 28px;
   font-weight: 700;
   color: #333;
@@ -75,7 +83,7 @@
 
 /* Hover Effect for Links */
 .nav-link::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 0;
   left: 0;
@@ -117,21 +125,20 @@
   }
 } */
 
-
 .hamburger-button {
   @apply p-2 focus:outline-none;
 }
 
 .hamburger {
-  @apply w-6 h-5 relative flex flex-col justify-between;
+  @apply relative flex h-5 w-6 flex-col justify-between;
 }
 
 .line {
-  @apply w-full h-0.5 bg-gray-800 transition-all duration-300;
+  @apply h-0.5 w-full bg-gray-800 transition-all duration-300;
 }
 
 .hamburger.open .line:nth-child(1) {
-  @apply transform rotate-45 translate-y-2;
+  @apply translate-y-2 rotate-45 transform;
 }
 
 .hamburger.open .line:nth-child(2) {
@@ -139,5 +146,5 @@
 }
 
 .hamburger.open .line:nth-child(3) {
-  @apply transform -rotate-45 -translate-y-2.5;
+  @apply -translate-y-2.5 -rotate-45 transform;
 }
