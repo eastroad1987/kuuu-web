@@ -16,12 +16,12 @@ const Header = ({ isSideMenuOpen, toggleSideMenu }: HeaderProps) => {
         <div className="main-nav">
           {/* <Hamburger isOpen={isSideMenuOpen} onClick={toggleSideMenu} /> */}
           <Link href="/" className="header-logo">
-            Kuuu's Blog
+            <h1 className="header title">Kuuu's Blog</h1>
           </Link>
-          <br />
+          {/* <br /> */}
         </div>
 
-        <nav className="main-nav-categories">
+        {/* <nav className="main-nav-categories">
           <Link href="/" className="nav-link">
             Home
           </Link>
@@ -37,7 +37,7 @@ const Header = ({ isSideMenuOpen, toggleSideMenu }: HeaderProps) => {
           <Link href="/other" className="nav-link">
             その他
           </Link>
-        </nav>
+        </nav> */}
       </div>
     </header>
   );

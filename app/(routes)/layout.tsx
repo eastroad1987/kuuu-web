@@ -19,7 +19,7 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
         // toggleSideMenu={toggleSideMenu}
       />
       <Layout.Content>{children}</Layout.Content>
-      <Layout.Footer />
+      {/* <Layout.Footer /> */}
     </Layout>
   );
 };
