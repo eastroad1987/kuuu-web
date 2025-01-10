@@ -7,7 +7,7 @@
   z-index: 1000;
 }
 .header.title {
-  font-size: 4rem;
+  font-size: 3rem;
   font-family: "Waltograph", cursive;
   color: rgba(255, 192, 203, 1); /* Inner lighter pink */
   text-shadow:
@@ -50,6 +50,7 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
+  height: 100px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;

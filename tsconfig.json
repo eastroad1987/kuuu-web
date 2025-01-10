@@ -28,6 +28,9 @@
       "@/app/*": [
         "./app/(routes)/*"
       ],
+      "@/context/*": [
+        "./app/context/*"
+      ],
       "@/components/*": [
         "./components/*"
       ],

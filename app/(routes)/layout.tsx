@@ -14,10 +14,10 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <Layout>
       {/* {isSideMenuOpen && <Layout.SideMenu />} */}
-      <Layout.Header
-        // isSideMenuOpen={isSideMenuOpen}
-        // toggleSideMenu={toggleSideMenu}
-      />
+      {/* <Layout.Header
+        isSideMenuOpen={isSideMenuOpen}
+        toggleSideMenu={toggleSideMenu}
+      /> */}
       <Layout.Content>{children}</Layout.Content>
       {/* <Layout.Footer /> */}
     </Layout>
