@@ -32,7 +32,9 @@ export default function ProfileContent({ show }: InputProps) {
           </div>
         </div>
         <div className="profile-right-container">
-          <div className={`relative w-full h-full ${show ? "animate-slide-left" : ""}`}>
+          <div
+            className={`relative h-full w-full ${show ? "animate-slide-left" : ""}`}
+          >
             <Image
               src="/images/kurumi2.png"
               alt="profile"
@@ -55,7 +57,7 @@ function LineSvg() {
       viewBox="0 0 200 20"
       fill="none"
       stroke="white"
-      stroke-width="2"
+      // stroke-width="2"
     >
       <line x1="10" y1="10" x2="190" y2="10"></line>
       <rect
@@ -89,12 +91,6 @@ function LetterIcon() {
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 512 512"
     >
-      <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-      <g
-        id="SVGRepo_tracerCarrier"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      ></g>
       <g id="SVGRepo_iconCarrier">
         {" "}
         <g>
@@ -118,11 +114,14 @@ function OpenLetterIcon() {
       viewBox="0 0 272.814 272.814"
       fill="#000000"
     >
-      <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+      <g
+        id="SVGRepo_bgCarrier"
+        // stroke-width="0"
+      ></g>
       <g
         id="SVGRepo_tracerCarrier"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        // stroke-linecap="round"
+        // stroke-linejoin="round"
       ></g>
       <g id="SVGRepo_iconCarrier">
         {" "}

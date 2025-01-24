@@ -41,15 +41,6 @@ function LayoutHeader({ isSideMenuOpen, toggleSideMenu }: LayoutHeaderProps) {
   );
 }
 
-function LayoutSideMenu() {
-  return (
-    <SideMenu
-      onClose={function (): void {
-        throw new Error("Function not implemented.");
-      }}
-    />
-  );
-}
 
 function LayoutFooter() {
   return <Footer />;
@@ -57,7 +48,6 @@ function LayoutFooter() {
 
 Layout.Header = LayoutHeader;
 Layout.Content = Content;
-Layout.SideMenu = LayoutSideMenu;
 Layout.Footer = LayoutFooter;
 
 export default Layout;

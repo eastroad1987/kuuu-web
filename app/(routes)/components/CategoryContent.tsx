@@ -17,7 +17,7 @@ export default function CategoryContent({ show }: InputProps) {
               <h2 className="text-4xl font-bold text-black">Category</h2>
             </div>
             <Link
-              href="/culture"
+              href="/category/0"
               className={`flex h-[65%] w-full flex-col items-center justify-center bg-[#ffc212] ${show ? "animate-slide-right" : ""}`}
             >
               <h2 className="text-4xl font-bold">Musical & Movie</h2>
@@ -37,7 +37,7 @@ export default function CategoryContent({ show }: InputProps) {
               </div>
             </div>
             <Link
-              href="/life"
+              href="/category/1"
               className={`flex h-full w-[55%] flex-col items-center justify-center bg-[#0b3b10] ${show ? "animate-slide-down" : ""}`}
             >
               <h2 className="text-4xl font-bold">Life</h2>
@@ -47,7 +47,7 @@ export default function CategoryContent({ show }: InputProps) {
         <div className="category-bottom-container">
           <div className="flex h-full w-[50%] flex-row items-center justify-center">
             <Link
-              href="/food"
+              href="/category/2"
               className={`flex h-full w-full flex-col items-center justify-center bg-[#1f2f57] ${show ? "animate-slide-up" : ""}`}
             >
               <h2 className="text-4xl font-bold">CAFE & Restaurant</h2>
@@ -65,7 +65,7 @@ export default function CategoryContent({ show }: InputProps) {
           </div>
           <div className="flex h-full w-[50%] flex-row items-center justify-center">
             <Link
-              href="/sightseeing"
+              href="/category/3"
               className={`flex h-full w-full flex-col items-center justify-center bg-[#d62c28] ${show ? "animate-slide-left" : ""}`}
             >
               <h2 className="text-4xl font-bold">Sightseeing</h2>

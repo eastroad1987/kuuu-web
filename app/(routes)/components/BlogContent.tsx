@@ -23,7 +23,7 @@ export default function BlogContent({ show }: InputProps) {
     { id: 7, title: "Blog 7", content: "This is the content of blog 7." },
   ];
 
-  const [value, setValue] = useState(new Date());
+  const [value, setValue] = useState(moment().format("YYYY-MM-DD"));
   const [mark, setMark] = useState([]);
 
   const [visibleItems, setVisibleItems] = useState<number[]>([]);
@@ -42,11 +42,11 @@ export default function BlogContent({ show }: InputProps) {
     if (arrayIndex === 0 || arrayIndex === 4) {
       scale = 0.6;
       yOffset = arrayIndex === 0 ? 0 : baseOffset * 4;
-      blur = 2;
+      blur = 1;
       zIndex = 1;
     } else if (arrayIndex === 1 || arrayIndex === 3) {
       scale = 0.8;
-      blur = 1;
+      blur = 0.5;
       yOffset = arrayIndex === 1 ? baseOffset * 0.8 : baseOffset * 3.15;
       zIndex = 2;
     } else {
@@ -64,8 +64,10 @@ export default function BlogContent({ show }: InputProps) {
       zIndex,
     };
   };
-
+  const [isClient, setIsClient] = useState(false)
+  
   useEffect(() => {
+    setIsClient(true)
     setWindowHeight(window.innerHeight);
     const handleResize = () => setWindowHeight(window.innerHeight);
     window.addEventListener("resize", handleResize);
@@ -97,7 +99,7 @@ export default function BlogContent({ show }: InputProps) {
 
   return (
     <section
-      className={`flex h-full w-full flex-row items-center justify-between bg-red-500`}
+      className={`flex h-full w-full flex-row items-center justify-between bg-white`}
     >
       <div className="h-full w-[50%]">
         <div className="relative h-screen w-full overflow-hidden p-4">
@@ -145,7 +147,7 @@ export default function BlogContent({ show }: InputProps) {
                         ease: [0.32, 0.72, 0, 1],
                       },
                     }}
-                    className="absolute w-[100%] rounded-lg bg-white p-4 shadow-md"
+                    className="absolute w-[100%] p-4"
                     style={{
                       top: 0, // 윈도우 높이의 30% 위치에 배치
                       filter,
@@ -180,33 +182,37 @@ export default function BlogContent({ show }: InputProps) {
         </div>
       </div>
       <div className="h-full w-[50%]">
-        <div className="calendar-container">
-          <Calendar
-            onChange={handleChange} // useState로 포커스 변경 시 현재 날짜 받아오기
-            formatDay={(locale, date) => moment(date).format("DD")} // 날'일' 제외하고 숫자만 보이도록 설정
-            value={value}
-            minDetail="month" // 상단 네비게이션에서 '월' 단위만 보이게 설정
-            maxDetail="month" // 상단 네비게이션에서 '월' 단위만 보이게 설정
-            showNeighboringMonth={false} //  이전, 이후 달의 날짜는 보이지 않도록 설정
-            className="mx-auto w-full border-b text-sm"
-            tileContent={({ date, view }) => {
-              // 날짜 타일에 컨텐츠 추가하기 (html 태그)
-              // 추가할 html 태그를 변수 초기화
-              let html = [];
-              // 현재 날짜가 post 작성한 날짜 배열(mark)에 있다면, dot div 추가
-              if (mark.find((x) => x === moment(date).format("YYYY-MM-DD"))) {
-                html.push(<div className="dot"></div>);
-              }
-              // 다른 조건을 주어서 html.push 에 추가적인 html 태그를 적용할 수 있음.
-              return (
-                <>
-                  <div className="absoluteDiv flex items-center justify-center">
-                    {html}
-                  </div>
-                </>
-              );
-            }}
-          />
+        <div className="flex h-full w-full flex-col items-center justify-center">
+          {isClient&&
+            <div className="calendar-container">
+              <Calendar
+                onChange={handleChange} // useState로 포커스 변경 시 현재 날짜 받아오기
+                formatDay={(locale, date) => moment(date).format("DD")} // 날'일' 제외하고 숫자만 보이도록 설정
+                value={value}
+                minDetail="month" // 상단 네비게이션에서 '월' 단위만 보이게 설정
+                maxDetail="month" // 상단 네비게이션에서 '월' 단위만 보이게 설정
+                showNeighboringMonth={false} //  이전, 이후 달의 날짜는 보이지 않도록 설정
+                className="w-full h-full border-b text-sm"
+                // tileContent={({ date, view }) => {
+                //   // 날짜 타일에 컨텐츠 추가하기 (html 태그)
+                //   // 추가할 html 태그를 변수 초기화
+                //   let html = [];
+                //   // 현재 날짜가 post 작성한 날짜 배열(mark)에 있다면, dot div 추가
+                //   if (mark.find((x) => x === moment(date).format("YYYY-MM-DD"))) {
+                //     html.push(<div className="dot"></div>);
+                //   }
+                //   // 다른 조건을 주어서 html.push 에 추가적인 html 태그를 적용할 수 있음.
+                //   return (
+                //     <>
+                //       <div className="absoluteDiv flex h-full w-full items-center justify-center">
+                //         {html}
+                //       </div>
+                //     </>
+                //   );
+                // }}
+              />
+            </div>
+          }
         </div>
       </div>
     </section>

@@ -14,7 +14,7 @@ export default function HomePage() {
       { id: 2, children: <MainLayout.Category show={currentSection === 2} /> },
       { id: 3, children: <MainLayout.Blogs show={currentSection === 3} /> },
     ];
-  }, [currentSection])
+  }, [currentSection]);
 
   useEffect(() => {
     // 스크롤 이벤트 리스너 추가
@@ -48,15 +48,21 @@ export default function HomePage() {
   };
 
   return (
-    <div className="h-screen w-full overflow-hidden">
-      <MainLayout currentSection={currentSection}>
-        {sections.map((section) => section.children)}
-      </MainLayout>
-      <MainLayout.Dots
-        total={sections.length}
-        current={currentSection}
-        onPageChange={setCurrentSection}
-      />
+    <div className="flex h-screen w-full flex-col items-center justify-start">
+      <main className="h-screen w-full max-w-[1280px] overflow-hidden">
+        <MainLayout currentSection={currentSection}>
+          {sections.map((section, idx) => (
+            <div key={idx} className="h-full w-full">
+              {section.children}
+            </div>
+          ))}
+        </MainLayout>
+        <MainLayout.Dots
+          total={sections.length}
+          current={currentSection}
+          onPageChange={setCurrentSection}
+        />
+      </main>
     </div>
   );
 }
