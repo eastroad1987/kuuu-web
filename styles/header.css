@@ -135,7 +135,7 @@
 }
 
 .line {
-  @apply h-0.5 w-full bg-gray-800 transition-all duration-300;
+  @apply h-0.5 w-full bg-white transition-all duration-300;
 }
 
 .hamburger.open .line:nth-child(1) {

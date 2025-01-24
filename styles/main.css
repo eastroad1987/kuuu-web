@@ -100,7 +100,7 @@
 }
 
 .profile-left-container {
-  background-color: #1f2f57;
+  background-color: #d62c28;
   color: #ffffff;
   display: flex;
   flex-direction: column;
@@ -117,7 +117,7 @@
 }
 
 .profile-text {
-  background-color: #1f2f57;
+  background-color: #d62c28;
   width: 100%;
   color: #ffffff;
   display: flex;
