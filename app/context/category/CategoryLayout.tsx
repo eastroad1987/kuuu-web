@@ -5,6 +5,7 @@ import CategoryPosts from "@/app/category/components/Posts";
 
 import { createContext, ReactNode } from "react";
 import { Board, Post, SubBoard } from "../../../types/types";
+import SideMenu from "@/components/common/SideMenu";
 
 interface LayoutContextType {
   id: string;
@@ -32,9 +33,10 @@ const CategoryLayout = ({ children, id = "0" }: LayoutProps) => {
 interface HeaderInputProps {
   title: string;
   color: string;
+  toggleSideMenu: () => void;
 }
-function Header({ title, color }: HeaderInputProps) {
-  return <CategoryHeader title={title} color={color} />;
+function Header({ title, color, toggleSideMenu }: HeaderInputProps) {
+  return <CategoryHeader title={title} color={color} toggleSideMenu={toggleSideMenu} />;
 }
 
 interface BoardsInputProps {
@@ -53,8 +55,22 @@ function Posts({ posts }: PostsInputProps) {
   return <CategoryPosts posts={posts} />;
 }
 
+interface SideMenuProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+function CategorySideMenu({ isOpen, onClose }: SideMenuProps) {
+  return (
+    <SideMenu
+      isOpen={isOpen}
+      onClose={onClose}
+    />
+  );
+}
+
 CategoryLayout.Header = Header;
 CategoryLayout.Boards = Boards;
+CategoryLayout.SideMenu = CategorySideMenu;
 CategoryLayout.Posts = Posts;
 
 export default CategoryLayout;

@@ -28,7 +28,7 @@ export default function PostHeader({
       <div
         className={`flex h-full flex-col items-end justify-between`}
       >
-        <Hamburger onClick={toggleSideMenu} />
+        <Hamburger onClick={toggleSideMenu} color={"white"} />
         <h1 className="text-[24px] font-bold text-white">{date.toLocaleDateString()}</h1>
       </div>
     </header>

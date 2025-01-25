@@ -2,9 +2,10 @@
 interface HamburgerProps {
   isOpen?: boolean;
   onClick?: () => void;
+  color?: string;
 }
 
-const Hamburger = ({ isOpen, onClick }: HamburgerProps) => {
+const Hamburger = ({ isOpen, onClick, color = "black" }: HamburgerProps) => {
   return (
     <button 
       className="hamburger-button"
@@ -13,9 +14,9 @@ const Hamburger = ({ isOpen, onClick }: HamburgerProps) => {
       aria-expanded={isOpen}
     >
       <div className={`hamburger ${isOpen ? 'open' : ''}`}>
-        <span className="line"></span>
-        <span className="line"></span>
-        <span className="line"></span>
+        <span className={`line bg-${color}`}></span>
+        <span className={`line bg-${color}`}></span>
+        <span className={`line bg-${color}`}></span>
       </div>
     </button>
   );

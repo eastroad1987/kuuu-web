@@ -1,6 +1,7 @@
 "use client";
 import CategoryLayout from "@/context/category/CategoryLayout";
 import { Board, Post, SubBoard, YNEnum } from "../../../../types/types";
+import { useState } from "react";
 
 interface PageProps {
   id: string;
@@ -113,11 +114,14 @@ const CategoryPage = ({ params }: { params: PageProps }) => {
     },
   ];
 
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
     <CategoryLayout id={id}>
-      <CategoryLayout.Header title={title} color={color} />
+      <CategoryLayout.Header title={title} color={color} toggleSideMenu={() => setIsOpen(!isOpen)} />
       <CategoryLayout.Boards id={id} board={boards[parseInt(id)]} subBoards={subBoards} />
       <CategoryLayout.Posts posts={posts} />
+      <CategoryLayout.SideMenu isOpen={isOpen} onClose={() => setIsOpen(false) } />
     </CategoryLayout>
   );
 };

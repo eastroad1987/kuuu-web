@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import React, { useState } from "react";
 import ReactQuill from "react-quill";
 
@@ -72,19 +73,16 @@ export default function AdminPage() {
     console.log(content);
   };
 
-  const handleBack = () => {
-    console.log("back");
-  };
-
   return (
-    <div className="flex flex-col items-center justify-start w-full mt-10">
+    <div className="mt-10 flex w-full flex-col items-center justify-start">
       <div className="flex flex-row items-center justify-start gap-8">
-        <button onClick={handleBack}>돌아가기</button>
-        <button onClick={handlePreview}>미리보기</button>
-        <button onClick={handleSubmit}>저장</button>
+        <Link href="/">Go To Home</Link>
+        <button onClick={handleSubmit}>Save</button>
       </div>
       <div className="flex max-w-lg flex-col items-center justify-start">
-        <label htmlFor="title" className="mt-16">Thumbnail</label>
+        <label htmlFor="title" className="mt-16">
+          Thumbnail
+        </label>
         <button className="btn btn-primary mt-5">
           <img
             className="mask mask-squircle size-25"
@@ -93,7 +91,7 @@ export default function AdminPage() {
           />
         </button>
         <label htmlFor="title" className="mt-10">
-          제목
+          Title
         </label>
         <input
           type="text"
