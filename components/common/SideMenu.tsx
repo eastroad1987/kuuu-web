@@ -1,9 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useEffect } from "react";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPenToSquare, faUser } from "@fortawesome/free-regular-svg-icons";
 interface SubMenuItem {
   title: string;
   href: string;
@@ -75,37 +74,35 @@ interface SideMenuProps {
 }
 
 const SideMenu = ({ isOpen, onClose }: SideMenuProps) => {
-  const pathname = usePathname();
-
-  useEffect(() => {
-    if (isOpen) {
-      document.addEventListener("mousedown", onClose);
-    } else {
-      document.removeEventListener("mousedown", onClose);
-    }
-    return () => {
-      document.removeEventListener("mousedown", onClose);
-    };
-  }, [isOpen]);
-
   return (
     <>
-      {isOpen && <div className="side-menu-overlay" />}
+      {isOpen && <div className="side-menu-overlay" onClick={onClose} />}
       <nav className={`side-menu ${isOpen ? "open" : ""}`}>
         <ul>
           <li>
-            <a href="#home">Home</a>
+            <Link href="/">Home</Link>
           </li>
           <li>
-            <a href="#about">About</a>
+            <Link href="/category/0">Musical & Movie</Link>
           </li>
           <li>
-            <a href="#services">Services</a>
+            <Link href="/category/1">Life</Link>
           </li>
           <li>
-            <a href="#contact">Contact</a>
+            <Link href="/category/2">CAFE & Restaurant</Link>
+          </li>
+          <li>
+            <Link href="/category/3">Sightseeing</Link>
           </li>
         </ul>
+        <li className="flex w-full flex-row items-end justify-end">
+          <Link href="/admin" className="h-[24px] w-[24px]">
+            <FontAwesomeIcon icon={faPenToSquare} />
+          </Link>
+          <Link href="/" className="h-[24px] w-[24px]">
+            <FontAwesomeIcon icon={faUser} />
+          </Link>
+        </li>
       </nav>
     </>
   );
