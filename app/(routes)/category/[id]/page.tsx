@@ -1,6 +1,6 @@
 "use client";
 import CategoryLayout from "@/context/category/CategoryLayout";
-import { Board, Post, SubBoard, YNEnum } from "../../../../types/types";
+import { Post, YNEnum } from "../../../../types/types";
 import { useState } from "react";
 
 interface PageProps {
@@ -27,13 +27,13 @@ const CategoryPage = ({ params }: { params: PageProps }) => {
           : "#D62C28";
 
   // Dummy Data
-  const boards: Board[] = [
+  const boards: any[] = [
     { board_name: "General Discussion" },
     { board_name: "Tech News" },
     { board_name: "Lifestyle" },
   ];
 
-  const subBoards: SubBoard[] = [
+  const subBoards: any[] = [
     {
       board_name: "General Discussion",
       anonymous_yn: YNEnum.Y,
@@ -75,7 +75,7 @@ const CategoryPage = ({ params }: { params: PageProps }) => {
     },
   ];
 
-  const posts: Post[] = [
+  const posts: any[] = [
     {
       id: 1,
       created_at: new Date("2025-01-12T10:00:00"),
@@ -89,7 +89,6 @@ const CategoryPage = ({ params }: { params: PageProps }) => {
       board_id: 1,
     },
     {
-      id: 2,
       created_at: new Date("2025-01-12T11:00:00"),
       writer_id: 102,
       writer_name: "Jane Smith",
