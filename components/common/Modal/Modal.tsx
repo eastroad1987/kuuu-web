@@ -14,8 +14,9 @@ export default function Modal({ children }: ModalProps) {
   };
 
   return (
-    <div className="fixed inset-0 z-[1001] bg-black/50">
-      <div className="fixed inset-0 flex items-center justify-center">
+    <div className="absolute inset-0 z-[9999]">
+      <div className="absolute inset-0 bg-black/60" onClick={onClose} />
+      <div className="absolute inset-0 flex items-center justify-center">
         <div className="w-[400px] rounded-lg bg-white p-6">
           {children}
           <div className="mt-4 flex justify-end gap-2">
