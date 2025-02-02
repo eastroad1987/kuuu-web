@@ -3,6 +3,9 @@
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare, faUser } from "@fortawesome/free-regular-svg-icons";
+import ModalTrigger from "./Modal/ModalTrigger";
+// import { useAuth } from "../../hooks/useAuth";
+
 interface SubMenuItem {
   title: string;
   href: string;
@@ -74,6 +77,9 @@ interface SideMenuProps {
 }
 
 const SideMenu = ({ isOpen, onClose }: SideMenuProps) => {
+  // const { session, status, isAuthenticated, isLoading, user } = useAuth();
+  // console.log(session, status, isAuthenticated, isLoading, user);
+  
   return (
     <>
       {isOpen && <div className="side-menu-overlay" onClick={onClose} />}
@@ -96,12 +102,16 @@ const SideMenu = ({ isOpen, onClose }: SideMenuProps) => {
           </li>
         </ul>
         <li className="flex w-full flex-row items-end justify-end">
-          <Link href="/admin" className="h-[24px] w-[24px]">
-            <FontAwesomeIcon icon={faPenToSquare} />
-          </Link>
-          <Link href="/" className="h-[24px] w-[24px]">
-            <FontAwesomeIcon icon={faUser} />
-          </Link>
+          <ModalTrigger href="/auth">
+            <div className="h-[24px] w-[24px]">
+              <FontAwesomeIcon icon={faPenToSquare} />
+            </div>
+          </ModalTrigger>
+          <ModalTrigger href="/">
+            <div className="h-[24px] w-[24px]">
+              <FontAwesomeIcon icon={faUser} />
+            </div>
+          </ModalTrigger>
         </li>
       </nav>
     </>

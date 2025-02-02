@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 
-import { Inter } from "next/font/google";
+import "@/styles/globals.css";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
-import "@/styles/globals.css";
+import { Inter } from "next/font/google";
 import "react-quill/dist/quill.snow.css";
 
+import AuthProvider from "@/components/auth/AuthProvider";
 import ReactQueryProviders from "@/components/provider/reactQuery";
 import ReduxProvider from "@/components/provider/redux";
 
@@ -20,16 +21,21 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  modal,
 }: {
   children: React.ReactNode;
+  modal: React.ReactNode;
 }) {
   return (
     <html lang="en">
-      <ReactQueryProviders>
-        <ReduxProvider>
-          <body>{children}</body>
-        </ReduxProvider>
-      </ReactQueryProviders>
+      <AuthProvider>
+        <ReactQueryProviders>
+          <ReduxProvider>
+            <body>{children}</body>
+            {/* {modal} */}
+          </ReduxProvider>
+        </ReactQueryProviders>
+      </AuthProvider>
     </html>
   );
 }
