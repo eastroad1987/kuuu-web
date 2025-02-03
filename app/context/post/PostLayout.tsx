@@ -3,7 +3,7 @@
 import PostHeader from "@/app/post/components/Header";
 import PostContent from "@/app/post/components/Post";
 import { createContext, ReactNode } from "react";
-import { Post } from "../../../types/types";
+import { Post } from "../../../types/entities";
 import SideMenu from "@/components/common/SideMenu";
 
 interface LayoutContextType {

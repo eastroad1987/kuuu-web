@@ -1,6 +1,6 @@
 "use client";
 import CategoryLayout from "@/context/category/CategoryLayout";
-import { Board, Post, SubBoard, YNEnum } from "../../../../types/types";
+import { Post } from "../../../../types/entities";
 import PostLayout from "@/context/post/PostLayout";
 import { useEffect, useRef, useState } from "react";
 
@@ -30,7 +30,7 @@ const PostPage = ({ params }: { params: PageProps }) => {
 
   // Dummy Data
   const post: Post = {
-    id: 1,
+    id: 12,
     created_at: new Date("2025-01-12T10:00:00"),
     writer_id: 101,
     writer_name: "John Doe",

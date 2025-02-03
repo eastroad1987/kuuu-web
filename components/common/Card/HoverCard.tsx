@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Post } from "../../../types/types";
+import { Post } from "../../../types/entities";
 
 interface InputProps {
   post: Post;

@@ -28,16 +28,16 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
-        <AuthProvider>
-          <ReactQueryProviders>
-            <ReduxProvider>
+      <AuthProvider>
+        <ReactQueryProviders>
+          <ReduxProvider>
+            <body>
               {modal}
               {children}
-            </ReduxProvider>
-          </ReactQueryProviders>
-        </AuthProvider>
-      </body>
+            </body>
+          </ReduxProvider>
+        </ReactQueryProviders>
+      </AuthProvider>
     </html>
   );
 }

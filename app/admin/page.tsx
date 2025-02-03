@@ -69,6 +69,10 @@ export default function AdminPage() {
     }
   };
 
+  const handleContentChange = (value: string) => {
+    setContent(value);
+  };
+
   const handlePreview = () => {
     console.log(content);
   };
@@ -99,16 +103,19 @@ export default function AdminPage() {
           aria-label="input"
           onChange={handleTitleChange}
         />
-        <ReactQuill
-          ref={quillRef}
-          id={"quill-editor"}
-          className="text-editor mt-10"
-          style={{ width: "100%", height: "400px" }}
-          formats={formats}
-          modules={modules}
-          theme="snow"
-          value={content}
-        />
+        {typeof window !== "undefined" && (
+          <ReactQuill
+            ref={quillRef}
+            id={"quill-editor"}
+            className="text-editor mt-10"
+            style={{ width: "100%", height: "400px" }}
+            formats={formats}
+            modules={modules}
+            theme="snow"
+            value={content}
+            onChange={handleContentChange}
+          />
+        )}
       </div>
     </div>
   );
