@@ -4,7 +4,7 @@ import CategoryHeader from "@/app/category/components/Header";
 import CategoryPosts from "@/app/category/components/Posts";
 
 import { createContext, ReactNode } from "react";
-import { Board, Post, SubBoard } from "../../../types/types";
+import { Category, Post, SubCategory } from "../../../types/entities";
 import SideMenu from "@/components/common/SideMenu";
 
 interface LayoutContextType {
@@ -41,8 +41,8 @@ function Header({ title, color, toggleSideMenu }: HeaderInputProps) {
 
 interface BoardsInputProps {
   id: string;
-  board: Board;
-  subBoards: SubBoard[];
+  board: Category;
+  subBoards: SubCategory[];
 }
 function Boards({ id, board, subBoards }: BoardsInputProps) {
   return <CategoryBoards id={id} board={board} subBoards={subBoards} />;

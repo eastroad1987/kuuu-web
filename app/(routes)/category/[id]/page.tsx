@@ -1,7 +1,8 @@
 "use client";
 import CategoryLayout from "@/context/category/CategoryLayout";
-import { Post, YNEnum } from "../../../../types/types";
+
 import { useState } from "react";
+import { YNEnum } from "../../../../types/constants";
 
 interface PageProps {
   id: string;

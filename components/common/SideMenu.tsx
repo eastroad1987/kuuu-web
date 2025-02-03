@@ -102,12 +102,12 @@ const SideMenu = ({ isOpen, onClose }: SideMenuProps) => {
           </li>
         </ul>
         <li className="flex w-full flex-row items-end justify-end">
-          <ModalTrigger href="/auth">
+          <ModalTrigger href="/admin">
             <div className="h-[24px] w-[24px]">
               <FontAwesomeIcon icon={faPenToSquare} />
             </div>
           </ModalTrigger>
-          <ModalTrigger href="/">
+          <ModalTrigger href="/auth">
             <div className="h-[24px] w-[24px]">
               <FontAwesomeIcon icon={faUser} />
             </div>

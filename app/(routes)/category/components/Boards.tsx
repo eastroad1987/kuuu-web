@@ -1,11 +1,11 @@
 import Image from "next/image";
-import { Board, SubBoard } from "../../../../types/types";
+import { Category, SubCategory } from "../../../../types/entities";
 import CategoryButton from "@/components/common/CategoryButton";
 
 interface InputProps {
   id: string;
-  board: Board;
-  subBoards: SubBoard[];
+  board: Category;
+  subBoards: SubCategory[];
 }
 
 export default function CategoryBoards({ id, board, subBoards }: InputProps) {

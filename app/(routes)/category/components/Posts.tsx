@@ -1,5 +1,5 @@
 import HoverCard from "@/components/common/Card/HoverCard";
-import { Post } from "../../../../types/types";
+import { Post } from "../../../../types/entities";
 
 interface InputProps {
   posts: Post[];

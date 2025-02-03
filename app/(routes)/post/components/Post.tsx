@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Post } from "../../../../types/types";
+import { Post } from "../../../../types/entities";
 import CategoryButton from "@/components/common/CategoryButton";
 
 interface InputProps {
