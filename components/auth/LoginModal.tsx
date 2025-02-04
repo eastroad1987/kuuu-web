@@ -98,6 +98,7 @@ export default function LoginModal() {
 
             <button
               type="submit"
+              onClick={handleSubmit}
               disabled={isLoading}
               className="w-full rounded-md bg-blue-500 py-2 text-white hover:bg-blue-600 disabled:opacity-50"
             >
