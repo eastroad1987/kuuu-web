@@ -1,4 +1,4 @@
-import { CategoryResponse, PostResponse, SubCategoryResponse } from "./dto";
+import { CreatePostDto, PostResponse } from "./dto";
 import { Category, Post, SubCategory } from "./entities";
 
 export interface MainPageState {
@@ -39,27 +39,50 @@ export interface UseCategoryType {
 }
 
 export interface PostPageState {
-
+  isOpen: boolean;
+  id: string;
+  color: string;
+  title: string;
+  boardName: string;
+  date: Date;
+  post: Post;
 }
 
 export interface UsePostType {
   state: PostPageState;
   updateState: (updates: Partial<PostPageState>) => void;
   handlers: {
-    fetchPostData: () => void;
+    toggleSideMenu: () => void;
+    onSideMenuClose: () => void;
   };
 }
 
 export interface AdminWriterPageState {
-
+  date: Date;
+  form: CreatePostDto;
+  categories: Category[];
+  category: Category;
+  subCategories: SubCategory[];
+  subCategory: SubCategory;
+  isUploading: boolean;
+  progress: number;
+  thumbnailFile: any | null;
+  quillRef: any;
 }
 
 export interface UseAdminWriterType {
   state: AdminWriterPageState;
   updateState: (updates: Partial<AdminWriterPageState>) => void;
   handlers: {
-    fetchAdminWriterData: () => void;
+    clickSubmit: () => void;
+    changeCategory: (value: string) => void;
+    changeSubCategory: (value: string) => void;
+    changeFiles: (files: FileList | null) => void;
+    changeTitle: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    changeContent: (value: string) => void;
+    changeDate: (date: Date) => void;
   };
+  navigation: NavigationType;
 }
 
 export interface AuthPageState {

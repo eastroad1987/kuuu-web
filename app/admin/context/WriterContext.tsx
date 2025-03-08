@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext } from 'react';
-import { UseAdminWriterType } from '../types/types';
+import { UseAdminWriterType } from '@/types/types';
 
 const WriterContext = createContext<UseAdminWriterType | undefined>(undefined);
 

@@ -1,31 +1,46 @@
-import Image from "next/image";
-import { Post } from "../../../types/entities";
-import CategoryButton from "../../../components/common/CategoryButton";
+"use client";
 
-interface InputProps {
-  post: Post;
-}
+import SideMenu from "@/components/common/SideMenu";
+import { usePostContext } from "../context/PostContext";
+import PostHeader from "./Header";
+import PostContent from "./Post";
 
-export default function PostContent({ post }: InputProps) {
-  return (
-    <section className="flex h-[450px] w-full flex-col items-center justify-between">
-      <div style={{ textAlign: "center" }}>
-        <div className="content-container">
-          <img src={post?.thumbnail || ''} alt="Main Image" />
-          <div className="ql-show">
-            <div
-              className="ql-editor"
-              style={{
-                fontFamily: "Pretendard",
-                fontSize: 16,
-                fontWeight: 400,
-                lineHeight: "24px",
-              }}
-              dangerouslySetInnerHTML={{ __html: post?.content }}
-            />
-          </div>
+const PostComponents = {
+  Container: ({ children }: { children: React.ReactNode }) => {
+    const { state } = usePostContext();
+    return (
+      <div
+        className="flex h-full w-full flex-col items-center justify-start"
+        style={{ backgroundColor: state.color }}
+      >
+        <div className="flex h-full w-full max-w-[1280px] flex-col items-center justify-start">
+          {children}
         </div>
       </div>
-    </section>
-  );
-}
+    );
+  },
+  Header: () => {
+    const { state, handlers } = usePostContext();
+    return (
+      <PostHeader
+        toggleSideMenu={handlers.toggleSideMenu}
+        boardName={state.boardName}
+        title={state.title}
+        color={state.color}
+        date={state.date}
+      />
+    );
+  },
+  SideMenu: () => {
+    const { state, handlers } = usePostContext();
+    return (
+      <SideMenu isOpen={state.isOpen} onClose={handlers.onSideMenuClose} />
+    );
+  },
+  Post: () => {
+    const { state } = usePostContext();
+    return <PostContent post={state.post} />;
+  },
+};
+
+export default PostComponents;

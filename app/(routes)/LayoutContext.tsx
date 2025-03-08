@@ -1,25 +1,24 @@
 "use client";
-import Footer from "./Footer";
-import Header from "./Header";
-import SideMenu from "./SideMenu";
+import Footer from "../components/common/Footer";
+import Header from "../components/common/Header";
 
 import { createContext, ReactNode } from "react";
 
 interface LayoutContextType {
-  isScrollable: boolean;
+  backgroundColor: string;
 }
 
 const LayoutContext = createContext<LayoutContextType | undefined>(undefined);
 
 interface LayoutProps {
   children: ReactNode;
-  isScrollable?: boolean;
+  backgroundColor: string;
 }
 
-const Layout = ({ children, isScrollable = true }: LayoutProps) => {
+const Layout = ({ children, backgroundColor }: LayoutProps) => {
   return (
-    <LayoutContext.Provider value={{ isScrollable }}>
-      <div className="scrollbar-none mt-0 flex h-screen w-full flex-col items-stretch justify-start overflow-y-auto bg-white">
+    <LayoutContext.Provider value={{ backgroundColor }}>
+      <div className="scrollbar-none mt-0 flex h-screen w-full flex-col items-stretch justify-start overflow-y-auto" style={{ backgroundColor }}>
         {children}
       </div>
     </LayoutContext.Provider>
