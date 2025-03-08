@@ -5,7 +5,7 @@ const nextConfig = {
 
   // 이미지 도메인 허용 설정
   images: {
-    domains: process.env.RESOURCES_DOMAINS.trim().split(','),
+    domains: process.env.RESOURCES_DOMAINS.trim().split(","),
   },
 
   // webpack 설정
@@ -21,20 +21,18 @@ const nextConfig = {
 
   // API 라우트 설정
   async rewrites() {
-    return {
-      beforeFiles: [
-        {
-          source: "/api/:path*",
-          destination: `${process.env.NEXT_PUBLIC_API_URL}/:path*`,
-          has: [
-            {
-              type: "header",
-              key: "Authorization",
-            },
-          ],
-        },
-      ],
-    };
+    return [
+      {
+        source: "/api/:path*",
+        destination: `${process.env.NEXT_PUBLIC_API_URL}/:path*`,
+        has: [
+          {
+            type: "header",
+            key: "Authorization",
+          },
+        ],
+      },
+    ];
   },
 
   // 보안 헤더 설정
@@ -61,6 +59,7 @@ const nextConfig = {
         headers: [
           { key: "X-Frame-Options", value: "DENY" },
           { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "Access-Control-Allow-Origin", value: "*" },
           {
             key: "Permissions-Policy",
             value: "camera=(), microphone=(), geolocation=()",

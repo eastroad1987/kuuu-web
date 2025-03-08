@@ -1,16 +1,13 @@
 import type { Metadata } from "next";
 
 import "@/styles/globals.css";
-import { config } from "@fortawesome/fontawesome-svg-core";
-import "@fortawesome/fontawesome-svg-core/styles.css";
 import { Inter } from "next/font/google";
 import "react-quill/dist/quill.snow.css";
 
-import AuthProvider from "@/components/auth/AuthProvider";
-import ReactQueryProviders from "@/components/provider/reactQuery";
-import ReduxProvider from "@/components/provider/redux";
-
-config.autoAddCss = false;
+import AuthProvider from "./components/auth/AuthProvider";
+import AxiosProvider from "./components/provider/AxiosProvider";
+import ReactQueryProviders from "./components/provider/QueryProvider";
+import ReduxProvider from "./components/provider/redux";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,17 +24,19 @@ export default function RootLayout({
   modal: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <AuthProvider>
-        <ReactQueryProviders>
-          <ReduxProvider>
-            <body>
-              {modal}
-              {children}
-            </body>
-          </ReduxProvider>
-        </ReactQueryProviders>
-      </AuthProvider>
+    <html lang="ko">
+      <ReactQueryProviders>
+        <AuthProvider>
+          <AxiosProvider>
+            <ReduxProvider>
+              <body>
+                {children}
+                {modal}
+              </body>
+            </ReduxProvider>
+          </AxiosProvider>
+        </AuthProvider>
+      </ReactQueryProviders>
     </html>
   );
 }
