@@ -32,19 +32,19 @@
         "./app/context/*"
       ],
       "@/components/*": [
-        "./components/*"
+        "./app/components/*"
       ],
       "@/styles/*": [
-        "./styles/*"
+        "./app/styles/*"
       ],
       "@/types/*": [
-        "./types/*"
+        "./app/types/*"
       ],
       "@/libs/*": [
-        "./libs/*"
+        "./app/libs/*"
       ],
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "hooks/useAuth.tsㅌ", "hooks/useAuth.tsㅌ"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]
 }

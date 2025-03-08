@@ -1,4 +1,4 @@
-import Hamburger from "@/components/common/Hamburger";
+import Hamburger from "../../../components/common/Hamburger";
 
 interface InputProps {
   toggleSideMenu?: () => void;

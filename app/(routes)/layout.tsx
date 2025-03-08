@@ -1,12 +1,15 @@
 "use client";
 
-import Layout from "@/components/common/Layout";
+import { Suspense } from "react";
+import Layout from "../components/common/Layout";
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <Layout>
-      <Layout.Content>{children}</Layout.Content>
-    </Layout>
+    <Suspense fallback={<div>Loading...</div>}>
+      <Layout>
+        <Layout.Content>{children}</Layout.Content>
+      </Layout>
+    </Suspense>
   );
 };
 

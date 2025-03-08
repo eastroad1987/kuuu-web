@@ -1,13 +1,48 @@
 "use client";
+import FileUploader from "@/components/common/FileUploader";
+import Select from "@/components/common/Select";
+import { uploadFile } from "@/libs/api";
+import { CreatePostDto, CreateSubCategoryDto } from "@/types/dto";
 import Link from "next/link";
 import React, { useState } from "react";
 import ReactQuill from "react-quill";
-
+import { useAppSelector } from "../redux/hooks";
+import { useCreatePost } from "@/libs/api";
 // import { useQuill } from 'react-quilljs';
-
 export default function AdminPage() {
-  const [content, setContent] = useState("");
-  const [title, setTitle] = useState("");
+  const categories = useAppSelector(
+    (store) => (store as any).reducers.Categories.categories,
+  );
+
+  const initialForm: CreatePostDto = {
+    title: "",
+    content: "",
+    summary: "",
+    thumbnail: "",
+    referencePlace: "",
+    images: "",
+    attachFiles: "",
+    categoryId: categories[0]?.id,
+    subcategoryId: categories[0]?.subcategories[0]?.id,
+  };
+
+  const { mutate: createPost } = useCreatePost(initialForm);
+
+  const [form, setForm] = useState<CreatePostDto>(initialForm);
+
+  const [category, setCategory] = useState(categories[0]);
+
+  const [subCategories, setSubCategories] = useState(
+    categories.find((category: any) => category.id === category.id)
+      ?.subcategories,
+  );
+  const [subCategory, setSubCategory] = useState<CreateSubCategoryDto>();
+
+  const [isUploading, setIsUploading] = useState(false);
+  const [progress, setProgress] = useState(0);
+
+  const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
+
   const quillRef = React.useRef<ReactQuill>(null);
 
   const modules = React.useMemo(
@@ -52,29 +87,85 @@ export default function AdminPage() {
       "map",
     ];
 
-  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(e.currentTarget.value);
-  };
-
   const handleSubmit = async () => {
-    const date = new Date();
+    if (!form.title || !form.content) {
+      console.error(form.title, form.content);
+      return;
+    }
+
+    let thumbnailUrl = "";
+    if (thumbnailFile) {
+      const formData = new FormData();
+      formData.append("file", thumbnailFile?.file);
+      const item: any = await uploadFile(formData);
+      console.log("item: ", item);
+      thumbnailUrl = item.data[0].url;
+    }
+
     try {
-      // await createPost({
-      //   title: title,
-      //   content,
-      //   date,
-      // }).then((res) => console.log(res));
+      setIsUploading(true);
+      setProgress(0);
+      const post = {
+        ...form,
+        thumbnail: thumbnailUrl,
+        categoryId: Number(form.categoryId),
+        subcategoryId: Number(form.subcategoryId),
+      };
+      await createPost(post);
     } catch (error) {
-      console.log(error);
+      console.error(error);
+    } finally {
+      setIsUploading(false);
+      setProgress(0);
+      setThumbnailFile(null);
+      setForm(initialForm);
     }
   };
 
-  const handleContentChange = (value: string) => {
-    setContent(value);
+  const handleCategoryChange = (value: string) => {
+    const selected = categories.find(
+      (category: any) => category.id === Number(value),
+    );
+    setCategory(selected);
+    setSubCategories(selected.subcategories);
+    setSubCategory(selected.subcategories[0]);
+    setForm({
+      ...form,
+      categoryId: selected.id,
+      subcategoryId: selected.subcategories[0].id,
+    });
   };
 
-  const handlePreview = () => {
-    console.log(content);
+  const handleSubCategoryChange = (value: string) => {
+    setSubCategory(
+      subCategories.find(
+        (subCategory: any) => subCategory.id === Number(value),
+      ),
+    );
+
+    setForm({
+      ...form,
+      subcategoryId: value,
+    });
+  };
+
+  const handleChangeFiles = (files: any) => {
+    if (!files) return;
+    setThumbnailFile(files[0]);
+  };
+
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm({
+      ...form,
+      title: e.currentTarget.value,
+    });
+  };
+
+  const handleContentChange = (value: string) => {
+    setForm({
+      ...form,
+      content: value,
+    });
   };
 
   return (
@@ -83,24 +174,66 @@ export default function AdminPage() {
         <Link href="/">Go To Home</Link>
         <button onClick={handleSubmit}>Save</button>
       </div>
+      <div className="mt-10 flex flex-row items-center justify-start gap-8">
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-white">
+            Category
+          </label>
+          <Select
+            value={category?.id}
+            onChange={handleCategoryChange}
+            options={categories}
+            placeholder="Choose Category"
+            className="max-w-xs"
+          />
+        </div>
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-white">
+            SubCategory
+          </label>
+          <Select
+            value={subCategory?.id}
+            onChange={handleSubCategoryChange}
+            options={subCategories}
+            placeholder="Choose SubCategory"
+            className="max-w-xs"
+          />
+        </div>
+      </div>
+
       <div className="flex max-w-lg flex-col items-center justify-start">
         <label htmlFor="title" className="mt-16">
           Thumbnail
         </label>
-        <button className="btn btn-primary mt-5">
-          <img
-            className="mask mask-squircle size-25"
-            src="https://cdn.flyonui.com/fy-assets/components/radio/image-1.png"
-            alt="mask image"
-          />
-        </button>
+        <FileUploader
+          isUploading={isUploading}
+          progress={progress}
+          onChangeFiles={handleChangeFiles}
+          accept="image/*"
+          className="w-full max-w-md"
+        >
+          <div className="rounded-lg border-2 border-dashed border-gray-300 p-4 transition-colors hover:border-blue-500">
+            {thumbnailFile ? (
+              <img
+                src={thumbnailFile?.url}
+                alt="Thumbnail"
+                className="h-48 w-full rounded object-cover"
+              />
+            ) : (
+              <div className="flex h-48 items-center justify-center text-gray-500">
+                클릭하여 썸네일 업로드
+              </div>
+            )}
+          </div>
+        </FileUploader>
         <label htmlFor="title" className="mt-10">
           Title
         </label>
         <input
           type="text"
-          className="input mt-5 w-full"
+          className="input mt-5 w-full text-black"
           aria-label="input"
+          value={form.title}
           onChange={handleTitleChange}
         />
         {typeof window !== "undefined" && (
@@ -112,7 +245,7 @@ export default function AdminPage() {
             formats={formats}
             modules={modules}
             theme="snow"
-            value={content}
+            value={form.content}
             onChange={handleContentChange}
           />
         )}
