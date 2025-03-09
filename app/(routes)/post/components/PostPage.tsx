@@ -10,7 +10,7 @@ const PostComponents = {
     const { state } = usePostContext();
     return (
       <div
-        className="flex h-full w-full flex-col items-center justify-start"
+        className="flex h-screen w-full flex-col items-center justify-start"
         style={{ backgroundColor: state.color }}
       >
         <div className="flex h-full w-full max-w-[1280px] flex-col items-center justify-start">

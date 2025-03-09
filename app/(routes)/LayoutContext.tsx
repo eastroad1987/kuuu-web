@@ -18,15 +18,13 @@ interface LayoutProps {
 const Layout = ({ children, backgroundColor }: LayoutProps) => {
   return (
     <LayoutContext.Provider value={{ backgroundColor }}>
-      <div className="scrollbar-none mt-0 flex h-screen w-full flex-col items-stretch justify-start overflow-y-auto" style={{ backgroundColor }}>
-        {children}
-      </div>
+      {children}
     </LayoutContext.Provider>
   );
 };
 
 function Content({ children }: { children: ReactNode }) {
-  return <div className="flex flex-1 w-full">{children}</div>;
+  return <>{children}</>;
 }
 
 interface LayoutHeaderProps {
@@ -39,7 +37,6 @@ function LayoutHeader({ isSideMenuOpen, toggleSideMenu }: LayoutHeaderProps) {
     <Header isSideMenuOpen={isSideMenuOpen} toggleSideMenu={toggleSideMenu} />
   );
 }
-
 
 function LayoutFooter() {
   return <Footer />;

@@ -2,11 +2,13 @@ import { Category, SubCategory } from "@/types/entities";
 import { CategoryPageState } from "@/types/types";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useAppSelector } from "../../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { useGetPostsBySubCategory } from "@/libs/api";
+import { setBackgroundColor } from "../../../redux/reducer";
 
 export default function useCategory(id: string) {
   const router = useRouter();
+  const dispatch = useAppDispatch();
 
   const color =
     id === "0"
@@ -18,7 +20,7 @@ export default function useCategory(id: string) {
           : "#D62C28";
 
   const categories = useAppSelector(
-    (store) => (store as any).reducers.Categories.categories,
+    (store) => (store as any).reducers.app.categories,
   );
   const category = categories.find(
     (category: any) => category.id === Number(id) + 1,
@@ -47,6 +49,10 @@ export default function useCategory(id: string) {
   const updateState = (updates: Partial<CategoryPageState>) => {
     setState((prevState) => ({ ...prevState, ...updates }));
   };
+  
+  useEffect(() => {
+    dispatch(setBackgroundColor("#FFFFFF"));
+  }, []);
 
   useEffect(() => {
     console.log("[useCategory] category: ", category);

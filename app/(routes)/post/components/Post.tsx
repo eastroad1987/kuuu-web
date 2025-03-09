@@ -8,15 +8,14 @@ interface InputProps {
 
 export default function PostContent({ post }: InputProps) {
   return (
-    <section className="flex h-[450px] w-full flex-col items-center justify-between">
+    <section className="flex h-full w-full flex-col items-center justify-between overflow-auto">
       <div style={{ textAlign: "center" }}>
         <div className="content-container">
           <img src={post?.thumbnail || ''} alt="Main Image" />
           <div className="ql-show">
             <div
-              className="ql-editor"
+              className="ql-editor w-full h-screen"
               style={{
-                fontFamily: "Pretendard",
                 fontSize: 16,
                 fontWeight: 400,
                 lineHeight: "24px",

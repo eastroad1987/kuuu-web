@@ -2,7 +2,7 @@ import { useGetCategories, useGetPosts } from "@/libs/api";
 import { MainPageState } from "@/types/types";
 import { useEffect, useState } from "react";
 import { useScrollSections } from "../../../hooks/useScrollSections";
-import { setCategories } from "../../../redux/categories/reducer";
+import { setBackgroundColor, setCategories } from "../../../redux/reducer";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 
 export default function useHome() {
@@ -14,7 +14,7 @@ export default function useHome() {
 
   const dispatch = useAppDispatch();
   const list = useAppSelector(
-    (store) => (store as any).reducers.Categories.categories,
+    (store) => (store as any).reducers.app.categories,
   );
 
   const {
@@ -46,6 +46,10 @@ export default function useHome() {
   const updateState = (updates: Partial<MainPageState>) => {
     setState((prev: MainPageState) => ({ ...prev, ...updates }));
   };
+
+  useEffect(() => {
+    dispatch(setBackgroundColor("#FFFFFF"));
+  }, []);
 
   useEffect(() => {
     updateState({ currentSection: currentSection });

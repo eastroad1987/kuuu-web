@@ -8,7 +8,7 @@ interface HorizontalCardProps {
 export default function HorizontalCard({ post }: HorizontalCardProps) {
 
   const categories = useAppSelector(
-    (store) => (store as any).reducers.Categories.categories,
+    (store) => (store as any).reducers.app.categories,
   );
 
   const category = categories.find((category: any) => category.id === post.categoryId);
