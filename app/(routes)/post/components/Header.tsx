@@ -21,7 +21,7 @@ export default function PostHeader({
     <header
       className={`flex h-[230px] w-full flex-row items-center justify-between bg-[${color}]`}
     >
-      <div className="flex flex-col items-start justify-start h-full">
+      <div className="flex flex-col items-start justify-start h-full p-11">
         <h1 className="text-[24px] font-bold text-white">{boardName}</h1>
       </div>
       <h1 className="text-[24px] font-bold text-white">{title}</h1>

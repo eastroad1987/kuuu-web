@@ -6,12 +6,15 @@ import { AdminWriterPageState } from "@/types/types";
 import { Category } from "@/types/entities";
 import ReactQuill from "react-quill";
 import { useRouter } from "next/navigation";
+import { useAppDispatch } from "../../redux/hooks";
+import { setBackgroundColor } from "../../redux/reducer";
 
 export default function useWriter() {
   const router = useRouter();
+  const dispatch = useAppDispatch();
 
   const categories = useAppSelector(
-    (store) => (store as any).reducers.Categories.categories,
+    (store) => (store as any).reducers.app.categories,
   );
 
   const initialForm: CreatePostDto = {
@@ -47,6 +50,10 @@ export default function useWriter() {
   };
 
   useEffect(() => {
+    dispatch(setBackgroundColor("#000000"));
+  }, []);
+
+  useEffect(() => {
     updateState({
       categories: categories,
       category: categories[0],
@@ -54,7 +61,7 @@ export default function useWriter() {
       subCategory: categories[0]?.subcategories[0],
     });
   }, [categories]);
-
+  
   const handlers = {
     clickSubmit: () => {
       // if (!form.title || !form.content) {

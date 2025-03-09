@@ -9,7 +9,7 @@ import CategoryPosts from "./Posts";
 const CategoryComponents = {
   Container: ({ children }: { children: React.ReactNode }) => {
     return (
-      <div className="flex h-full w-full flex-col items-center justify-start">
+      <div className="flex h-screen w-full flex-col items-center justify-start bg-white">
         <div className="flex h-full w-full max-w-[1280px] flex-col items-center justify-start">
           {children}
         </div>
@@ -40,7 +40,9 @@ const CategoryComponents = {
   },
   Posts: () => {
     const { state } = useCategoryContext();
-    return <CategoryPosts posts={state.posts} />;
+
+    const boardName = `${state.currentBoard.title} - ${state.currentSubBoard.title}`;
+    return <CategoryPosts posts={state.posts} boardName={boardName} />;
   },
   SideMenu: () => {
     const { state, handlers } = useCategoryContext();

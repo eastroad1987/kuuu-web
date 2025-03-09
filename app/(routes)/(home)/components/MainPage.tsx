@@ -11,7 +11,7 @@ const MainComponents = {
   Container: ({ children }: { children: React.ReactNode }) => {
     const { state } = useMainContext();
     return (
-      <div className="flex h-screen w-full flex-col items-center justify-start">
+      <div className="flex h-screen w-full flex-col items-center justify-start bg-white">
         <main className="h-screen w-full max-w-[1280px] overflow-hidden">
           <div
             className="h-full w-full transition-transform duration-1000 ease-in-out"

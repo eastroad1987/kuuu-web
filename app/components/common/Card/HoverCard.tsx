@@ -2,14 +2,16 @@ import Link from "next/link";
 import { Post } from "../../../types/entities";
 
 interface InputProps {
+  boardName: string;
   post: Post;
 }
 
-export default function HoverCard({ post }: InputProps) {
+export default function HoverCard({ boardName, post }: InputProps) {
   if (!post) return null;
+  console.log(post);
   return (
     <Link
-      href={`/post/${post.id}`}
+      href={`/post/${post.id}?boardName=${boardName}`}
       className="max-w-sm overflow-hidden rounded-lg bg-white shadow-lg transition-shadow duration-300 hover:shadow-2xl"
     >
       <div className="relative overflow-hidden">
