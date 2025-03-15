@@ -30,7 +30,7 @@ axios.interceptors.request.use((config) => {
 axios.interceptors.response.use(
   (response: any) => {
     const data = response.data;
-    console.log("response:", response);
+    // console.log("response:", response);
     if (
       response.status === 200 ||
       response.status === 201 ||
@@ -136,8 +136,8 @@ const transformPagination = (pagination: any) => {
 };
 
 const transformFilters = (filters: any, url: any) => {
-  console.log("유알에");
-  console.log(url);
+  // console.log("유알에");
+  // console.log(url);
   if (!filters) return;
   let result: any[] = [];
   for (const key in filters) {
@@ -196,7 +196,7 @@ const useGetList = <T>(
 
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     const transformRequest: AxiosTransformer = (data: any, headers: any) => {};
-    console.log("url:", url);
+    // console.log("url:", url);
     const data: T = await axios.get(`${url}`, {
       params,
       paramsSerializer: (params: any) => {

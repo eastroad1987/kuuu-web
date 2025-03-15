@@ -14,7 +14,7 @@ interface InputProps {
 }
 
 export default function BlogContent({ show, data }: InputProps) {
-  console.log(data);
+
   const maxVisibleItems = 5;
   
   const [value, setValue] = useState(moment().format("YYYY-MM-DD"));
