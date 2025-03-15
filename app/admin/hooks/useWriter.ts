@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo, useCallback } from "react";
 import { useAppSelector } from "../../redux/hooks";
 import { CreatePostDto } from "@/types/dto";
-import { useCreatePost } from "@/libs/api";
+import { uploadFile, useCreatePost } from "@/libs/api";
 import { AdminWriterPageState } from "@/types/types";
 import { Category } from "@/types/entities";
 import ReactQuill from "react-quill";
@@ -17,7 +17,7 @@ export default function useWriter() {
     (store) => (store as any).reducers.app.categories,
   );
 
-  const initialForm: CreatePostDto = {
+  const initialForm = useMemo<CreatePostDto>(() => ({
     title: "",
     content: "",
     summary: "",
@@ -27,12 +27,12 @@ export default function useWriter() {
     attachFiles: "",
     categoryId: categories[0]?.id,
     subcategoryId: categories[0]?.subcategories[0]?.id,
-  };
+  }), [categories]);
 
   const { mutate: createPost } = useCreatePost(initialForm);
 
   const quillRef = useRef<ReactQuill>(null);
-  const [state, setState] = useState<AdminWriterPageState>({
+  const [state, setState] = useState<AdminWriterPageState>(() => ({
     date: new Date(),
     form: initialForm,
     categories: categories,
@@ -43,110 +43,137 @@ export default function useWriter() {
     progress: 0,
     thumbnailFile: null,
     quillRef: quillRef,
-  });
+  }));
 
-  const updateState = (updates: Partial<AdminWriterPageState>) => {
+  const updateState = useCallback((updates: Partial<AdminWriterPageState>) => {
     setState((prevState) => ({ ...prevState, ...updates }));
-  };
-
-  useEffect(() => {
-    dispatch(setBackgroundColor("#000000"));
   }, []);
 
   useEffect(() => {
-    updateState({
-      categories: categories,
-      category: categories[0],
-      subCategories: categories[0]?.subcategories,
-      subCategory: categories[0]?.subcategories[0],
-    });
-  }, [categories]);
+    dispatch(setBackgroundColor("#000000"));
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (categories?.length > 0) {
+      updateState({
+        categories: categories,
+        category: categories[0],
+        subCategories: categories[0]?.subcategories,
+        subCategory: categories[0]?.subcategories[0],
+      });
+    }
+  }, [categories, updateState]);
   
-  const handlers = {
-    clickSubmit: () => {
-      // if (!form.title || !form.content) {
-      //   console.error(form.title, form.content);
-      //   return;
-      // }
-      // let thumbnailUrl = "";
-      // if (thumbnailFile) {
-      //   const formData = new FormData();
-      //   formData.append("file", thumbnailFile?.file);
-      //   const item: any = await uploadFile(formData);
-      //   console.log("item: ", item);
-      //   thumbnailUrl = item.data[0].url;
-      // }
-      // try {
-      //   setIsUploading(true);
-      //   setProgress(0);
-      //   const post = {
-      //     ...form,
-      //     thumbnail: thumbnailUrl,
-      //     categoryId: Number(form.categoryId),
-      //     subcategoryId: Number(form.subcategoryId),
-      //   };
-      //   await createPost(post);
-      // } catch (error) {
-      //   console.error(error);
-      // } finally {
-      //   setIsUploading(false);
-      //   setProgress(0);
-      //   setThumbnailFile(null);
-      //   setForm(initialForm);
-      // }
+  const handlers = useMemo(() => ({
+    clickSubmit: async () => {
+      if (!state.form.title || !state.form.content) {
+        console.error(state.form.title, state.form.content);
+        return;
+      }
+      
+      updateState({ isUploading: true, progress: 0 });
+      
+      try {
+        let thumbnailUrl = "";
+        if (state.thumbnailFile) {
+          const formData = new FormData();
+          formData.append("file", state.thumbnailFile?.file);
+          const item: any = await uploadFile(formData);
+          thumbnailUrl = item.data[0].url;
+        }
+        
+        const post = {
+          ...state.form,
+          thumbnail: thumbnailUrl,
+          categoryId: Number(state.form.categoryId),
+          subcategoryId: Number(state.form.subcategoryId),
+        };
+        
+        await createPost(post);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        updateState({
+          isUploading: false,
+          progress: 0,
+          thumbnailFile: null,
+          form: initialForm,
+        });
+      }
     },
+    
     changeCategory: (value: string) => {
-      // const selected = categories.find(
-      //   (category: any) => category.id === Number(value),
-      // );
-      // setCategory(selected);
-      // setSubCategories(selected.subcategories);
-      // setSubCategory(selected.subcategories[0]);
-      // setForm({
-      //   ...form,
-      //   categoryId: selected.id,
-      //   subcategoryId: selected.subcategories[0].id,
-      // });
+      const selected = categories.find(
+        (category: any) => category.id === Number(value),
+      );
+      
+      if (selected) {
+        updateState({
+          category: selected,
+          subCategories: selected.subcategories,
+          subCategory: selected.subcategories[0],
+          form: {
+            ...state.form,
+            categoryId: selected.id,
+            subcategoryId: selected.subcategories[0]?.id,
+          },
+        });
+      }
     },
+    
     changeSubCategory: (value: string) => {
-      // setSubCategory(
-      //   subCategories.find(
-      //     (subCategory: any) => subCategory.id === Number(value),
-      //   ),
-      // );
-      // setForm({
-      //   ...form,
-      //   subcategoryId: value,
-      // });
+      const selected = state.subCategories.find(
+        (subCategory: any) => subCategory.id === Number(value),
+      );
+      
+      if (selected) {
+        updateState({
+          subCategory: selected,
+          form: {
+            ...state.form,
+            subcategoryId: value,
+          },
+        });
+      }
     },
+    
     changeFiles: (files: any) => {
-      // if (!files) return;
-      // setThumbnailFile(files[0]);
+      if (!files) return;
+      updateState({
+        thumbnailFile: files[0],
+      });
     },
+    
     changeTitle: (e: React.ChangeEvent<HTMLInputElement>) => {
-      // setForm({
-      //   ...form,
-      //   title: e.currentTarget.value,
-      // });
+      updateState({
+        form: {
+          ...state.form,
+          title: e.currentTarget.value,
+        },
+      });
     },
+    
     changeContent: (value: string) => {
-      // setForm({
-      //   ...form,
-      //   content: value,
-      // });
+      updateState({
+        form: {
+          ...state.form,
+          content: value,
+        },
+      });
     },
+    
     changeDate: (date: Date) => {
       updateState({
         date: date,
       });
     },
-  };
+  }), [state, categories, createPost, initialForm, updateState]);
 
-  const navigation = {
+  const navigation = useMemo(() => ({
     goToHome: () => {
       router.push("/");
     },
-  };
+  }), [router]);
 
   return {
     state,

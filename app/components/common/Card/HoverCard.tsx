@@ -8,7 +8,6 @@ interface InputProps {
 
 export default function HoverCard({ boardName, post }: InputProps) {
   if (!post) return null;
-  console.log(post);
   return (
     <Link
       href={`/post/${post.id}?boardName=${boardName}`}

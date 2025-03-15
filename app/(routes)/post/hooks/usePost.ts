@@ -1,6 +1,6 @@
 import { useGetPostById } from "@/libs/api";
 import { PostPageState } from "@/types/types";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { useAppDispatch } from "../../../redux/hooks";
 import { setBackgroundColor } from "../../../redux/reducer";
 
@@ -9,7 +9,8 @@ export default function usePost(id: string) {
 
   const { data: post, isLoading, isError, refetch } = useGetPostById(id);
 
-  const initialState: PostPageState = {
+  // 초기 상태 메모이제이션
+  const initialState = useMemo<PostPageState>(() => ({
     id: id,
     boardName: "",
     title: post?.title || "",
@@ -17,29 +18,36 @@ export default function usePost(id: string) {
     date: post?.created_at || new Date(),
     post: post || null,
     isOpen: false,
-  };
+  }), [id, post]);
+
   const [state, setState] = useState<PostPageState>(initialState);
 
-  const updateState = (updates: Partial<PostPageState>) => {
+  // updateState 함수 메모이제이션
+  const updateState = useCallback((updates: Partial<PostPageState>) => {
     setState((prevState) => ({ ...prevState, ...updates }));
-  };
+  }, []);
+
+  // 카테고리 ID에 따른 색상 결정 함수 메모이제이션
+  const getCategoryColor = useCallback((categoryId: number) => {
+    return categoryId === 0
+      ? "#FCC018"
+      : categoryId === 1
+        ? "#0B3B10"
+        : categoryId === 2
+          ? "#0F2355"
+          : "#D62C28";
+  }, []);
 
   useEffect(() => {
     refetch();
-  }, []);
+  }, [refetch]);
 
   useEffect(() => {
     if (post) {
       const boardName = `${post.category.title} - ${post.subcategory.title}`;
       const categoryId = post.category.id - 1;
-      const color =
-        categoryId === 0
-          ? "#FCC018"
-          : categoryId === 1
-            ? "#0B3B10"
-            : categoryId === 2
-              ? "#0F2355"
-              : "#D62C28";
+      const color = getCategoryColor(categoryId);
+      
       updateState({
         boardName: boardName,
         color: color,
@@ -47,22 +55,26 @@ export default function usePost(id: string) {
         date: post?.created_at || new Date(),
         post: post || null,
       });
+      
       dispatch(setBackgroundColor(color));
     }
-  }, [post]);
+  }, [post, updateState, getCategoryColor, dispatch]);
 
-  const handlers = {
+  // handlers 객체 메모이제이션
+  const handlers = useMemo(() => ({
     toggleSideMenu: () => {
       setState((prevState) => ({ ...prevState, isOpen: !prevState.isOpen }));
     },
     onSideMenuClose: () => {
       setState((prevState) => ({ ...prevState, isOpen: false }));
     },
-  };
+  }), []);
 
   return {
     state,
     updateState,
     handlers,
+    isLoading,
+    isError
   };
 }
