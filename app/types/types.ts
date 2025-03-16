@@ -1,11 +1,27 @@
 import { CreatePostDto, PostResponse } from "./dto";
 import { Category, Post, SubCategory } from "./entities";
 
+export interface CardStyle {
+  scale: number;
+  filter: string;
+  opacity: number;
+  yOffset: number;
+  zIndex: number;
+}
+
 export interface MainPageState {
+  timerRef: any;
+  maxVisibleBlogs: number;
+  visibleBlogs: number[];
+  arrayIndex: number[];
+  currentIndex: number;
+  windowHeight: number;
   posts: PostResponse[];
   limit: number;
   isScrolling: boolean;
   currentSection: number;
+  currentPostId: string;
+  currentDate: Date;
 }
 
 export interface UseMainType {
@@ -13,6 +29,9 @@ export interface UseMainType {
   updateState: (updates: Partial<MainPageState>) => void;
   handlers: {
     onPageChange: (page: number) => void;
+    onSelected: (postId: string) => void;
+    onChangeDate: (date: Date) => void;
+    onSelectedDate: (date: Date) => void;
   };
 }
 

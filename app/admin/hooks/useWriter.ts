@@ -17,17 +17,20 @@ export default function useWriter() {
     (store) => (store as any).reducers.app.categories,
   );
 
-  const initialForm = useMemo<CreatePostDto>(() => ({
-    title: "",
-    content: "",
-    summary: "",
-    thumbnail: "",
-    referencePlace: "",
-    images: "",
-    attachFiles: "",
-    categoryId: categories[0]?.id,
-    subcategoryId: categories[0]?.subcategories[0]?.id,
-  }), [categories]);
+  const initialForm = useMemo<CreatePostDto>(
+    () => ({
+      title: "",
+      content: "",
+      summary: "",
+      thumbnail: "",
+      referencePlace: "",
+      images: "",
+      attachFiles: "",
+      categoryId: categories[0]?.id,
+      subcategoryId: categories[0]?.subcategories[0]?.id,
+    }),
+    [categories],
+  );
 
   const { mutate: createPost } = useCreatePost(initialForm);
 
@@ -63,50 +66,50 @@ export default function useWriter() {
       });
     }
   }, [categories, updateState]);
-  
-  const handlers = useMemo(() => ({
-    clickSubmit: async () => {
-      if (!state.form.title || !state.form.content) {
-        console.error(state.form.title, state.form.content);
-        return;
+
+  const handleClickSubmit = useCallback(async () => {
+    if (!state.form.title || !state.form.content) {
+      console.error(state.form.title, state.form.content);
+      return;
+    }
+
+    updateState({ isUploading: true, progress: 0 });
+
+    try {
+      let thumbnailUrl = "";
+      if (state.thumbnailFile) {
+        const formData = new FormData();
+        formData.append("file", state.thumbnailFile?.file);
+        const item: any = await uploadFile(formData);
+        thumbnailUrl = item.data[0].url;
       }
-      
-      updateState({ isUploading: true, progress: 0 });
-      
-      try {
-        let thumbnailUrl = "";
-        if (state.thumbnailFile) {
-          const formData = new FormData();
-          formData.append("file", state.thumbnailFile?.file);
-          const item: any = await uploadFile(formData);
-          thumbnailUrl = item.data[0].url;
-        }
-        
-        const post = {
-          ...state.form,
-          thumbnail: thumbnailUrl,
-          categoryId: Number(state.form.categoryId),
-          subcategoryId: Number(state.form.subcategoryId),
-        };
-        
-        await createPost(post);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        updateState({
-          isUploading: false,
-          progress: 0,
-          thumbnailFile: null,
-          form: initialForm,
-        });
-      }
-    },
-    
-    changeCategory: (value: string) => {
+
+      const post = {
+        ...state.form,
+        thumbnail: thumbnailUrl,
+        categoryId: Number(state.form.categoryId),
+        subcategoryId: Number(state.form.subcategoryId),
+      };
+
+      await createPost(post);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      updateState({
+        isUploading: false,
+        progress: 0,
+        thumbnailFile: null,
+        form: initialForm,
+      });
+    }
+  }, [state.form, state.thumbnailFile, updateState, createPost, initialForm]);
+
+  const handleChangeCategory = useCallback(
+    (value: string) => {
       const selected = categories.find(
         (category: any) => category.id === Number(value),
       );
-      
+
       if (selected) {
         updateState({
           category: selected,
@@ -120,12 +123,15 @@ export default function useWriter() {
         });
       }
     },
-    
-    changeSubCategory: (value: string) => {
+    [categories, state.form, updateState],
+  );
+
+  const handleChangeSubCategory = useCallback(
+    (value: string) => {
       const selected = state.subCategories.find(
         (subCategory: any) => subCategory.id === Number(value),
       );
-      
+
       if (selected) {
         updateState({
           subCategory: selected,
@@ -136,15 +142,21 @@ export default function useWriter() {
         });
       }
     },
-    
-    changeFiles: (files: any) => {
+    [state.subCategories, state.form, updateState],
+  );
+
+  const handleChangeFiles = useCallback(
+    (files: any) => {
       if (!files) return;
       updateState({
         thumbnailFile: files[0],
       });
     },
-    
-    changeTitle: (e: React.ChangeEvent<HTMLInputElement>) => {
+    [updateState],
+  );
+
+  const handleChangeTitle = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
       updateState({
         form: {
           ...state.form,
@@ -152,8 +164,11 @@ export default function useWriter() {
         },
       });
     },
-    
-    changeContent: (value: string) => {
+    [state.form, updateState],
+  );
+
+  const handleChangeContent = useCallback(
+    (value: string) => {
       updateState({
         form: {
           ...state.form,
@@ -161,19 +176,38 @@ export default function useWriter() {
         },
       });
     },
-    
-    changeDate: (date: Date) => {
+    [state.form, updateState],
+  );
+
+  const handleChangeDate = useCallback(
+    (date: Date) => {
       updateState({
         date: date,
       });
     },
-  }), [state, categories, createPost, initialForm, updateState]);
+    [updateState],
+  );
 
-  const navigation = useMemo(() => ({
-    goToHome: () => {
-      router.push("/");
-    },
-  }), [router]);
+  const handlers = {
+    clickSubmit: handleClickSubmit,
+    changeCategory: handleChangeCategory,
+    changeSubCategory: handleChangeSubCategory,
+    changeFiles: handleChangeFiles,
+    changeTitle: handleChangeTitle,
+    changeContent: handleChangeContent,
+    changeDate: handleChangeDate,
+  };
+
+  const goToHome = useCallback(() => {
+    router.push("/");
+  }, [router]);
+
+  const navigation = useMemo(
+    () => ({
+      goToHome,
+    }),
+    [goToHome],
+  );
 
   return {
     state,

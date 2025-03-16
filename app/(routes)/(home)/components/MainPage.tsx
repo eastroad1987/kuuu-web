@@ -36,8 +36,18 @@ const MainComponents = {
     return <ProfileContent show={state.currentSection === 2} />;
   },
   BlogContent: () => {
-    const { state } = useMainContext();
-    return <BlogContent show={state.currentSection === 3} data={state.posts} />;
+    const { state, handlers } = useMainContext();
+    return (
+      <BlogContent
+        data={state.posts}
+        visibleItems={state.visibleBlogs}
+        windowHeight={state.windowHeight}
+        value={state.currentDate}
+        onChangeDate={handlers.onChangeDate}
+        onSelected={handlers.onSelected}
+        onSelectedDate={handlers.onSelectedDate}
+      />
+    );
   },
   VerticalDotButtons: () => {
     const { state, handlers } = useMainContext();
