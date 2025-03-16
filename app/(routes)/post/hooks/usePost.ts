@@ -60,15 +60,20 @@ export default function usePost(id: string) {
     }
   }, [post, updateState, getCategoryColor, dispatch]);
 
-  // handlers 객체 메모이제이션
-  const handlers = useMemo(() => ({
-    toggleSideMenu: () => {
-      setState((prevState) => ({ ...prevState, isOpen: !prevState.isOpen }));
-    },
-    onSideMenuClose: () => {
-      setState((prevState) => ({ ...prevState, isOpen: false }));
-    },
-  }), []);
+  // handlers 함수들을 개별 useCallback으로 분리
+  const handleToggleSideMenu = useCallback(() => {
+    setState((prevState) => ({ ...prevState, isOpen: !prevState.isOpen }));
+  }, [updateState]);
+  
+  const handleSideMenuClose = useCallback(() => {
+    setState((prevState) => ({ ...prevState, isOpen: false }));
+  }, [updateState]);
+
+  // handlers 객체 구성
+  const handlers = {
+    toggleSideMenu: handleToggleSideMenu,
+    onSideMenuClose: handleSideMenuClose,
+  };
 
   return {
     state,

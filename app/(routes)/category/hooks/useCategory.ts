@@ -87,23 +87,31 @@ export default function useCategory(id: string) {
     }
   }, [state.currentSubBoard?.id, postsRefetch]);
 
-  const handlers = useMemo(() => ({
-    clickSubCategory: (subCategory: SubCategory) => {
-      setState((prevState) => ({ ...prevState, currentSubBoard: subCategory }));
-    },
-    toggleSideMenu: () => {
-      setState((prevState) => ({ ...prevState, isOpen: !prevState.isOpen }));
-    },
-    onSideMenuClose: () => {
-      setState((prevState) => ({ ...prevState, isOpen: false }));
-    },
-  }), []);
+  const handleClickSubCategory = useCallback((subCategory: SubCategory) => {
+    updateState({ currentSubBoard: subCategory });
+  }, [updateState]);
+  
+  const handleToggleSideMenu = useCallback(() => {
+    setState((prevState) => ({ ...prevState, isOpen: !prevState.isOpen }));
+  }, [updateState]);
+  
+  const handleSideMenuClose = useCallback(() => {
+    setState((prevState) => ({ ...prevState, isOpen: false }));
+  }, [updateState]);
+
+  const handlers = {
+    clickSubCategory: handleClickSubCategory,
+    toggleSideMenu: handleToggleSideMenu,
+    onSideMenuClose: handleSideMenuClose,
+  };
+
+  const goToPost = useCallback((postId: string) => {
+    router.push(`/post/${postId}`);
+  }, [router]);
 
   const navigation = useMemo(() => ({
-    goToPost: (postId: string) => {
-      router.push(`/post/${postId}`);
-    },
-  }), [router]);
+    goToPost
+  }), [goToPost]);
 
   return {
     state,

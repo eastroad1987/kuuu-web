@@ -1,30 +1,39 @@
 "use client";
 
+import HorizontalCard from "@/components/common/Card/HorizontalCard";
 import NoData from "@/components/common/NoData/NoData";
 import { PostResponse } from "@/types/dto";
+import { CardStyle } from "@/types/types";
 import { AnimatePresence, motion } from "framer-motion";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import Calendar from "react-calendar";
-import HorizontalCard from "@/components/common/Card/HorizontalCard";
 
 interface InputProps {
-  show: boolean;
   data?: PostResponse[];
+  visibleItems: number[];
+  windowHeight: number;
+  value: Date;
+  onChangeDate: (date: Date) => void;
+  onSelected: (postId: string) => void;
+  onSelectedDate: (date: Date) => void;
 }
 
-export default function BlogContent({ show, data }: InputProps) {
+export default function BlogContent({
+  visibleItems,
+  windowHeight,
+  value,
+  data,
+  onChangeDate,
+  onSelected,
+  onSelectedDate,
+}: InputProps) {
+  const [isClient, setIsClient] = useState(false);
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
-  const maxVisibleItems = 5;
-  
-  const [value, setValue] = useState(moment().format("YYYY-MM-DD"));
-  
-  const indexArray = Array.from({length: data?.length || 0}, (_, i) => i);
-  const [visibleItems, setVisibleItems] = useState<number[]>(indexArray);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [windowHeight, setWindowHeight] = useState(0);
-
-  const getCardStyle = (arrayIndex: number) => {
+  function getCardStyle(arrayIndex: number) {
     let scale = 1;
     let blur = 0;
     let yOffset = 0;
@@ -57,40 +66,7 @@ export default function BlogContent({ show, data }: InputProps) {
       yOffset,
       zIndex,
     };
-  };
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-    setWindowHeight(window.innerHeight);
-    const handleResize = () => setWindowHeight(window.innerHeight);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  useEffect(() => {
-    if (data && data.length <= 0) return;
-    const timer = setInterval(() => {
-      if (data && currentIndex < data.length) {
-        setVisibleItems((prev) => {
-          const newItems = [...prev, currentIndex];
-          if (newItems.length > 5) {
-            return newItems.slice(1);
-          }
-          return newItems;
-        });
-        setCurrentIndex((prev) => prev + 1);
-      } else {
-        setCurrentIndex(0);
-      }
-    }, 1200); // 시간 간격 증가
-
-    return () => clearInterval(timer);
-  }, [currentIndex]);
-
-  const handleChange = (date: any) => {
-    setValue(date);
-  };
+  }
 
   return (
     <section
@@ -107,7 +83,7 @@ export default function BlogContent({ show, data }: InputProps) {
 
                   return (
                     <motion.div
-                      key={itemIndex}
+                      key={arrayIndex}
                       initial={{
                         y: windowHeight, // 윈도우 높이에서 시작
                         opacity: 0,
@@ -169,7 +145,10 @@ export default function BlogContent({ show, data }: InputProps) {
                           ease: "easeInOut",
                         }}
                       >
-                        <HorizontalCard post={data?.[itemIndex]} />
+                        <HorizontalCard
+                          post={data?.[itemIndex]}
+                          onSelected={onSelected}
+                        />
                       </motion.div>
                     </motion.div>
                   );
@@ -186,7 +165,7 @@ export default function BlogContent({ show, data }: InputProps) {
           {isClient && (
             <div className="calendar-container">
               <Calendar
-                onChange={handleChange} // useState로 포커스 변경 시 현재 날짜 받아오기
+                onChange={(value) => onChangeDate(value as Date)} // useState로 포커스 변경 시 현재 날짜 받아오기
                 formatDay={(locale, date) => moment(date).format("DD")} // 날'일' 제외하고 숫자만 보이도록 설정
                 value={value}
                 minDetail="month" // 상단 네비게이션에서 '월' 단위만 보이게 설정

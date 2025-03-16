@@ -3,10 +3,11 @@ import { useAppSelector } from "../../../redux/hooks";
 
 interface HorizontalCardProps {
   post: PostResponse;
+  onSelected: (postId: string) => void;
 }
 
-export default function HorizontalCard({ post }: HorizontalCardProps) {
-
+export default function HorizontalCard({ post, onSelected }: HorizontalCardProps) {
+  
   const categories = useAppSelector(
     (store) => (store as any).reducers.app.categories,
   );
@@ -14,7 +15,7 @@ export default function HorizontalCard({ post }: HorizontalCardProps) {
   const category = categories.find((category: any) => category.id === post.categoryId);
 
   return (
-    <div className="mx-auto max-w-4xl overflow-hidden rounded-xl bg-white shadow-md md:flex">
+    <button className="mx-auto max-w-4xl overflow-hidden rounded-xl bg-white shadow-md md:flex" onClick={() => onSelected(post?.id as any)}>
       <div className="md:flex-shrink-0">
         <img
           className="h-48 w-full object-cover md:w-48"
@@ -33,6 +34,6 @@ export default function HorizontalCard({ post }: HorizontalCardProps) {
           {post.summary}
         </p>
       </div>
-    </div>
+    </button>
   );
 }
