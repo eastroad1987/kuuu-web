@@ -9,6 +9,44 @@ import AxiosProvider from "./components/provider/AxiosProvider";
 import ReactQueryProviders from "./components/provider/QueryProvider";
 import ReduxProvider from "./components/provider/redux";
 
+import localFont from "next/font/local";
+
+export const shipporiMincho = localFont({
+  src: [
+    {
+      path: "../public/fonts/ShipporiMincho-Regular.ttf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/ShipporiMincho-Medium.ttf",
+      weight: "500",
+      style: "medium",
+    },
+    {
+      path: "../public/fonts/ShipporiMincho-SemiBold.ttf",
+      weight: "600",
+      style: "semibold",
+    },
+    {
+      path: "../public/fonts/ShipporiMincho-Bold.ttf",
+      weight: "700",
+      style: "bold",
+    },
+    {
+      path: "../public/fonts/ShipporiMincho-ExtraBold.ttf",
+      weight: "800",
+      style: "extrabold",
+    },
+  ],
+});
+
+export const youngest = localFont({
+  src: "../public/fonts/Youngest-Regular.ttf",
+  display: "swap",
+});
+
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -24,7 +62,7 @@ export default function RootLayout({
   modal: React.ReactNode;
 }) {
   return (
-    <html lang="ko">
+    <html lang="jp" className={`${shipporiMincho.className} ${youngest.className}`}>
       <ReactQueryProviders>
         <AuthProvider>
           <AxiosProvider>
