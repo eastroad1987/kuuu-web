@@ -12,5 +12,7 @@ const CategoryLayout = memo(({ children, value }: CategoryLayoutProps) => {
   return <CategoryProvider value={value}>{children}</CategoryProvider>;
 });
 
+CategoryLayout.displayName = "CategoryLayout";
+
 export default CategoryLayout;
 

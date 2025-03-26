@@ -12,5 +12,7 @@ const WriterLayout = memo(({ children, value }: WriterLayoutProps) => {
   return <WriterProvider value={value}>{children}</WriterProvider>;
 });
 
+WriterLayout.displayName = "WriterLayout";
+
 export default WriterLayout;
 

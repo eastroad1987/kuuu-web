@@ -12,5 +12,7 @@ const PostLayout = memo(({ children, value }: PostLayoutProps) => {
   return <PostProvider value={value}>{children}</PostProvider>;
 });
 
+PostLayout.displayName = "PostLayout";
+
 export default PostLayout;
 
