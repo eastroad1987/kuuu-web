@@ -42,7 +42,7 @@ export const shipporiMincho = localFont({
 });
 
 export const youngest = localFont({
-  src: "../public/fonts/Youngest-Regular.ttf",
+  src: "../public/fonts/Youngest-Regular.woff",
   display: "swap",
 });
 
