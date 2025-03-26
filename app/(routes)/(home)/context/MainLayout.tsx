@@ -12,5 +12,7 @@ const MainLayout = memo(({ children, value }: MainLayoutProps) => {
   return <MainProvider value={value}>{children}</MainProvider>;
 });
 
+MainLayout.displayName = "MainLayout";
+
 export default MainLayout;
 

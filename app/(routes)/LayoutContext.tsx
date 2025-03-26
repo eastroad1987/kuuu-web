@@ -23,6 +23,8 @@ const Layout = ({ children, backgroundColor }: LayoutProps) => {
   );
 };
 
+Layout.displayName = "Layout";
+
 function Content({ children }: { children: ReactNode }) {
   return <>{children}</>;
 }

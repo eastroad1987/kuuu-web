@@ -16,7 +16,7 @@ const Header = ({ isSideMenuOpen, toggleSideMenu }: HeaderProps) => {
         <div className="main-nav">
           {/* <Hamburger isOpen={isSideMenuOpen} onClick={toggleSideMenu} /> */}
           <Link href="/" className="header-logo">
-            <h1 className="header title">Kuuu's Blog</h1>
+            <h1 className="header title">{`Kuuu's Blog`}</h1>
           </Link>
           {/* <br /> */}
         </div>

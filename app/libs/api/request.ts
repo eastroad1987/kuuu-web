@@ -194,7 +194,7 @@ const useGetList = <T>(
     params.filter = transformFilters(filters, url);
     params.order = transformSorter(sorter);
 
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    
     const transformRequest: AxiosTransformer = (data: any, headers: any) => {};
     // console.log("url:", url);
     const data: T = await axios.get(`${url}`, {

@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState, useMemo, useCallback } from "react";
-import { useAppSelector } from "../../redux/hooks";
+
 import { CreatePostDto } from "@/types/dto";
 import { uploadFile, useCreatePost } from "@/libs/api";
 import { AdminWriterPageState } from "@/types/types";
 import { Category } from "@/types/entities";
 import ReactQuill from "react-quill";
 import { useRouter } from "next/navigation";
-import { useAppDispatch } from "../../redux/hooks";
+
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { setBackgroundColor } from "../../redux/reducer";
 
 export default function useWriter() {

@@ -4,10 +4,13 @@ import Link from "next/link";
 import { useWriterContext } from "../context/WriterContext";
 import Select from "@/components/common/Select";
 import FileUploader from "@/components/common/FileUploader";
-import ReactQuill from "react-quill";
+import dynamic from "next/dynamic";
+
+import "react-quill/dist/quill.snow.css";
 import { useMemo } from "react";
 import DateSelector from "@/components/common/DateSelector";
 
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 const WriterComponents = {
   Container: ({ children }: { children: React.ReactNode }) => {
     return (
@@ -29,9 +32,7 @@ const WriterComponents = {
     const { handlers } = useWriterContext();
     return (
       <div className="mt-10 flex flex-row items-center justify-start gap-8">
-        <DateSelector
-          onChange={handlers.changeDate}
-        />
+        <DateSelector onChange={handlers.changeDate} />
       </div>
     );
   },
@@ -147,18 +148,20 @@ const WriterComponents = {
           value={state.form.title}
           onChange={handlers.changeTitle}
         />
-        {typeof window !== "undefined" && (
-          <ReactQuill
-            ref={state.quillRef}
-            id={"quill-editor"}
-            className="text-editor mt-10"
-            style={{ width: "100%", height: "400px" }}
-            formats={formats}
-            modules={modules}
-            theme="snow"
-            value={state.form.content}
-            onChange={handlers.changeContent}
-          />
+        {typeof window !== undefined && (
+          <div className="h-full w-full">
+            <ReactQuill
+              ref={state.quillRef}
+              id={"quill-editor"}
+              className="text-editor mt-10"
+              style={{ width: "100%", height: "400px" }}
+              formats={formats}
+              modules={modules}
+              theme="snow"
+              value={state.form.content}
+              onChange={handlers.changeContent}
+            />
+          </div>
         )}
       </div>
     );
