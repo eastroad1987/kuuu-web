@@ -17,7 +17,7 @@ WORKDIR /var/app
 COPY . .
 
 # 모듈 설치 및 빌드
-RUN npm update
+# RUN npm update
 RUN npm install
 RUN npm run build
 
