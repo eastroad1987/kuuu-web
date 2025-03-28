@@ -6,6 +6,7 @@ set -e
 # 변수 설정
 IMAGE_NAME="kuuu-web-image-prod"
 CONTAINER_NAME="kuuu-web-container-prod"
+NETWORK_NAME="kuuu-network-prod"
 PORT=3000  # 필요한 포트로 변경하세요
 
 # 이전 컨테이너 중지 및 삭제
@@ -21,6 +22,7 @@ docker build -t $IMAGE_NAME .
 echo "Starting container..."
 docker run -d \
     --name $CONTAINER_NAME \
+    --network $NETWORK_NAME \
     -p $PORT:$PORT \
     $IMAGE_NAME
 
