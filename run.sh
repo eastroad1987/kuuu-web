@@ -14,6 +14,13 @@ echo "Cleaning up old container..."
 docker stop $CONTAINER_NAME 2>/dev/null || true
 docker rm $CONTAINER_NAME 2>/dev/null || true
 
+if ! docker network ls | grep -q $NETWORK_NAME; then
+    log "Docker 네트워크 생성 중: $NETWORK_NAME"
+    docker network create $NETWORK_NAME
+else
+    log "네트워크가 이미 존재합니다: $NETWORK_NAME"
+fi
+
 # 도커 이미지 빌드
 echo "Building Docker image..."
 docker build -t $IMAGE_NAME .
