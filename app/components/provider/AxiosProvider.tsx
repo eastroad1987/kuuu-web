@@ -1,6 +1,6 @@
 "use client";
 import { useMemo } from "react";
-import axios, { AxiosContext } from "../../libs/api/request";
+import axios, { AxiosContext } from "../../lib/api/request";
 
 const AxiosProvider = ({ children }: React.PropsWithChildren<unknown>) => {
   const axiosValue = useMemo(() => {

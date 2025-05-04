@@ -28,6 +28,7 @@ export default function BlogContent({
   onSelected,
   onSelectedDate,
 }: InputProps) {
+
   const [isClient, setIsClient] = useState(false);
   useEffect(() => {
     setIsClient(true);
@@ -80,7 +81,6 @@ export default function BlogContent({
                 {visibleItems.map((itemIndex, arrayIndex) => {
                   const { scale, filter, opacity, yOffset, zIndex } =
                     getCardStyle(arrayIndex);
-
                   return (
                     <motion.div
                       key={arrayIndex}
@@ -146,7 +146,7 @@ export default function BlogContent({
                         }}
                       >
                         <HorizontalCard
-                          post={data?.[itemIndex]}
+                          post={itemIndex as any}
                           onSelected={onSelected}
                         />
                       </motion.div>
