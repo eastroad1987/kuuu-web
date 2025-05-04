@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { uploadFile, uploadMultipleFiles } from "@/libs/api/file";
+import { uploadFile, uploadMultipleFiles } from "../../lib/api/file";
 
 interface FileUploaderProps {
   isUploading: boolean;

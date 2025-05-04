@@ -1,13 +1,14 @@
-import { useGetPostById } from "@/libs/api";
 import { PostPageState } from "@/types/types";
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { useAppDispatch } from "../../../redux/hooks";
 import { setBackgroundColor } from "../../../redux/reducer";
+import { useGetPostById } from "../../../lib/api/apis";
 
 export default function usePost(id: string) {
   const dispatch = useAppDispatch();
 
-  const { data: post, isLoading, isError, refetch } = useGetPostById(id);
+  const { data: postResponse, isLoading, isError, refetch } = useGetPostById(id);
+  const post = postResponse?.data;
 
   // 초기 상태 메모이제이션
   const initialState = useMemo<PostPageState>(() => ({
