@@ -1,11 +1,9 @@
-import { useEffect, useRef, useState, useMemo, useCallback } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-import { CreatePostDto } from "@/types/dto";
-import { uploadFile, useCreatePost } from "@/libs/api";
 import { AdminWriterPageState } from "@/types/types";
-import { Category } from "@/types/entities";
-import ReactQuill from "react-quill";
 import { useRouter } from "next/navigation";
+
+import { useCreatePost, useGetS3SignedUrl } from "../../lib/api/apis";
 
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { setBackgroundColor } from "../../redux/reducer";
@@ -13,40 +11,36 @@ import { setBackgroundColor } from "../../redux/reducer";
 export default function useWriter() {
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const getSignedUrl = useGetS3SignedUrl();
 
   const categories = useAppSelector(
     (store) => (store as any).reducers.app.categories,
   );
 
-  const initialForm = useMemo<CreatePostDto>(
-    () => ({
-      title: "",
-      content: "",
-      summary: "",
-      thumbnail: "",
-      referencePlace: "",
-      images: "",
-      attachFiles: "",
-      categoryId: categories[0]?.id,
-      subcategoryId: categories[0]?.subcategories[0]?.id,
-    }),
-    [categories],
-  );
+  const initialForm = useMemo(() => ({
+    title: "",
+    content: "",
+    summary: "",
+    thumbnail: "",
+    referencePlace: "",
+    images: "",
+    attachFiles: "",
+    categoryId: "1",
+    subcategoryId: "1",
+  }), []);
 
-  const { mutate: createPost } = useCreatePost(initialForm);
+  const { mutate: createPost } = useCreatePost();
 
-  const quillRef = useRef<ReactQuill>(null);
   const [state, setState] = useState<AdminWriterPageState>(() => ({
     date: new Date(),
     form: initialForm,
     categories: categories,
     category: categories[0],
-    subCategories: categories[0]?.subcategories,
-    subCategory: categories[0]?.subcategories[0],
+    subCategories: categories[0]?.subCategories,
+    subCategory: categories[0]?.subCategories[0],
     isUploading: false,
     progress: 0,
     thumbnailFile: null,
-    quillRef: quillRef,
   }));
 
   const updateState = useCallback((updates: Partial<AdminWriterPageState>) => {
@@ -59,11 +53,12 @@ export default function useWriter() {
 
   useEffect(() => {
     if (categories?.length > 0) {
+      console.log(categories);
       updateState({
         categories: categories,
         category: categories[0],
-        subCategories: categories[0]?.subcategories,
-        subCategory: categories[0]?.subcategories[0],
+        subCategories: categories[0]?.subCategories,
+        subCategory: categories[0]?.subCategories[0],
       });
     }
   }, [categories, updateState]);
@@ -79,17 +74,35 @@ export default function useWriter() {
     try {
       let thumbnailUrl = "";
       if (state.thumbnailFile) {
-        const formData = new FormData();
-        formData.append("file", state.thumbnailFile?.file);
-        const item: any = await uploadFile(formData);
-        thumbnailUrl = item.data[0].url;
+        // 1. Get signed URL
+        const { data: signedUrlData } = await getSignedUrl.mutateAsync({
+          fileName: state.thumbnailFile.file.name,
+          fileType: state.thumbnailFile.file.type,
+        });
+
+        // 2. Upload file using signed URL
+        await fetch(signedUrlData.signedUrl, {
+          method: "PUT",
+          body: state.thumbnailFile.file,
+          headers: {
+            "Content-Type": state.thumbnailFile.file.type,
+          },
+        });
+
+        thumbnailUrl = signedUrlData.key;
       }
 
       const post = {
-        ...state.form,
+        title: state.form.title,
+        content: state.form.content,
+        summary: state.form.summary || "",
         thumbnail: thumbnailUrl,
+        referencePlace: state.form.referencePlace || "",
+        images: state.form.images || "",
+        attachFiles: state.form.attachFiles || "",
         categoryId: Number(state.form.categoryId),
         subcategoryId: Number(state.form.subcategoryId),
+        authorId: 1,
       };
 
       await createPost(post);
@@ -103,7 +116,14 @@ export default function useWriter() {
         form: initialForm,
       });
     }
-  }, [state.form, state.thumbnailFile, updateState, createPost, initialForm]);
+  }, [
+    state.form,
+    state.thumbnailFile,
+    updateState,
+    createPost,
+    initialForm,
+    getSignedUrl,
+  ]);
 
   const handleChangeCategory = useCallback(
     (value: string) => {

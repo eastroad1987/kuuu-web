@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 
 import "@/styles/globals.css";
 import { Inter } from "next/font/google";
-import "react-quill/dist/quill.snow.css";
 
 import AuthProvider from "./components/auth/AuthProvider";
 import AxiosProvider from "./components/provider/AxiosProvider";
@@ -64,16 +63,16 @@ export default function RootLayout({
   return (
     <html lang="jp" className={`${shipporiMincho.className} ${youngest.className}`}>
       <ReactQueryProviders>
-        <AuthProvider>
-          <AxiosProvider>
-            <ReduxProvider>
+        <ReduxProvider>
+          <AuthProvider>
+            <AxiosProvider>
               <body>
                 {children}
                 {modal}
               </body>
-            </ReduxProvider>
-          </AxiosProvider>
-        </AuthProvider>
+            </AxiosProvider>
+          </AuthProvider>
+        </ReduxProvider>
       </ReactQueryProviders>
     </html>
   );
