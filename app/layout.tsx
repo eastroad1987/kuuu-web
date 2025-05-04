@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 
 import "@/styles/globals.css";
 import { Inter } from "next/font/google";
@@ -45,7 +46,6 @@ export const youngest = localFont({
   display: "swap",
 });
 
-
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -62,18 +62,20 @@ export default function RootLayout({
 }) {
   return (
     <html lang="jp" className={`${shipporiMincho.className} ${youngest.className}`}>
-      <ReactQueryProviders>
-        <ReduxProvider>
-          <AuthProvider>
-            <AxiosProvider>
-              <body>
-                {children}
-                {modal}
-              </body>
-            </AxiosProvider>
-          </AuthProvider>
-        </ReduxProvider>
-      </ReactQueryProviders>
+      <body>
+        <Suspense fallback={<div>Loading...</div>}>
+          <ReactQueryProviders>
+            <ReduxProvider>
+              <AuthProvider>
+                <AxiosProvider>
+                  {children}
+                  {modal}
+                </AxiosProvider>
+              </AuthProvider>
+            </ReduxProvider>
+          </ReactQueryProviders>
+        </Suspense>
+      </body>
     </html>
   );
 }

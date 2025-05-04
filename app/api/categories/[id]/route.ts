@@ -17,32 +17,18 @@ export async function GET(
     });
 
     if (!category) {
-      return NextResponse.json<ApiResponse<null>>(
-        { 
-          data: null,
-          error: "Category not found",
-          message: "Category not found"
-        },
-        { status: 404 }
+      return NextResponse.json(
+        { error: "Category not found" },
+        { status: 404 },
       );
     }
 
-    return NextResponse.json<ApiResponse<any>>(
-      { 
-        data: category,
-        error: undefined,
-        message: undefined
-      }
-    );
+    return NextResponse.json({ data: category });
   } catch (error) {
     console.error("Error fetching category:", error);
-    return NextResponse.json<ApiResponse<null>>(
-      { 
-        data: null,
-        error: "Failed to fetch category",
-        message: "Failed to fetch category"
-      },
-      { status: 500 }
+    return NextResponse.json(
+      { error: "Failed to fetch category" },
+      { status: 500 },
     );
   }
 }
@@ -57,14 +43,7 @@ export async function PUT(
     const { title } = body;
 
     if (!title) {
-      return NextResponse.json<ApiResponse<null>>(
-        { 
-          data: null,
-          error: "Title is required",
-          message: "Title is required"
-        },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Title is required" }, { status: 400 });
     }
 
     const category = await prisma.category.update({
@@ -72,22 +51,12 @@ export async function PUT(
       data: { title },
     });
 
-    return NextResponse.json<ApiResponse<any>>(
-      { 
-        data: category,
-        error: undefined,
-        message: undefined
-      }
-    );
+    return NextResponse.json({ data: category });
   } catch (error) {
     console.error("Error updating category:", error);
-    return NextResponse.json<ApiResponse<null>>(
-      { 
-        data: null,
-        error: "Failed to update category",
-        message: "Failed to update category"
-      },
-      { status: 500 }
+    return NextResponse.json(
+      { error: "Failed to update category" },
+      { status: 500 },
     );
   }
 }
@@ -102,22 +71,12 @@ export async function DELETE(
       where: { id: BigInt(params.id) },
     });
 
-    return NextResponse.json<ApiResponse<null>>(
-      { 
-        data: null,
-        error: undefined,
-        message: "Category deleted successfully"
-      }
-    );
+    return NextResponse.json({ message: "Category deleted successfully" });
   } catch (error) {
     console.error("Error deleting category:", error);
-    return NextResponse.json<ApiResponse<null>>(
-      { 
-        data: null,
-        error: "Failed to delete category",
-        message: "Failed to delete category"
-      },
-      { status: 500 }
+    return NextResponse.json(
+      { error: "Failed to delete category" },
+      { status: 500 },
     );
   }
 }

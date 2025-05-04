@@ -69,6 +69,7 @@ const nextConfig = {
   },
   images: {
     domains: process.env.RESOURCES_DOMAINS.trim().split(','),
+    disableStaticImages: true
   },
   // 컴파일러 설정
   compiler: {

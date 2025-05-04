@@ -3,7 +3,6 @@
 import HorizontalCard from "@/components/common/Card/HorizontalCard";
 import NoData from "@/components/common/NoData/NoData";
 import { PostResponse } from "@/types/dto";
-import { CardStyle } from "@/types/types";
 import { AnimatePresence, motion } from "framer-motion";
 import moment from "moment";
 import { useEffect, useState } from "react";
@@ -11,7 +10,7 @@ import Calendar from "react-calendar";
 
 interface InputProps {
   data?: PostResponse[];
-  visibleItems: number[];
+  visibleItems: [];
   windowHeight: number;
   value: Date;
   onChangeDate: (date: Date) => void;

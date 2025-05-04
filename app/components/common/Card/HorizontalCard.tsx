@@ -1,3 +1,4 @@
+"use client";
 import { PostResponse } from "@/types/dto";
 import { useAppSelector } from "../../../redux/hooks";
 import Image from "next/image";
@@ -19,7 +20,7 @@ export default function HorizontalCard({
     (category: any) => category.id === post?.categoryId,
   );
 
-  return (
+  return ( 
     <button
       className="mx-auto max-w-4xl overflow-hidden rounded-xl bg-white shadow-md md:flex"
       onClick={() => onSelected(post?.id as any)}

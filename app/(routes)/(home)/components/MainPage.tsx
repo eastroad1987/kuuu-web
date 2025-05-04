@@ -1,5 +1,6 @@
 "use client";
 
+import { ReactNode } from "react";
 import VerticalDots from "@/components/common/VerticalDots";
 import { useMainContext } from "../context/MainContext";
 import BlogContent from "./BlogContent";
@@ -8,7 +9,7 @@ import MainContent from "./MainContent";
 import ProfileContent from "./ProfileContent";
 
 const MainComponents = {
-  Container: ({ children }: { children: React.ReactNode }) => {
+  Container: ({ children }: { children: ReactNode }) => {
     const { state } = useMainContext();
     return (
       <div className="flex h-screen w-full flex-col items-center justify-start bg-white">
@@ -62,3 +63,4 @@ const MainComponents = {
 };
 
 export default MainComponents;
+
