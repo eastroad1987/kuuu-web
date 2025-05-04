@@ -4,7 +4,7 @@
 import {
   QueryClient,
   QueryClientProvider,
-} from "@tanstack/react-query";
+} from "react-query";
 import * as React from "react";
 
 export const queryClient = new QueryClient({

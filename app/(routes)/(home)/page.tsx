@@ -4,6 +4,7 @@ import MainComponents from "./components/MainPage";
 import useHome from "./hooks/useHome";
 import MainLayout from "./context/MainLayout";
 
+
 export default function HomePage() {
   const useHomeHook = useHome();
   return (

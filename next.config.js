@@ -2,6 +2,12 @@
 const nextConfig = {
   // React strict mode 활성화
   reactStrictMode: true,
+
+  // 이미지 도메인 허용 설정
+  images: {
+    domains: process.env.RESOURCES_DOMAINS.trim().split(","),
+  },
+
   // webpack 설정
   webpack: (config) => {
     config.experiments = {
@@ -62,14 +68,13 @@ const nextConfig = {
       },
     ];
   },
+
+  // 실험적 기능
   experimental: {
-    images: {
-      layoutRaw: true,
-    },
+    serverActions: true,
+    serverComponentsExternalPackages: ["@prisma/client"],
   },
-  images: {
-    domains: process.env.RESOURCES_DOMAINS.trim().split(','),
-  },
+
   // 컴파일러 설정
   compiler: {
     removeConsole: process.env.NODE_ENV === "production",

@@ -86,6 +86,7 @@ export interface AdminWriterPageState {
   isUploading: boolean;
   progress: number;
   thumbnailFile: any | null;
+  quillRef: any;
 }
 
 export interface UseAdminWriterType {

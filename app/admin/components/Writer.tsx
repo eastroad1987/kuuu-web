@@ -5,13 +5,12 @@ import { useWriterContext } from "../context/WriterContext";
 import Select from "@/components/common/Select";
 import FileUploader from "@/components/common/FileUploader";
 import dynamic from "next/dynamic";
+
+import "react-quill/dist/quill.snow.css";
 import { useMemo } from "react";
 import DateSelector from "@/components/common/DateSelector";
-import Image from 'next/image';
-import "react-quill/dist/quill.snow.css";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
-
 const WriterComponents = {
   Container: ({ children }: { children: React.ReactNode }) => {
     return (
@@ -127,11 +126,9 @@ const WriterComponents = {
         >
           <div className="rounded-lg border-2 border-dashed border-gray-300 p-4 transition-colors hover:border-blue-500">
             {state.thumbnailFile ? (
-              <Image
+              <img
                 src={state.thumbnailFile?.url}
                 alt="Thumbnail"
-                width={500}
-                height={300}
                 className="h-48 w-full rounded object-cover"
               />
             ) : (
@@ -154,7 +151,8 @@ const WriterComponents = {
         {typeof window !== undefined && (
           <div className="h-full w-full">
             <ReactQuill
-              id="quill-editor"
+              ref={state.quillRef}
+              id={"quill-editor"}
               className="text-editor mt-10"
               style={{ width: "100%", height: "400px" }}
               formats={formats}
