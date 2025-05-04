@@ -3,6 +3,7 @@ import Footer from "../components/common/Footer";
 import Header from "../components/common/Header";
 
 import { createContext, ReactNode } from "react";
+import { useUrl } from "../hooks/useURL";
 
 interface LayoutContextType {
   backgroundColor: string;
@@ -12,12 +13,16 @@ const LayoutContext = createContext<LayoutContextType | undefined>(undefined);
 
 interface LayoutProps {
   children: ReactNode;
-  backgroundColor: string;
 }
 
-const Layout = ({ children, backgroundColor }: LayoutProps) => {
+const Layout = ({ children }: LayoutProps) => {
+  const { pathname } = useUrl();
+  const list = pathname.split("/");
+  const isAdmin = list.includes("admin");
+  const color = isAdmin ? "#000000" : "#FFFFFF";
+
   return (
-    <LayoutContext.Provider value={{ backgroundColor }}>
+    <LayoutContext.Provider value={{ backgroundColor: color }}>
       {children}
     </LayoutContext.Provider>
   );

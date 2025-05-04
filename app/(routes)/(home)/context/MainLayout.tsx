@@ -15,4 +15,3 @@ const MainLayout = memo(({ children, value }: MainLayoutProps) => {
 MainLayout.displayName = "MainLayout";
 
 export default MainLayout;
-

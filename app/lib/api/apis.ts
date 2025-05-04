@@ -1,3 +1,5 @@
+"use client";
+
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { ApiResponse, PaginatedResponse } from "@/types/api";
 
