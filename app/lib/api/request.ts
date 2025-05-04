@@ -3,7 +3,7 @@ import { createContext, ReactNode } from "react";
 import Axios, { AxiosInstance, AxiosTransformer } from "axios";
 
 import { useContext } from "react";
-import { useQuery, useMutation, useQueryClient } from "react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import qs from "qs";
 import { eqOrLikeQuery } from "../../types/constants";
 
@@ -186,50 +186,51 @@ const useGetList = <T>(
 ) => {
   const axios = useAxios();
 
-  const service = async () => {
-    let params: listParams = {};
-    // console.log(key);
-    // console.log(transformFilters(filters, url));
-    params = { ...transformPagination(pagination) };
-    params.filter = transformFilters(filters, url);
-    params.order = transformSorter(sorter);
+  return useQuery<T, Error>({
+    queryKey: [key],
+    queryFn: async () => {
+      let params: listParams = {};
+      params = { ...transformPagination(pagination) };
+      params.filter = transformFilters(filters, url);
+      params.order = transformSorter(sorter);
 
-    
-    const transformRequest: AxiosTransformer = (data: any, headers: any) => {};
-    // console.log("url:", url);
-    const data: T = await axios.get(`${url}`, {
-      params,
-      paramsSerializer: (params: any) => {
-        return qs.stringify(params, { arrayFormat: "repeat" });
-      },
-      transformRequest,
-    });
+      const transformRequest: AxiosTransformer = (data: any, headers: any) => {};
+      const data: T = await axios.get(`${url}`, {
+        params,
+        paramsSerializer: (params: any) => {
+          return qs.stringify(params, { arrayFormat: "repeat" });
+        },
+        transformRequest,
+      });
 
-    return data;
-  };
-  return useQuery(key, () => service());
+      return data;
+    },
+  });
 };
 
 const useGetOne = <T>(key: string, url: string, params?: any) => {
   const axios = useAxios();
 
-  const service = async () => {
-    const data: T = await axios.get(`${url}`, params);
-
-    return data;
-  };
-  return useQuery(key, () => service());
+  return useQuery<T, Error>({
+    queryKey: [key],
+    queryFn: async () => {
+      const data: T = await axios.get(`${url}`, params);
+      return data;
+    },
+  });
 };
 
 const useGetQuery = <T>(key: string, url: string, query?: any) => {
   const axios = useAxios();
   const queryString = qs.stringify(query);
-  const service = async () => {
-    const data: T = await axios.get(`${url}?${queryString}`);
 
-    return data;
-  };
-  return useQuery(key, () => service());
+  return useQuery<T, Error>({
+    queryKey: [key],
+    queryFn: async () => {
+      const data: T = await axios.get(`${url}?${queryString}`);
+      return data;
+    },
+  });
 };
 
 const axiosFileUpload = async <T, U>(url: string, formData: any) => {
@@ -240,36 +241,54 @@ const axiosFileUpload = async <T, U>(url: string, formData: any) => {
 const useCreate = <T, U>(url: string) => {
   const axios = useAxios();
   const queryClient = useQueryClient();
-  return useMutation(async (params: T) => {
-    const data: U = await axios.post(`${url}`, params);
-    return data;
+  return useMutation<U, Error, T>({
+    mutationFn: async (params: T) => {
+      const data: U = await axios.post(`${url}`, params);
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries();
+    },
   });
 };
 
 const useUpdate = <T>(url: string) => {
   const axios = useAxios();
   const queryClient = useQueryClient();
-  return useMutation(async (item: T) => {
-    const data: T = await axios.patch(`${url}`, item);
-    return data;
+  return useMutation<T, Error, T>({
+    mutationFn: async (item: T) => {
+      const data: T = await axios.put(`${url}`, item);
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries();
+    },
   });
 };
 
 const useDelete = <T>(url: string) => {
   const axios = useAxios();
   const queryClient = useQueryClient();
-  return useMutation(async (id: number) => {
-    const data: T = await axios.delete(`${url}?id=${id}`);
-    return data;
+  return useMutation<void, Error, number>({
+    mutationFn: async (id: number) => {
+      await axios.delete(`${url}/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries();
+    },
   });
 };
 
 const useBatch = (url: string) => {
   const axios = useAxios();
   const queryClient = useQueryClient();
-  return useMutation(async (ids: number[]) => {
-    const data = await axios.post(`${url}`, { idList: ids });
-    return data;
+  return useMutation<void, Error, number[]>({
+    mutationFn: async (ids: number[]) => {
+      await axios.post(`${url}/batch`, { ids });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries();
+    },
   });
 };
 
