@@ -1,10 +1,11 @@
-import { useGetCategories, useGetPosts, useGetPostsByPeriod } from "@/libs/api";
 import { MainPageState } from "@/types/types";
-import { useEffect, useState, useMemo, useCallback } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useScrollSections } from "../../../hooks/useScrollSections";
-import { setBackgroundColor, setCategories } from "../../../redux/reducer";
+import { useGetCategories, useGetPostsByPeriod } from "../../../lib/api/apis";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
-import { getMonthPeriod } from "@/libs/date";
+import { setBackgroundColor, setCategories } from "../../../redux/reducer";
+
+import { useRouter } from "next/navigation";
 
 export default function useHome() {
   const limitPages = 4;
@@ -14,7 +15,8 @@ export default function useHome() {
   });
 
   const dispatch = useAppDispatch();
-  const list = useAppSelector(
+  const router = useRouter();
+  const categoriesList = useAppSelector(
     (store) => (store as any).reducers.app.categories,
   );
 
@@ -24,13 +26,16 @@ export default function useHome() {
     isError: isCategoriesError,
   } = useGetCategories();
 
-  //   const {
-  //     data: posts,
-  //     isLoading: isPostsLoading,
-  //   isError: isPostsError,
-  // } = useGetPosts({ start: 1, limit: 99999 });
+  const [startDate, setStartDate] = useState<string>("");
+  const [endDate, setEndDate] = useState<string>("");
 
-  // 초기 상태 메모이제이션
+  const {
+    data: posts,
+    isLoading: isPostsLoading,
+    isError: isPostsError,
+    refetch: refetchPosts,
+  } = useGetPostsByPeriod(startDate, endDate);
+
   const initialState = useMemo<MainPageState>(
     () => ({
       timerRef: null,
@@ -51,79 +56,62 @@ export default function useHome() {
 
   const [state, setState] = useState<MainPageState>(initialState);
 
-  const {
-    data: posts,
-    isLoading: isPostsLoading,
-    isError: isPostsError,
-  } = useGetPostsByPeriod(
-    getMonthPeriod(state.currentDate).start.toDateString(),
-    getMonthPeriod(state.currentDate).end.toDateString(),
-  );
-
-  // updateState 함수 메모이제이션
   const updateState = useCallback((updates: Partial<MainPageState>) => {
     setState((prev: MainPageState) => ({ ...prev, ...updates }));
   }, []);
 
-  // 클라이언트 사이드 초기화
   useEffect(() => {
     const handleResize = () =>
       updateState({ windowHeight: window.innerHeight });
     updateState({ windowHeight: window.innerHeight });
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  }, [updateState]);
 
-  // 데이터가 변경되면 인덱스 배열 초기화
   useEffect(() => {
     updateState({ arrayIndex: state.arrayIndex });
-  }, [state.arrayIndex]);
+  }, [state.arrayIndex, updateState]);
 
-  // 아이템 순환 타이머 로직
-  useEffect(() => {
-    if (posts && posts.length <= 0 || state.currentIndex < 0) return;
-    const timer = setInterval(() => {
-      if (posts && state.currentIndex < posts.length) {
-        let newItems = [...state.visibleBlogs, state.currentIndex];
-        if (newItems.length > state.maxVisibleBlogs) {
-          newItems = newItems.slice(1);
-        }
-        updateState({
-          visibleBlogs: newItems,
-          currentIndex: state.currentIndex + 1,
-        });
-      } else {
-        updateState({ currentIndex: 0 });
-      }
-    }, 1200); // 시간 간격 증가
-    return () => clearInterval(timer);
-  }, [state.currentIndex]);
-
-  // 백그라운드 색상 설정 Effect
   useEffect(() => {
     dispatch(setBackgroundColor("#FFFFFF"));
   }, [dispatch]);
 
-  // 현재 섹션 업데이트 Effect
   useEffect(() => {
     updateState({ currentSection });
   }, [currentSection, updateState]);
 
-  // 카테고리 데이터 로딩 Effect
   useEffect(() => {
-    if (categories && (!list || list.length === 0)) {
-      dispatch(setCategories(categories));
+    if (categories?.data && (!categoriesList || categoriesList.length === 0)) {
+      dispatch(setCategories(categories.data));
     }
-  }, [categories, list, dispatch]);
+  }, [categories, categoriesList, dispatch]);
 
-  // 포스트 데이터 로딩 Effect
+  // 날짜 변경 시 포스트 데이터 업데이트
   useEffect(() => {
-    if (posts && (!state.posts || state.posts.length === 0)) {
-      updateState({ posts, currentIndex: 0 });
-    }
-  }, [posts, state.posts, updateState]);
+    if (state.currentDate) {
+      const start = new Date(state.currentDate);
+      start.setDate(start.getDate() - 14); // 2주 전
+      start.setHours(0, 0, 0, 0);
 
-  // handlers 함수들을 개별 useCallback으로 분리
+      const end = new Date(state.currentDate);
+      end.setDate(end.getDate() + 14); // 2주 후
+      end.setHours(23, 59, 59, 999);
+
+      setStartDate(start.toISOString());
+      setEndDate(end.toISOString());
+    }
+  }, [state.currentDate]);
+
+  // 포스트 데이터 업데이트
+  useEffect(() => {
+    if (posts?.data) {
+      updateState({
+        posts: posts.data as any,
+        visibleBlogs: posts.data as any,
+      });
+    }
+  }, [posts, updateState]);
+
   const handlePageChange = useCallback(
     (page: number) => {
       updateState({ currentSection: page });
@@ -141,6 +129,7 @@ export default function useHome() {
   const handleSelected = useCallback(
     (postId: string) => {
       updateState({ currentPostId: postId });
+      router.push(`/post/${postId}`);
     },
     [updateState],
   );
@@ -152,21 +141,22 @@ export default function useHome() {
     [updateState],
   );
 
-  // handlers 객체 구성
-  const handlers = {
-    onPageChange: handlePageChange,
-    onSelected: handleSelected,
-    onSelectedDate: handleSelectedDate,
-    onChangeDate: handleChangeDate,
-  };
+  const handlers = useMemo(
+    () => ({
+      onPageChange: handlePageChange,
+      onSelected: handleSelected,
+      onSelectedDate: handleSelectedDate,
+      onChangeDate: handleChangeDate,
+    }),
+    [handlePageChange, handleSelected, handleSelectedDate, handleChangeDate],
+  );
 
-  // 관련 상태들 메모이제이션
   const status = useMemo(
     () => ({
-      isLoading: isPostsLoading || isCategoriesLoading,
-      isError: isPostsError || isCategoriesError,
+      isLoading: isCategoriesLoading || isPostsLoading,
+      isError: isCategoriesError || isPostsError,
     }),
-    [isPostsLoading, isCategoriesLoading, isPostsError, isCategoriesError],
+    [isCategoriesLoading, isPostsLoading, isCategoriesError, isPostsError],
   );
 
   return {

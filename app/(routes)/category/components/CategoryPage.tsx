@@ -40,7 +40,6 @@ const CategoryComponents = {
   },
   Posts: () => {
     const { state } = useCategoryContext();
-
     const boardName = `${state.currentBoard.title} - ${state.currentSubBoard.title}`;
     return <CategoryPosts posts={state.posts} boardName={boardName} />;
   },
