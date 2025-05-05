@@ -10,9 +10,10 @@ export interface CardStyle {
 }
 
 export interface MainPageState {
+  isMobile: boolean;
   timerRef: any;
   maxVisibleBlogs: number;
-  visibleBlogs: number[];
+  visibleBlogs: any[];
   arrayIndex: number[];
   currentIndex: number;
   windowHeight: number;

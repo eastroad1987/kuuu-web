@@ -5,10 +5,11 @@ import NoData from "@/components/common/NoData/NoData";
 import { PostResponse } from "@/types/dto";
 import { AnimatePresence, motion } from "framer-motion";
 import moment from "moment";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import Calendar from "react-calendar";
 
 interface InputProps {
+  isMobile: boolean;
   data?: PostResponse[];
   visibleItems: [];
   windowHeight: number;
@@ -19,6 +20,7 @@ interface InputProps {
 }
 
 export default function BlogContent({
+  isMobile,
   visibleItems,
   windowHeight,
   value,
@@ -27,7 +29,6 @@ export default function BlogContent({
   onSelected,
   onSelectedDate,
 }: InputProps) {
-
   const [isClient, setIsClient] = useState(false);
   useEffect(() => {
     setIsClient(true);
@@ -70,9 +71,182 @@ export default function BlogContent({
 
   return (
     <section
-      className={`flex h-full w-full flex-row items-center justify-between bg-white`}
+      className={`flex h-full w-full ${isMobile ? "flex-col" : "flex-row"} items-center justify-between bg-white`}
     >
-      <div className="h-full w-[50%]">
+      {isMobile ? (
+        <Mobile
+          isClient={isClient}
+          data={data}
+          visibleItems={visibleItems}
+          windowHeight={windowHeight}
+          value={value}
+          getCardStyle={getCardStyle}
+          onChangeDate={onChangeDate}
+          onSelected={onSelected}
+          onSelectedDate={onSelectedDate}
+        />
+      ) : (
+        <Desktop
+          isClient={isClient}
+          data={data}
+          visibleItems={visibleItems}
+          windowHeight={windowHeight}
+          value={value}
+          getCardStyle={getCardStyle}
+          onChangeDate={onChangeDate}
+          onSelected={onSelected}
+          onSelectedDate={onSelectedDate}
+        />
+      )}
+    </section>
+  );
+}
+
+interface ChildInputProps {
+  isClient: boolean;
+  data?: PostResponse[];
+  visibleItems: [];
+  windowHeight: number;
+  value: Date;
+  getCardStyle: any;
+  onChangeDate: (date: Date) => void;
+  onSelected: (postId: string) => void;
+  onSelectedDate: (date: Date) => void;
+}
+
+function Mobile({
+  isClient,
+  data,
+  visibleItems,
+  windowHeight,
+  getCardStyle,
+  onSelected,
+  onChangeDate,
+  value,
+}: ChildInputProps) {
+  return (
+    <Fragment>
+      <div className="h-[50%] w-full">
+        <div className="flex h-full w-full flex-col items-center justify-center">
+          {isClient && (
+            <div className="calendar-container">
+              <Calendar
+                onChange={(value) => onChangeDate(value as Date)}
+                formatDay={(locale, date) => moment(date).format("DD")}
+                value={value}
+                minDetail="month"
+                maxDetail="month"
+                showNeighboringMonth={false}
+                className="h-full w-full border-b text-xs"
+              />
+            </div>
+          )}
+        </div>
+      </div>
+      <div className="h-[50%] w-full">
+        <div className="relative h-full w-full overflow-hidden p-4">
+          <div className="flex h-full w-full flex-col items-center justify-center">
+            {data && data.length > 0 ? (
+              <AnimatePresence mode="popLayout">
+                {visibleItems.map((itemIndex, arrayIndex) => {
+                  const { scale, filter, opacity, yOffset, zIndex } =
+                    getCardStyle(arrayIndex);
+                  return (
+                    <motion.div
+                      key={arrayIndex}
+                      initial={{
+                        y: windowHeight,
+                        opacity: 0,
+                        scale: 0.3,
+                        zIndex,
+                      }}
+                      animate={{
+                        y: yOffset,
+                        opacity,
+                        scale,
+                        zIndex,
+                      }}
+                      exit={{
+                        y: -windowHeight * 0.3,
+                        opacity: 0,
+                        scale: 0.3,
+                        transition: {
+                          duration: 0.4,
+                          ease: "easeInOut",
+                        },
+                        zIndex,
+                      }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 100,
+                        damping: 15,
+                        mass: 0.8,
+                        opacity: {
+                          duration: 0.6,
+                          ease: "easeInOut",
+                        },
+                        scale: {
+                          duration: 0.6,
+                          ease: [0.32, 0.72, 0, 1],
+                        },
+                      }}
+                      className="absolute w-[100%] p-4"
+                      style={{
+                        top: 0,
+                        filter,
+                        transformOrigin: "center center",
+                        willChange: "transform, opacity",
+                        transform: `
+                        scale(${scale})
+                        translateY(-${yOffset}px)
+                        ${arrayIndex === 2 ? "translateZ(10px)" : ""}
+                      `,
+                        transition:
+                          "transform 0.6s cubic-bezier(0.32, 0.72, 0, 1)",
+                        zIndex,
+                      }}
+                    >
+                      <motion.div
+                        initial={{ scale: 0.9 }}
+                        animate={{ scale: 1 }}
+                        exit={{ scale: 0.9 }}
+                        transition={{
+                          duration: 0.4,
+                          ease: "easeInOut",
+                        }}
+                      >
+                        <HorizontalCard
+                          post={itemIndex as any}
+                          onSelected={onSelected}
+                        />
+                      </motion.div>
+                    </motion.div>
+                  );
+                })}
+              </AnimatePresence>
+            ) : (
+              <NoData />
+            )}
+          </div>
+        </div>
+      </div>
+    </Fragment>
+  );
+}
+
+function Desktop({
+  isClient,
+  data,
+  visibleItems,
+  windowHeight,
+  getCardStyle,
+  onSelected,
+  onChangeDate,
+  value,
+}: ChildInputProps) {
+  return (
+    <Fragment>
+      <div className={`h-full w-[50%]`}>
         <div className="relative h-screen w-full overflow-hidden p-4">
           <div className="flex h-full w-full flex-col items-center justify-center">
             {data && data.length > 0 ? (
@@ -193,6 +367,6 @@ export default function BlogContent({
           )}
         </div>
       </div>
-    </section>
+    </Fragment>
   );
 }

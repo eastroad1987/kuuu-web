@@ -1,12 +1,16 @@
 "use client";
 
 import Image from "next/image";
+import { useState } from "react";
 
 interface InputProps {
   show: boolean;
+  isMobile: boolean;
 }
 
-export default function ProfileContent({ show }: InputProps) {
+export default function ProfileContent({ show, isMobile }: InputProps) {
+  const [isHovered, setIsHovered] = useState(false);
+
   return (
     <div className={`flex h-full w-full items-center justify-center`}>
       <div className="profile-container">
@@ -16,18 +20,23 @@ export default function ProfileContent({ show }: InputProps) {
             <h2>프로필</h2>
           </div>
           <div className="flex w-full flex-col items-center justify-center">
-            <h2 className="text-4xl">KURUMI</h2>
+            <h2 className={`text-4xl ${isMobile ? 'text-2xl' : ''}`}>KURUMI</h2>
             <div className="w-[40%]">
               <LineSvg />
             </div>
-            <h3 className="text-2xl">쿠루미</h3>
+            <h3 className={`text-2xl ${isMobile ? 'text-xl' : ''}`}>쿠루미</h3>
           </div>
           <div className="icons mb-10">
-            <button id="profile-prev-button" className="icon mr-4">
-              <LetterIcon />
-            </button>
-            <button id="profile-next-button" className="icon ml-4">
-              <OpenLetterIcon />
+            <button 
+              id="profile-prev-button" 
+              className="icon"
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => setIsHovered(false)}
+              onClick={() => {
+                window.open("https://www.instagram.com/kuuus_blog?igsh=MXQzZGQ3bHRjd2dhZg%3D%3D&utm_source=qr", "_blank");
+              }}
+            >
+              {isHovered ? <OpenLetterIcon /> : <LetterIcon />}
             </button>
           </div>
         </div>

@@ -30,16 +30,27 @@ const MainComponents = {
   },
   CategoryContent: () => {
     const { state } = useMainContext();
-    return <CategoryContent show={state.currentSection === 1} />;
+    return (
+      <CategoryContent
+        show={state.currentSection === 1}
+        isMobile={state.isMobile}
+      />
+    );
   },
   ProfileContent: () => {
     const { state } = useMainContext();
-    return <ProfileContent show={state.currentSection === 2} />;
+    return (
+      <ProfileContent
+        show={state.currentSection === 2}
+        isMobile={state.isMobile}
+      />
+    );
   },
   BlogContent: () => {
     const { state, handlers } = useMainContext();
     return (
       <BlogContent
+        isMobile={state.isMobile}
         data={state.posts}
         visibleItems={state.visibleBlogs}
         windowHeight={state.windowHeight}
@@ -63,4 +74,3 @@ const MainComponents = {
 };
 
 export default MainComponents;
-

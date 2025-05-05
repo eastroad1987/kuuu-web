@@ -95,7 +95,7 @@ const SideMenu = ({ isOpen, onClose }: SideMenuProps) => {
             <Link href="/category/1">Life</Link>
           </li>
           <li>
-            <Link href="/category/2">CAFE & Restaurant</Link>
+            <Link href="/category/2">Cafe & Restaurant</Link>
           </li>
           <li>
             <Link href="/category/3">Sightseeing</Link>

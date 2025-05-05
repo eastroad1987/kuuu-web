@@ -7,8 +7,11 @@ import { useGetCategories, useGetPostsByPeriod } from "../../../lib/api/apis";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { setBackgroundColor, setCategories } from "../../../redux/reducer";
 import { useRouter } from "next/navigation";
+import useWindowSize from "../../../hooks/useWindowSize";
 
 export default function useHome() {
+  const { isMobile, width, height } = useWindowSize();
+
   const limitPages = 4;
   const { currentSection } = useScrollSections({
     totalSections: limitPages,
@@ -39,6 +42,7 @@ export default function useHome() {
 
   const initialState = useMemo<MainPageState>(
     () => ({
+      isMobile,
       timerRef: null,
       maxVisibleBlogs: 5,
       visibleBlogs: [],
@@ -62,12 +66,8 @@ export default function useHome() {
   }, []);
 
   useEffect(() => {
-    const handleResize = () =>
-      updateState({ windowHeight: window.innerHeight });
-    updateState({ windowHeight: window.innerHeight });
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, [updateState]);
+    updateState({ windowHeight: height, isMobile });
+  }, [height, isMobile, updateState]);
 
   useEffect(() => {
     updateState({ arrayIndex: state.arrayIndex });
@@ -104,7 +104,7 @@ export default function useHome() {
 
   useEffect(() => {
     if (posts?.data) {
-      updateState({ posts: posts.data as any });
+      updateState({ posts: posts.data as any, visibleBlogs: posts?.data as any});
     }
   }, [posts, updateState]);
 

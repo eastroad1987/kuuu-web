@@ -5,12 +5,8 @@ import MainComponents from "./MainPage";
 import useHome from "../hooks/useHome";
 import MainLayout from "../context/MainLayout";
 
-function HomeContent() {
+export default function HomeClient() {
   const useHomeHook = useHome();
-
-  if (useHomeHook.status.isLoading) {
-    return <div>Loading...</div>;
-  }
 
   const mainValue = {
     state: useHomeHook.state,
@@ -28,13 +24,5 @@ function HomeContent() {
       </MainComponents.Container>
       <MainComponents.VerticalDotButtons />
     </MainLayout>
-  );
-}
-
-export default function HomeClient() {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <HomeContent />
-    </Suspense>
   );
 }
