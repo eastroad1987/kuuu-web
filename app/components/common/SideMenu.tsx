@@ -107,11 +107,11 @@ const SideMenu = ({ isOpen, onClose }: SideMenuProps) => {
               <FontAwesomeIcon icon={faPenToSquare} />
             </div>
           </ModalTrigger>
-          <ModalTrigger href="/auth">
+          {/* <ModalTrigger href="/auth">
             <div className="h-[24px] w-[24px]">
               <FontAwesomeIcon icon={faUser} />
             </div>
-          </ModalTrigger>
+          </ModalTrigger> */}
         </li>
       </nav>
     </>
