@@ -58,6 +58,10 @@ const nextConfig = {
             key: "Permissions-Policy",
             value: "camera=(), microphone=(), geolocation=()",
           },
+          {
+            key: "Cache-Control",
+            value: "public, max-age=0, must-revalidate",
+          },
         ],
       },
     ];
@@ -66,6 +70,7 @@ const nextConfig = {
     images: {
       layoutRaw: true,
     },
+    serverActions: true,
   },
   images: {
     domains: process.env.RESOURCES_DOMAINS.trim().split(','),

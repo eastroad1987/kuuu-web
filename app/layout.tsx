@@ -39,19 +39,31 @@ export const shipporiMincho = localFont({
       style: "extrabold",
     },
   ],
+  display: "swap",
+  preload: true,
 });
 
 export const youngest = localFont({
   src: "../public/fonts/Youngest.woff",
   display: "swap",
+  preload: true,
 });
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ 
+  subsets: ["latin"],
+  display: "swap",
+  preload: true,
+});
 
 export const metadata: Metadata = {
   title: "Kuuu's Blog",
   description: "Japanese in Korea.",
+  viewport: "width=device-width, initial-scale=1",
+  themeColor: "#ffffff",
 };
+
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export default function RootLayout({
   children,
@@ -62,13 +74,19 @@ export default function RootLayout({
 }) {
   return (
     <html lang="jp" className={`${shipporiMincho.className} ${youngest.className}`}>
-      <body>
-        <Suspense fallback={<div>Loading...</div>}>
+      <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </head>
+      <body className={inter.className}>
+        <Suspense fallback={<div className="flex h-screen w-full items-center justify-center">Loading...</div>}>
           <ReactQueryProviders>
             <ReduxProvider>
               <AuthProvider>
                 <AxiosProvider>
-                  {children}
+                  <main>
+                    {children}
+                  </main>
                   {modal}
                 </AxiosProvider>
               </AuthProvider>

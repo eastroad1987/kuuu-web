@@ -1,20 +1,13 @@
 .main-content {
-  z-index: 100;
-  text-align: right;
-  position: absolute;
-  right: 10%;
-  bottom: 10%;
-  padding: 20px;
+  @apply z-10 text-right absolute right-[10%] bottom-[10%] p-5;
 }
 
 .main-content h1 {
-  font-size: 4rem;
+  @apply text-6xl;
 }
 
 .main-content p {
-  font-size: 1.2rem;
-  line-height: 1.8;
-  color: #f1c40f;
+  @apply text-lg leading-relaxed text-yellow-400;
 }
 
 @keyframes scale-up {
@@ -93,103 +86,57 @@
 }
 
 .profile-container {
-  display: grid;
-  grid-template-columns: 60% 1fr;
-  width: 100%;
-  height: 100%;
+  @apply grid grid-cols-[60%_1fr] w-full h-full;
 }
 
 .profile-left-container {
-  background-color: #d62c28;
-  color: #ffffff;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
+  @apply bg-red-600 text-white flex flex-col justify-between items-center;
 }
 
 .profile-right-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 15% 5% 15% 5%;
+  @apply flex flex-col justify-center items-center p-[15%_5%];
 }
 
 .profile-text {
-  background-color: #d62c28;
-  width: 100%;
-  color: #ffffff;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: flex-end;
-  padding: 20px;
+  @apply bg-red-600 w-full text-white flex flex-row justify-start items-end p-5;
 }
 
 .profile-text h1 {
-  font-size: 4rem;
-  margin-bottom: 10px;
+  @apply text-6xl mb-2.5;
 }
 
 .profile-text h2 {
-  font-size: 1.5rem;
-  margin-left: 10px;
-  margin-bottom: 20px;
+  @apply text-2xl ml-2.5 mb-5;
 }
 
 .profile-text p {
-  font-size: 1.2rem;
-  margin-bottom: 20px;
+  @apply text-lg mb-5;
 }
 
 .icons {
-  display: flex;
-  gap: 20px;
-  margin-top: 20px;
+  @apply flex gap-5 mt-5;
 }
 
 .icons .icon {
-  width: 80px;
-  height: 80px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @apply w-20 h-20 flex items-center justify-center;
 }
 
 .icons .icon svg {
-  width: 80px;
-  height: 80px;
-  fill: #ffffff;
+  @apply w-20 h-20 fill-white;
 }
 
 .category-container {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  @apply w-full h-full flex flex-col justify-center items-center;
 }
 
 .category-top-container {
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
-  height: 50%;
-  width: 100%;
+  @apply flex flex-row items-stretch h-1/2 w-full;
 }
 
 .category-bottom-container {
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
-  height: 50%;
-  width: 100%;
+  @apply flex flex-row items-stretch h-1/2 w-full;
 }
 
-.content-container {
-  img {
-    max-width: 100%;
-  }
+.content-container img {
+  @apply max-w-full;
 }
