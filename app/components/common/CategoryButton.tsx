@@ -10,6 +10,7 @@ interface InputProps {
 export default function CategoryButton({ title, color = "#16213E", isActive = false, onClick }: InputProps) {
   return (
     <button
+      id={`category-button-${title}`}
       style={{
         backgroundColor: isActive ? color : "#555",
         color: "#fff",

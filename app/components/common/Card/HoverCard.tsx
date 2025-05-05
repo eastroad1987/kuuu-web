@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Post } from "../../../types/entities";
+import Image from "next/image";
 
 interface InputProps {
   boardName: string;
@@ -13,11 +14,14 @@ export default function HoverCard({ boardName, post }: InputProps) {
       href={`/post/${post.id}?boardName=${boardName}`}
       className="max-w-sm overflow-hidden rounded-lg bg-white shadow-lg transition-shadow duration-300 hover:shadow-2xl"
     >
-      <div className="relative overflow-hidden">
-        <img
-          className="h-48 w-full transform object-cover transition-transform duration-300 hover:scale-110"
+      <div className="relative h-48 w-full overflow-hidden">
+        <Image
           src={post?.thumbnail || ''}
-          alt="Card image"
+          alt={post?.title || ''}
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          className="object-cover transition-transform duration-300 hover:scale-110"
+          priority={true}
         />
       </div>
       <div className="px-6 py-4">

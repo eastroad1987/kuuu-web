@@ -8,6 +8,7 @@ interface HamburgerProps {
 const Hamburger = ({ isOpen, onClick, color = "black" }: HamburgerProps) => {
   return (
     <button 
+      id="hamburger-button"
       className="hamburger-button"
       onClick={onClick}
       aria-label="Toggle menu"

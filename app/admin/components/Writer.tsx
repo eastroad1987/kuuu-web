@@ -25,7 +25,7 @@ const WriterComponents = {
     return (
       <div className="flex flex-row items-center justify-start gap-8">
         <Link href="/">Go To Home</Link>
-        <button onClick={handlers.clickSubmit}>Save</button>
+        <button id="save-button" onClick={handlers.clickSubmit}>Save</button>
       </div>
     );
   },

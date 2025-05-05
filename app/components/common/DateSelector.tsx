@@ -118,6 +118,7 @@ export default function DateSelector({
           {/* 달력 헤더 */}
           <div className="flex items-center justify-between border-b p-3">
             <button
+              id="prev-month-button"
               onClick={handlePrevMonth}
               className="rounded-full p-1 hover:bg-gray-100"
             >
@@ -143,6 +144,7 @@ export default function DateSelector({
               })}
             </div>
             <button
+              id="next-month-button"
               onClick={handleNextMonth}
               className="rounded-full p-1 hover:bg-gray-100"
             >

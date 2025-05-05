@@ -12,7 +12,16 @@ export default function PostContent({ post }: InputProps) {
       <div style={{ textAlign: "center" }}>
         {post && (
           <div className="content-container">
-            <img src={post?.thumbnail || ""} alt="Main Image" />
+            <div className="relative h-96 w-full overflow-hidden">
+              <Image
+                src={post?.thumbnail || ""}
+                alt={post?.title || "Post thumbnail"}
+                fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                className="object-cover"
+                priority
+              />
+            </div>
             <div className="ql-show">
               <div
                 className="ql-editor h-screen w-full"

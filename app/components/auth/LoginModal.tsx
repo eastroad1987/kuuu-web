@@ -97,6 +97,7 @@ export default function LoginModal() {
             </div>
 
             <button
+              id="login-submit-button"
               type="submit"
               onClick={handleSubmit}
               disabled={isLoading}

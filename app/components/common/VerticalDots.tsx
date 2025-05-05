@@ -1,4 +1,3 @@
-
 interface VerticalDotsProps {
   total: number;
   current: number;
@@ -11,6 +10,7 @@ function VerticalDots({ total, current, onPageChange }: VerticalDotsProps) {
       {Array.from({ length: total }, (_, i) => i).map((pageNum) => (
         <button
           key={pageNum}
+          id={`vertical-dots-button-${pageNum}`}
           onClick={() => onPageChange(pageNum)}
           className={`my-2 block h-3 w-3 rounded-full transition-all duration-300 ${current === pageNum ? "scale-125 bg-black" : "bg-gray-400"}`}
         />

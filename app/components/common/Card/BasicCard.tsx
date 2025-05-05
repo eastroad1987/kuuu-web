@@ -1,11 +1,18 @@
+import Image from "next/image";
+
 export default function BasicCard() {
   return (
     <div className="max-w-sm overflow-hidden rounded-lg bg-white shadow-lg">
-      <img
-        className="h-48 w-full object-cover"
-        src="/test/6.jpg"
-        alt="Card image"
-      />
+      <div className="relative h-48 w-full overflow-hidden">
+        <Image
+          src="/test/6.jpg"
+          alt="Card image"
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          className="object-cover"
+          priority={true}
+        />
+      </div>
       <div className="px-6 py-4">
         <h2 className="mb-2 text-xl font-bold">카드 제목</h2>
         <p className="text-base text-gray-700">
