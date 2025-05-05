@@ -11,7 +11,7 @@ import Calendar from "react-calendar";
 interface InputProps {
   isMobile: boolean;
   data?: PostResponse[];
-  visibleItems: [];
+  visibleItems: any[];
   windowHeight: number;
   value: Date;
   onChangeDate: (date: Date) => void;
@@ -105,7 +105,7 @@ export default function BlogContent({
 interface ChildInputProps {
   isClient: boolean;
   data?: PostResponse[];
-  visibleItems: [];
+  visibleItems: any[];
   windowHeight: number;
   value: Date;
   getCardStyle: any;

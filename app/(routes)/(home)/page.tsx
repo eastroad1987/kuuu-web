@@ -7,5 +7,9 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export default function HomePage() {
-  return <HomeClient />;
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <HomeClient />
+    </Suspense>
+  );
 }

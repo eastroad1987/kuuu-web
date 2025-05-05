@@ -5,9 +5,11 @@ import Layout from "./LayoutContext";
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <Layout>
-      <Layout.Content>{children}</Layout.Content>
-    </Layout>
+    <Suspense fallback={<div>Loading...</div>}>
+      <Layout>
+        <Layout.Content>{children}</Layout.Content>
+      </Layout>
+    </Suspense>
   );
 };
 
