@@ -23,18 +23,10 @@ export default function ProfileContent({ show }: InputProps) {
             <h3 className="text-2xl">쿠루미</h3>
           </div>
           <div className="icons mb-10">
-            <button
-              id="profile-prev-button"
-              className="icon mr-4"
-              onClick={handlePrev}
-            >
+            <button id="profile-prev-button" className="icon mr-4">
               <LetterIcon />
             </button>
-            <button
-              id="profile-next-button"
-              className="icon ml-4"
-              onClick={handleNext}
-            >
+            <button id="profile-next-button" className="icon ml-4">
               <OpenLetterIcon />
             </button>
           </div>
