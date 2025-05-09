@@ -17,17 +17,20 @@ export default function useWriter() {
     (store) => (store as any).reducers.app.categories,
   );
 
-  const initialForm = useMemo(() => ({
-    title: "",
-    content: "",
-    summary: "",
-    thumbnail: "",
-    referencePlace: "",
-    images: "",
-    attachFiles: "",
-    categoryId: "1",
-    subcategoryId: "1",
-  }), []);
+  const initialForm = useMemo(
+    () => ({
+      title: "",
+      content: "",
+      summary: "",
+      thumbnail: "",
+      referencePlace: "",
+      images: "",
+      attachFiles: "",
+      categoryId: "1",
+      subcategoryId: "1",
+    }),
+    [],
+  );
 
   const { mutate: createPost } = useCreatePost();
 
@@ -89,8 +92,9 @@ export default function useWriter() {
           },
         });
 
-        thumbnailUrl = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${signedUrlData.key}`;
+        thumbnailUrl = `https://s3-kuuu.s3.ap-northeast-2.amazonaws.com/${signedUrlData.key}`;
       }
+      
 
       const post = {
         title: state.form.title,
