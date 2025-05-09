@@ -84,13 +84,16 @@ export default function useWriter() {
         });
 
         // 2. Upload file using signed URL
-        await fetch(signedUrlData.signedUrl, {
+        const response = await fetch(signedUrlData.signedUrl, {
           method: "PUT",
           body: state.thumbnailFile.file,
           headers: {
-            "Content-Type": state.thumbnailFile.file.type,
+            "Content-Type": state.thumbnailFile.file.type || "image/jpeg",
           },
         });
+        if (!response.ok) {
+          throw new Error(`Upload failed: ${response.statusText}`);
+        }
 
         thumbnailUrl = `https://s3-kuuu.s3.ap-northeast-2.amazonaws.com/${signedUrlData.key}`;
       }
