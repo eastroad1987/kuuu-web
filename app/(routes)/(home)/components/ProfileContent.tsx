@@ -13,7 +13,7 @@ export default function ProfileContent({ show, isMobile }: InputProps) {
 
   return (
     <div className={`flex h-full w-full items-center justify-center`}>
-      <div className="profile-container">
+      <div className={`${isMobile ? 'profile-container-mobile' : 'profile-container'}`}>
         <div className="profile-left-container">
           <div className="profile-text">
             <h1>Profile</h1>

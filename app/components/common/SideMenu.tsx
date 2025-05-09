@@ -77,8 +77,6 @@ interface SideMenuProps {
 }
 
 const SideMenu = ({ isOpen, onClose }: SideMenuProps) => {
-  // const { session, status, isAuthenticated, isLoading, user } = useAuth();
-  // console.log(session, status, isAuthenticated, isLoading, user);
   
   return (
     <>

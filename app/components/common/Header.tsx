@@ -9,7 +9,6 @@ interface HeaderProps {
 }
 
 const Header = ({ isSideMenuOpen, toggleSideMenu }: HeaderProps) => {
-
   return (
     <header className="header">
       <div className="nav-container">
@@ -20,7 +19,6 @@ const Header = ({ isSideMenuOpen, toggleSideMenu }: HeaderProps) => {
           </Link>
           {/* <br /> */}
         </div>
-
         {/* <nav className="main-nav-categories">
           <Link href="/" className="nav-link">
             Home

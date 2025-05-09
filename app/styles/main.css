@@ -3,7 +3,7 @@
 }
 
 .main-content h1 {
-  @apply text-6xl;
+  @apply text-6xl text-white;
 }
 
 .main-content p {
@@ -89,6 +89,11 @@
   @apply grid grid-cols-[60%_1fr] w-full h-full;
 }
 
+.profile-container-mobile {
+  @apply grid grid-rows-[50%_1fr] w-full h-full;
+}
+
+
 .profile-left-container {
   @apply bg-red-600 text-white flex flex-col justify-between items-center;
 }
@@ -102,15 +107,15 @@
 }
 
 .profile-text h1 {
-  @apply text-6xl mb-2.5;
+  @apply text-6xl mb-2.5 text-white;
 }
 
 .profile-text h2 {
-  @apply text-2xl ml-2.5 mb-5;
+  @apply text-2xl ml-2.5 mb-5 text-white;
 }
 
 .profile-text p {
-  @apply text-lg mb-5;
+  @apply text-lg mb-5 text-white;
 }
 
 .icons {

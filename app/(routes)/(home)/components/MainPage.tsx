@@ -7,6 +7,8 @@ import BlogContent from "./BlogContent";
 import CategoryContent from "./CategoryContent";
 import MainContent from "./MainContent";
 import ProfileContent from "./ProfileContent";
+import SideMenu from "@/components/common/SideMenu";
+import HomeHeader from "./Header";
 
 const MainComponents = {
   Container: ({ children }: { children: ReactNode }) => {
@@ -22,6 +24,16 @@ const MainComponents = {
           </div>
         </main>
       </div>
+    );
+  },
+  Header: () => {
+    const { state, handlers } = useMainContext();
+    return <HomeHeader toggleSideMenu={handlers.toggleSideMenu} />;
+  },
+  SideMenu: () => {
+    const { state, handlers } = useMainContext();
+    return (
+      <SideMenu isOpen={state.isOpen} onClose={handlers.onSideMenuClose} />
     );
   },
   MainContent: () => {

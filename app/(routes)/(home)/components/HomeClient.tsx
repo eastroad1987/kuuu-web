@@ -16,6 +16,7 @@ export default function HomeClient() {
 
   return (
     <MainLayout value={mainValue}>
+      <MainComponents.Header />
       <MainComponents.Container>
         <MainComponents.MainContent />
         <MainComponents.CategoryContent />
@@ -23,6 +24,7 @@ export default function HomeClient() {
         <MainComponents.BlogContent />
       </MainComponents.Container>
       <MainComponents.VerticalDotButtons />
+      <MainComponents.SideMenu />
     </MainLayout>
   );
 }

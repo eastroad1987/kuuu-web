@@ -11,6 +11,7 @@ export interface CardStyle {
 
 export interface MainPageState {
   isMobile: boolean;
+  isOpen: boolean;
   timerRef: any;
   maxVisibleBlogs: number;
   visibleBlogs: any[];
@@ -33,6 +34,8 @@ export interface UseMainType {
     onSelected: (postId: string) => void;
     onChangeDate: (date: Date) => void;
     onSelectedDate: (date: Date) => void;
+    onSideMenuClose: () => void;
+    toggleSideMenu: () => void;
   };
 }
 

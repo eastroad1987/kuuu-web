@@ -43,6 +43,7 @@ export default function useHome() {
   const initialState = useMemo<MainPageState>(
     () => ({
       isMobile,
+      isOpen: false,
       timerRef: null,
       maxVisibleBlogs: 5,
       visibleBlogs: [],
@@ -133,6 +134,12 @@ export default function useHome() {
       },
       [updateState],
     ),
+    onSideMenuClose: useCallback(() => {
+      updateState({ isOpen: false });
+    }, [updateState]),
+    toggleSideMenu: useCallback(() => {
+      updateState({ isOpen: !state.isOpen });
+    }, [updateState]),
   };
 
   const status = {
