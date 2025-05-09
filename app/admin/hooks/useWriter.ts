@@ -89,7 +89,7 @@ export default function useWriter() {
           },
         });
 
-        thumbnailUrl = signedUrlData.key;
+        thumbnailUrl = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${signedUrlData.key}`;
       }
 
       const post = {

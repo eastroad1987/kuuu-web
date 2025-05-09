@@ -23,6 +23,7 @@ export async function POST(request: Request) {
     // 파일 저장
     await writeFile(filePath, buffer);
 
+    console.log("filePath", `https://s3-kuuu.s3.ap-northeast-2.amazonaws.com/uploads/${fileName}`);
     // 데이터베이스에 파일 정보 저장
     const uploadFile = await prisma.uploadFile.create({
       data: {
