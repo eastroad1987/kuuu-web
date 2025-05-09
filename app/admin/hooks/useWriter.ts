@@ -77,25 +77,21 @@ export default function useWriter() {
     try {
       let thumbnailUrl = "";
       if (state.thumbnailFile) {
-        // 1. Get signed URL
-        const { data: signedUrlData } = await getSignedUrl.mutateAsync({
-          fileName: state.thumbnailFile.file.name,
-          fileType: state.thumbnailFile.file.type,
+        const formData = new FormData();
+        formData.append('file', state.thumbnailFile.file);
+
+        const response = await fetch('/api/s3', {
+          method: 'POST',
+          body: formData,
         });
 
-        // 2. Upload file using signed URL
-        const response = await fetch(signedUrlData.signedUrl, {
-          method: "PUT",
-          body: state.thumbnailFile.file,
-          headers: {
-            "Content-Type": state.thumbnailFile.file.type || "image/jpeg",
-          },
-        });
         if (!response.ok) {
           throw new Error(`Upload failed: ${response.statusText}`);
         }
-
-        thumbnailUrl = `https://s3-kuuu.s3.ap-northeast-2.amazonaws.com/${signedUrlData.key}`;
+        // https://s3-kuuu.s3.ap-northeast-2.amazonaws.com/${signedUrlData.key
+        const data = await response.json();
+        console.log("data", data);
+        thumbnailUrl = data.url;
       }
       
 
@@ -129,7 +125,6 @@ export default function useWriter() {
     updateState,
     createPost,
     initialForm,
-    getSignedUrl,
   ]);
 
   const handleChangeCategory = useCallback(
