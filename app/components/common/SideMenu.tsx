@@ -77,7 +77,7 @@ interface SideMenuProps {
 }
 
 const SideMenu = ({ isOpen, onClose }: SideMenuProps) => {
-  
+    
   return (
     <>
       {isOpen && <div className="side-menu-overlay" onClick={onClose} />}
