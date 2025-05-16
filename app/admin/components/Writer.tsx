@@ -7,10 +7,43 @@ import FileUploader from "@/components/common/FileUploader";
 import dynamic from "next/dynamic";
 import { useMemo } from "react";
 import DateSelector from "@/components/common/DateSelector";
-import Image from 'next/image';
+import Image from "next/image";
 import "react-quill/dist/quill.snow.css";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
+
+const modules = {
+  toolbar: [
+    [{ header: [1, 2, 3, 4, 5, 6, false] }],
+    ["bold", "italic", "underline", "strike"],
+    [{ color: [] }, { background: [] }],
+    [
+      { list: "ordered" },
+      { list: "bullet" },
+      { indent: "-1" },
+      { indent: "+1" },
+    ],
+    [{ align: [] }],
+    ["link", "image", "video"], // 링크, 이미지, 비디오 업로드 설정
+    ["clean"],
+  ],
+};
+
+const formats = [
+  "header",
+  "bold",
+  "italic",
+  "underline",
+  "strike",
+  "color",
+  "background",
+  "list",
+  "bullet",
+  "align",
+  "link",
+  "image",
+  "video",
+];
 
 const WriterComponents = {
   Container: ({ children }: { children: React.ReactNode }) => {
@@ -25,7 +58,9 @@ const WriterComponents = {
     return (
       <div className="flex flex-row items-center justify-start gap-8">
         <Link href="/">Go To Home</Link>
-        <button id="save-button" onClick={handlers.clickSubmit}>Save</button>
+        <button id="save-button" onClick={handlers.clickSubmit}>
+          Save
+        </button>
       </div>
     );
   },
@@ -71,47 +106,9 @@ const WriterComponents = {
 
   Content: () => {
     const { state, handlers } = useWriterContext();
-    const modules = useMemo(
-        () => ({
-          toolbar: {
-            // container에 등록되는 순서대로 tool 배치
-            container: [
-              [{ header: [1, 2, 3, false] }], // header 설정
-              [
-                "bold",
-                "italic",
-                "underline",
-                "strike",
-                "blockquote",
-                "code-block",
-              ],
-              [
-                { list: "ordered" },
-                { list: "bullet" },
-                { indent: "-1" },
-                { indent: "+1" },
-              ], // 리스트, 인덴트 설정
-              ["link", "image", "video"], // 링크, 이미지, 비디오 업로드 설정
-            ],
-          },
-        }),
-        [],
-      ),
-      formats = [
-        "header",
-        "bold",
-        "italic",
-        "underline",
-        "strike",
-        "blockquote",
-        "list",
-        "bullet",
-        "indent",
-        "link",
-        "image",
-        "video",
-        "map",
-      ];
+    const quillModules = useMemo(() => modules, []);
+    const quillFormats = useMemo(() => formats, []);
+
 
     return (
       <div className="flex max-w-lg flex-col items-center justify-start">
@@ -146,7 +143,7 @@ const WriterComponents = {
         </label>
         <input
           type="text"
-          className="input mt-5 w-full text-black"
+          className="input mt-5 w-full rounded-md border-2 border-gray-300 bg-white text-black"
           aria-label="input"
           value={state.form.title}
           onChange={handlers.changeTitle}
@@ -157,8 +154,8 @@ const WriterComponents = {
               id="quill-editor"
               className="text-editor mt-10"
               style={{ width: "100%", height: "400px" }}
-              formats={formats}
-              modules={modules}
+              formats={quillFormats}
+              modules={quillModules}
               theme="snow"
               value={state.form.content}
               onChange={handlers.changeContent}

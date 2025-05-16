@@ -129,7 +129,7 @@ function Mobile({
       <div className="h-[50%] w-full">
         <div className="flex h-full w-full flex-col items-center justify-center">
           {isClient && (
-            <div className="calendar-container">
+            <div className="font-shippori calendar-container">
               <Calendar
                 onChange={(value) => onChangeDate(value as Date)}
                 formatDay={(locale, date) => moment(date).format("DD")}

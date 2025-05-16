@@ -18,7 +18,7 @@ export default function CategoryHeader({
         style={{ backgroundColor: color }}
         className={`flex h-full w-[60%] flex-row items-center justify-end pr-[50px]`}
       >
-        <h1 className="text-[24px] font-bold text-white">{title}</h1>
+        <h1 className="font-shippori text-[24px] font-bold text-white">{title}</h1>
       </div>
       <div
         className={`flex h-full flex-col items-end justify-center`}

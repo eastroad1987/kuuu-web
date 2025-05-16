@@ -15,13 +15,13 @@ export default function CategoryContent({ show, isMobile }: InputProps) {
         <div className="category-top-container">
           <div className="flex h-full w-[55%] flex-col items-center justify-center">
             <div className="flex h-[35%] w-full flex-col items-center justify-center">
-              <h2 className={`font-bold text-black ${isMobile ? 'text-2xl' : 'text-4xl'}`}>Category</h2>
+              <h2 className={`font-shippori text-black ${isMobile ? 'text-2xl' : 'text-4xl'}`}>Category</h2>
             </div>
             <Link
               href="/category/0"
               className={`flex h-[65%] w-full flex-col items-center justify-center bg-[#ffc212] ${show ? "animate-slide-right" : ""}`}
             >
-              <h2 className={`text-white font-bold ${isMobile ? 'text-2xl' : 'text-4xl'}`}>Musical & Movie</h2>
+              <h2 className={`font-shippori text-white font-bold ${isMobile ? 'text-2xl' : 'text-4xl'}`}>Musical & Movie</h2>
             </Link>
           </div>
           <div className="flex h-full w-[45%] flex-row items-center justify-center">
@@ -43,7 +43,7 @@ export default function CategoryContent({ show, isMobile }: InputProps) {
               href="/category/1"
               className={`flex h-full w-[${isMobile ? "100%" : "55%"}] flex-col items-center justify-center bg-[#0b3b10] ${show ? "animate-slide-down" : ""}`}
             >
-              <h2 className={`text-white font-bold ${isMobile ? 'text-2xl' : 'text-4xl'}`}>Life</h2>
+              <h2 className={`font-shippori text-white font-bold ${isMobile ? 'text-2xl' : 'text-4xl'}`}>Life</h2>
             </Link>
           </div>
         </div>
@@ -53,7 +53,7 @@ export default function CategoryContent({ show, isMobile }: InputProps) {
               href="/category/2"
               className={`flex h-full w-full flex-col items-center justify-center bg-[#1f2f57] ${show ? "animate-slide-up" : ""}`}
             >
-              <h2 className={`text-white font-bold ${isMobile ? 'text-2xl' : 'text-4xl'}`}>Cafe & Restaurant</h2>
+              <h2 className={`font-shippori text-white font-bold ${isMobile ? 'text-2xl' : 'text-4xl'}`}>Cafe & Restaurant</h2>
             </Link>
             {!isMobile && (
               <div className="relative h-full w-[45%]">
@@ -73,7 +73,7 @@ export default function CategoryContent({ show, isMobile }: InputProps) {
               href="/category/3"
               className={`flex h-full w-full flex-col items-center justify-center bg-[#d62c28] ${show ? "animate-slide-left" : ""}`}
             >
-              <h2 className={`text-white font-bold ${isMobile ? 'text-2xl' : 'text-4xl'}`}>Sightseeing</h2>
+              <h2 className={`font-shippori text-white font-bold ${isMobile ? 'text-2xl' : 'text-4xl'}`}>Sightseeing</h2>
             </Link>
           </div>
         </div>

@@ -16,11 +16,11 @@ export default function ProfileContent({ show, isMobile }: InputProps) {
       <div className={`${isMobile ? 'profile-container-mobile' : 'profile-container'}`}>
         <div className="profile-left-container">
           <div className="profile-text">
-            <h1>Profile</h1>
+            <h1 className="font-shippori">Profile</h1>
             <h2>프로필</h2>
           </div>
           <div className="flex w-full flex-col items-center justify-center">
-            <h2 className={`text-4xl ${isMobile ? 'text-2xl' : ''}`}>KURUMI</h2>
+            <h2 className={`font-tt-commons text-4xl ${isMobile ? 'text-2xl' : ''}`}>KURUMI</h2>
             <div className="w-[40%]">
               <LineSvg />
             </div>

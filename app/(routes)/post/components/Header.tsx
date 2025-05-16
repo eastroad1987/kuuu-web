@@ -22,14 +22,14 @@ export default function PostHeader({
       className={`flex h-[230px] w-full flex-row items-center justify-between bg-[${color}]`}
     >
       <div className="flex flex-col items-start justify-start h-full p-11">
-        <h1 className="text-[24px] font-bold text-white">{boardName}</h1>
+        <h1 className="font-shippori text-[24px] font-bold text-white">{boardName}</h1>
       </div>
-      <h1 className="text-[24px] font-bold text-white">{title}</h1>
+      <h1 className="font-shippori text-[24px] font-bold text-white">{title}</h1>
       <div
         className={`flex h-full flex-col items-end justify-between`}
       >
         <Hamburger onClick={toggleSideMenu} color={"white"} />
-        <h1 className="text-[24px] font-bold text-white">{date.toLocaleDateString()}</h1>
+        <h1 className="font-shippori text-[24px] font-bold text-white">{date.toLocaleDateString()}</h1>
       </div>
     </header>
   );

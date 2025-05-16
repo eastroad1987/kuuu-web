@@ -18,8 +18,8 @@ export default function MainContent({ show }: InputProps) {
         priority
       />
       <div className="main-content">
-        <h1 className={`${show ? "animate-scale" : ""}`}>{`Kuuu's BLOG`}</h1>
-        <p className={`${show ? "animate-slide-up" : ""}`}>
+        <h1 className={`font-youngest ${show ? "animate-scale" : ""}`}>{`Kuuu's BLOG`}</h1>
+        <p className={`font-youngest ${show ? "animate-slide-up" : ""}`}>
           Japanese in Korea.
         </p>
       </div>
