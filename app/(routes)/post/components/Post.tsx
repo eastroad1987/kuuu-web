@@ -1,41 +1,28 @@
-import Image from "next/image";
-import { Post } from "../../../types/entities";
-import CategoryButton from "../../../components/common/CategoryButton";
+"use client";
 
-interface InputProps {
-  post: Post;
+import { memo } from "react";
+import { PostProvider, UsePostType } from "../context/PostContext";
+import MobileWrapper from "./Mobile";
+import WebWrapper from "./Web";
+
+interface PostProps {
+  children: React.ReactNode;
+  value: UsePostType;
 }
 
-export default function PostContent({ post }: InputProps) {
-  return (
-    <section className="flex h-full w-full flex-col items-center justify-between overflow-auto">
-      <div style={{ textAlign: "center" }}>
-        {post && (
-          <div className="content-container">
-            <div className="relative h-96 w-full overflow-hidden">
-              <Image
-                src={post?.thumbnail || ""}
-                alt={post?.title || "Post thumbnail"}
-                fill
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                className="object-cover"
-                priority
-              />
-            </div>
-            <div className="ql-show">
-              <div
-                className="ql-editor h-screen w-full"
-                style={{
-                  fontSize: 16,
-                  fontWeight: 400,
-                  lineHeight: "24px",
-                }}
-                dangerouslySetInnerHTML={{ __html: post?.content }}
-              />
-            </div>
-          </div>
-        )}
-      </div>
-    </section>
-  );
-}
+const Post = memo(({ children, value }: PostProps) => {
+  return <PostProvider value={value}>{children}</PostProvider>;
+});
+
+Post.displayName = "Post";
+
+type PostComponentType = typeof Post & {
+  Web: typeof WebWrapper;
+  Mobile: typeof MobileWrapper;
+};
+
+const PostComponent = Post as PostComponentType;
+PostComponent.Web = WebWrapper;
+PostComponent.Mobile = MobileWrapper;
+
+export default PostComponent;

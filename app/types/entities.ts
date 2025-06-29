@@ -31,6 +31,7 @@ interface SubCategory extends BaseEntity {
 // Posts 테이블
 interface Post extends BaseEntity {
   id: bigint;
+  published_at: Date;
   summary: string;
   title: string;
   content: string;

@@ -1,21 +1,18 @@
 "use client";
-import Footer from "../components/common/Footer";
-import Header from "../components/common/Header";
 
-import { createContext, ReactNode } from "react";
+import { createContext, useContext } from "react";
 import { useUrl } from "../hooks/useURL";
 
 interface LayoutContextType {
   backgroundColor: string;
 }
-
 const LayoutContext = createContext<LayoutContextType | undefined>(undefined);
 
-interface LayoutProps {
-  children: ReactNode;
+interface LayoutProviderProps {
+  children: React.ReactNode;
 }
 
-const Layout = ({ children }: LayoutProps) => {
+function LayoutProvider({ children }: LayoutProviderProps): JSX.Element {
   const { pathname } = useUrl();
   const list = pathname.split("/");
   const isAdmin = list.includes("admin");
@@ -26,31 +23,15 @@ const Layout = ({ children }: LayoutProps) => {
       {children}
     </LayoutContext.Provider>
   );
-};
-
-Layout.displayName = "Layout";
-
-function Content({ children }: { children: ReactNode }) {
-  return <>{children}</>;
 }
 
-interface LayoutHeaderProps {
-  isSideMenuOpen?: boolean;
-  toggleSideMenu?: () => void;
+function useLayoutContext(): LayoutContextType {
+  const context = useContext(LayoutContext);
+  if (!context) {
+    throw new Error("Layout compound components must be used within Layout");
+  }
+  return context;
 }
 
-function LayoutHeader({ isSideMenuOpen, toggleSideMenu }: LayoutHeaderProps) {
-  return (
-    <Header isSideMenuOpen={isSideMenuOpen} toggleSideMenu={toggleSideMenu} />
-  );
-}
-
-function LayoutFooter() {
-  return <Footer />;
-}
-
-Layout.Header = LayoutHeader;
-Layout.Content = Content;
-Layout.Footer = LayoutFooter;
-
-export default Layout;
+export { LayoutProvider, useLayoutContext };
+export type { LayoutProviderProps };

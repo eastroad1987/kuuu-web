@@ -19,6 +19,7 @@ export default function useWriter() {
 
   const initialForm = useMemo(
     () => ({
+      publishedAt: new Date().toISOString(),
       title: "",
       content: "",
       summary: "",
@@ -78,10 +79,10 @@ export default function useWriter() {
       let thumbnailUrl = "";
       if (state.thumbnailFile) {
         const formData = new FormData();
-        formData.append('file', state.thumbnailFile.file);
+        formData.append("file", state.thumbnailFile.file);
 
-        const response = await fetch('/api/s3', {
-          method: 'POST',
+        const response = await fetch("/api/s3", {
+          method: "POST",
           body: formData,
         });
 
@@ -93,10 +94,10 @@ export default function useWriter() {
         console.log("data", data);
         thumbnailUrl = data.url;
       }
-      
 
       const post = {
         title: state.form.title,
+        publishedAt: state.date.toISOString(),
         content: state.form.content,
         summary: state.form.summary || "",
         thumbnail: thumbnailUrl,
@@ -107,7 +108,7 @@ export default function useWriter() {
         subcategoryId: Number(state.form.subcategoryId),
         authorId: 1,
       };
-
+      console.log("createPost", post);
       await createPost(post);
     } catch (error) {
       console.error(error);
@@ -119,29 +120,22 @@ export default function useWriter() {
         form: initialForm,
       });
     }
-  }, [
-    state.form,
-    state.thumbnailFile,
-    updateState,
-    createPost,
-    initialForm,
-  ]);
+  }, [state.form, state.thumbnailFile, state.date, updateState, createPost, initialForm]);
 
   const handleChangeCategory = useCallback(
     (value: string) => {
       const selected = categories.find(
-        (category: any) => category.id === Number(value),
+        (category: any) => category.id === value,
       );
-
       if (selected) {
         updateState({
           category: selected,
-          subCategories: selected.subcategories,
-          subCategory: selected.subcategories[0],
+          subCategories: selected.subCategories,
+          subCategory: selected.subCategories[0],
           form: {
             ...state.form,
             categoryId: selected.id,
-            subcategoryId: selected.subcategories[0]?.id,
+            subcategoryId: selected.subCategories[0]?.id,
           },
         });
       }
@@ -152,7 +146,7 @@ export default function useWriter() {
   const handleChangeSubCategory = useCallback(
     (value: string) => {
       const selected = state.subCategories.find(
-        (subCategory: any) => subCategory.id === Number(value),
+        (subCategory: any) => subCategory.id === value,
       );
 
       if (selected) {
@@ -204,6 +198,7 @@ export default function useWriter() {
 
   const handleChangeDate = useCallback(
     (date: Date) => {
+      console.log("date", date);
       updateState({
         date: date,
       });

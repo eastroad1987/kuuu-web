@@ -84,10 +84,11 @@ model Post {
   referencePlace  String?       @map("reference_place")
   images          String?
   attachFiles     String?       @map("attach_files")
-  viewCnt         Int          @default(0) @map("view_cnt")
+  viewCnt         Int           @default(0) @map("view_cnt")
   createdAt       DateTime      @default(now()) @map("created_at")
   updatedAt       DateTime      @updatedAt @map("updated_at")
   deletedAt       DateTime?     @map("deleted_at")
+  publishedAt     DateTime?     @map("published_at")
   authorId        BigInt        @map("author_id")
   author          User          @relation(fields: [authorId], references: [id])
   subcategoryId   BigInt?       @map("subcategory_id")

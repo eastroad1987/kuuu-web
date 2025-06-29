@@ -23,6 +23,7 @@ interface CreateSubCategoryDto {
 
 interface CreatePostDto {
   summary: string;
+  publishedAt: string;
   title: string;
   content: string;
   thumbnail?: string;

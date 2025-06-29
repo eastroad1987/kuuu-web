@@ -1,26 +1,24 @@
-"use client";
+'use client';
 
-import PostComponents from "../components/PostPage";
-import PostLayout from "../context/PostLayout";
-import usePost from "../hooks/usePost";
+import ResponsiveWrapper from '@/components/common/ResponsiveWrapper';
+import PostComponent from '../components/Post';
+import usePost from '../hooks/usePost';
+import { Suspense } from 'react';
 
-interface PageProps {
-  id: string;
-}
-
-const PostPage = ({ params }: { params: PageProps }) => {
+const PostPage = ({ params }: { params: { id: string } }) => {
   const { id } = params;
 
   const usePostHook = usePost(id);
 
   return (
-    <PostLayout value={usePostHook}>
-      <PostComponents.Container>
-        <PostComponents.Header />
-        <PostComponents.SideMenu />
-        <PostComponents.Post />
-      </PostComponents.Container>
-    </PostLayout>
+    <PostComponent value={usePostHook}>
+      <Suspense fallback={<div className="flex justify-center items-center h-screen">지원 페이지 로딩 중...</div>}>
+        <ResponsiveWrapper
+          WebComponent={PostComponent.Web}
+          MobileComponent={PostComponent.Mobile}
+        />
+      </Suspense>
+    </PostComponent>
   );
 };
 

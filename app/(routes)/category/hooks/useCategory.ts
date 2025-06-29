@@ -3,7 +3,10 @@ import { CategoryPageState } from "@/types/types";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useMemo, useCallback } from "react";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
-import { useGetPostBySubCategoryId, useGetSubCategoriesByCategoryId } from "../../../lib/api/apis";
+import {
+  useGetPostBySubCategoryId,
+  useGetSubCategoriesByCategoryId,
+} from "../../../lib/api/apis";
 import { setBackgroundColor } from "../../../redux/reducer";
 import { PaginatedResponse } from "@/types/api";
 
@@ -14,6 +17,21 @@ const CATEGORY_COLORS = {
   default: "#D62C28",
 } as const;
 
+const CATEGORY_IMAGE = {
+  "0": "/images/bridge.png",
+  "1": "/images/korea.png",
+  "2": "/images/life.png",
+  default: "/images/kurumi2.png",
+} as const;
+
+const CATEGORY_TITLE = {
+  "0": "Musical & Movie",
+  "1": "Life",
+  "2": "Cafe & Restaurant",
+  "3": "Sightseeing",
+  default: "Kurumi",
+} as const;
+
 export default function useCategory(id: string) {
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -22,6 +40,20 @@ export default function useCategory(id: string) {
     () =>
       CATEGORY_COLORS[id as keyof typeof CATEGORY_COLORS] ||
       CATEGORY_COLORS.default,
+    [id],
+  );
+
+  const mainImage = useMemo(
+    () =>
+      CATEGORY_IMAGE[id as keyof typeof CATEGORY_IMAGE] ||
+      CATEGORY_IMAGE.default,
+    [id],
+  );
+  
+  const title = useMemo(
+    () =>
+      CATEGORY_TITLE[id as keyof typeof CATEGORY_TITLE] ||
+      CATEGORY_TITLE.default,
     [id],
   );
 
@@ -41,14 +73,15 @@ export default function useCategory(id: string) {
     () => ({
       isOpen: false,
       id,
-      title: category ? category?.title : "",
+      title,
       color,
+      mainImage,
       currentBoard: category ? category : ({ title: "" } as Category),
       currentSubBoard: { title: "" } as SubCategory,
       subBoards: [],
       posts: [],
     }),
-    [id, color, category],
+    [id, title,, color, category, mainImage],
   );
 
   const [state, setState] = useState<CategoryPageState>(initialState);
@@ -98,7 +131,6 @@ export default function useCategory(id: string) {
       });
     }
   }, [subcategories, updateState, state.currentSubBoard]);
-
 
   useEffect(() => {
     console.log(posts);

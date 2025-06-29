@@ -1,8 +1,9 @@
 "use client";
 
+import ResponsiveWrapper from "@/components/common/ResponsiveWrapper";
+import { Suspense } from "react";
+import CategoryComponent from "../components/Category";
 import useCategory from "../hooks/useCategory";
-import CategoryLayout from "../context/CategoryLayout";
-import CategoryComponents from "../components/CategoryPage";
 
 interface PageProps {
   id: string;
@@ -13,14 +14,20 @@ const CategoryPage = ({ params }: { params: PageProps }) => {
   const useCategoryHook = useCategory(id);
 
   return (
-    <CategoryLayout value={useCategoryHook}>
-      <CategoryComponents.Container>
-        <CategoryComponents.Header />
-        <CategoryComponents.Boards />
-        <CategoryComponents.Posts />
-        <CategoryComponents.SideMenu />
-      </CategoryComponents.Container>
-    </CategoryLayout>
+    <CategoryComponent value={useCategoryHook}>
+      <Suspense
+        fallback={
+          <div className="flex h-screen items-center justify-center">
+            지원 페이지 로딩 중...
+          </div>
+        }
+      >
+        <ResponsiveWrapper
+          WebComponent={CategoryComponent.Web}
+          MobileComponent={CategoryComponent.Mobile}
+        />
+      </Suspense>
+    </CategoryComponent>
   );
 };
 

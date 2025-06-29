@@ -75,6 +75,7 @@ export async function POST(request: NextRequest) {
       content,
       summary,
       thumbnail,
+      publishedAt,
       referencePlace,
       images,
       attachFiles,
@@ -83,7 +84,7 @@ export async function POST(request: NextRequest) {
       authorId,
     } = body;
 
-    if (!title || !content || !categoryId || !authorId) {
+    if (!title || !content || !categoryId || !authorId || !publishedAt) {
       return NextResponse.json(
         { error: "Required fields are missing" },
         { status: 400 },
@@ -95,6 +96,7 @@ export async function POST(request: NextRequest) {
         title,
         content,
         summary,
+        publishedAt,
         categoryId: Number(categoryId),
         subcategoryId: subcategoryId ? Number(subcategoryId) : null,
         thumbnail,

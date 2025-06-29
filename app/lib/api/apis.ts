@@ -111,6 +111,7 @@ export const useCreatePost = () => {
   return useMutation({
     mutationFn: async (data: {
       title: string;
+      publishedAt: string;
       content: string;
       summary: string;
       thumbnail: string;
@@ -121,6 +122,8 @@ export const useCreatePost = () => {
       subcategoryId: number;
       authorId: number;
     }) => {
+      console.log("data", data);
+      console.log("json", JSON.stringify(data));
       const response = await fetch("/api/posts", {
         method: "POST",
         headers: {

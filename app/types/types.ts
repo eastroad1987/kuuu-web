@@ -17,6 +17,7 @@ export interface MainPageState {
   visibleBlogs: any[];
   arrayIndex: number[];
   currentIndex: number;
+  isHover: boolean;
   windowHeight: number;
   posts: PostResponse[];
   limit: number;
@@ -24,6 +25,7 @@ export interface MainPageState {
   currentSection: number;
   currentPostId: string;
   currentDate: Date;
+  mounted: boolean;
 }
 
 export interface UseMainType {
@@ -35,7 +37,10 @@ export interface UseMainType {
     onChangeDate: (date: Date) => void;
     onSelectedDate: (date: Date) => void;
     onSideMenuClose: () => void;
+    onEnter: () => void;
+    onLeave: () => void;
     toggleSideMenu: () => void;
+    getCardStyle: (arrayIndex: number) => CardStyle;
   };
 }
 
@@ -44,6 +49,7 @@ export interface CategoryPageState {
   title: string | null;
   color: string | null;
   id: string | null;
+  mainImage: string | null;
   currentBoard: Category;
   currentSubBoard: SubCategory;
   subBoards: SubCategory[];

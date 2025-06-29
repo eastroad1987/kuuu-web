@@ -34,7 +34,7 @@ export const ttCommonsPro = localFont({
       style: "normal",
     },
   ],
-  variable: '--font-tt-commons',
+  variable: "--font-tt-commons",
   display: "swap",
   preload: true,
 });
@@ -67,7 +67,7 @@ export const shipporiMincho = localFont({
       style: "normal",
     },
   ],
-  variable: '--font-shippori-mincho',
+  variable: "--font-shippori-mincho",
   display: "swap",
   preload: true,
 });
@@ -76,30 +76,30 @@ export const youngest = localFont({
   src: "../public/fonts/Youngest.woff",
   display: "swap",
   preload: true,
-  variable: '--font-youngest',
+  variable: "--font-youngest",
 });
 
 const inter = Inter({
   subsets: ["latin"],
   display: "swap",
   preload: true,
-  variable: '--font-inter',
+  variable: "--font-inter",
 });
 
 const notoSansJP = Noto_Sans_JP({
   subsets: ["latin"],
   display: "swap",
   preload: true,
-  variable: '--font-noto-sans-jp',
-  weight: ['400', '500', '700'],
+  variable: "--font-noto-sans-jp",
+  weight: ["400", "500", "700"],
 });
 
 const notoSerifJP = Noto_Serif_JP({
   subsets: ["latin"],
   display: "swap",
   preload: true,
-  variable: '--font-noto-serif-jp',
-  weight: ['400', '500', '700'],
+  variable: "--font-noto-serif-jp",
+  weight: ["400", "500", "700"],
 });
 
 export const viewport: Viewport = {

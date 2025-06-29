@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { createContext, memo, useContext } from 'react';
-import { UseMainType } from '@/types/types';
+import { UseMainType } from "@/types/types";
+import { createContext, useContext } from "react";
 
 const MainContext = createContext<UseMainType | undefined>(undefined);
 
@@ -17,10 +17,11 @@ function MainProvider({ children, value }: MainProviderProps): JSX.Element {
 function useMainContext(): UseMainType {
   const context = useContext(MainContext);
   if (!context) {
-    throw new Error('Main compound components must be used within Main');
+    throw new Error("Main compound components must be used within Main");
   }
   return context;
 }
 
 export { MainProvider, useMainContext };
-export type { UseMainType, MainProviderProps };
+export type { MainProviderProps, UseMainType };
+
