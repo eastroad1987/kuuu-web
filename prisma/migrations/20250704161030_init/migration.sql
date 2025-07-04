@@ -16,9 +16,9 @@ CREATE TABLE "users" (
     "device_token" TEXT,
     "image_url" TEXT,
     "sns_id" TEXT,
-    "created_at" TIMESTAMP(6),
-    "updated_at" TIMESTAMP(6) NOT NULL,
-    "deleted_at" TIMESTAMP(6),
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+    "deleted_at" TIMESTAMP(3),
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 );
@@ -27,9 +27,9 @@ CREATE TABLE "users" (
 CREATE TABLE "categories" (
     "id" BIGSERIAL NOT NULL,
     "title" TEXT NOT NULL,
-    "created_at" TIMESTAMP(6),
-    "updated_at" TIMESTAMP(6) NOT NULL,
-    "deleted_at" TIMESTAMP(6),
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+    "deleted_at" TIMESTAMP(3),
 
     CONSTRAINT "categories_pkey" PRIMARY KEY ("id")
 );
@@ -48,9 +48,9 @@ CREATE TABLE "sub_categories" (
     "attach_files_yn" "YnEnum" NOT NULL DEFAULT 'N',
     "comment_yn" "YnEnum" NOT NULL DEFAULT 'N',
     "view_cnt_yn" "YnEnum" NOT NULL DEFAULT 'Y',
-    "created_at" TIMESTAMP(6),
-    "updated_at" TIMESTAMP(6) NOT NULL,
-    "deleted_at" TIMESTAMP(6),
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+    "deleted_at" TIMESTAMP(3),
     "category_id" BIGINT NOT NULL,
 
     CONSTRAINT "sub_categories_pkey" PRIMARY KEY ("id")
@@ -67,10 +67,10 @@ CREATE TABLE "posts" (
     "images" TEXT,
     "attach_files" TEXT,
     "view_cnt" INTEGER NOT NULL DEFAULT 0,
-    "created_at" TIMESTAMP(6),
-    "updated_at" TIMESTAMP(6) NOT NULL,
-    "deleted_at" TIMESTAMP(6),
-    "published_at" TIMESTAMP(6),
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+    "deleted_at" TIMESTAMP(3),
+    "published_at" TIMESTAMP(3),
     "author_id" BIGINT NOT NULL,
     "subcategory_id" BIGINT,
     "category_id" BIGINT NOT NULL,
@@ -84,9 +84,9 @@ CREATE TABLE "comments" (
     "content" TEXT NOT NULL,
     "write_name" TEXT NOT NULL,
     "file_path" TEXT,
-    "created_at" TIMESTAMP(6),
-    "updated_at" TIMESTAMP(6) NOT NULL,
-    "deleted_at" TIMESTAMP(6),
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+    "deleted_at" TIMESTAMP(3),
     "post_id" BIGINT NOT NULL,
     "author_id" BIGINT NOT NULL,
     "parent_comment_id" BIGINT,
@@ -103,9 +103,9 @@ CREATE TABLE "upload_files" (
     "mime_type" TEXT,
     "size" DECIMAL(10,2) NOT NULL,
     "url" TEXT,
-    "created_at" TIMESTAMP(6),
-    "updated_at" TIMESTAMP(6) NOT NULL,
-    "deleted_at" TIMESTAMP(6),
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+    "deleted_at" TIMESTAMP(3),
     "post_id" BIGINT,
 
     CONSTRAINT "upload_files_pkey" PRIMARY KEY ("id")

@@ -20,28 +20,40 @@ async function main() {
   for (const user of userData) {
     await prisma.user.upsert({
       where: { email: user.email },
-      update: { ...user },
-      create: { ...user },
+      update: {
+        name: user.name,
+        password: user.password,
+      },
+      create: {
+        email: user.email,
+        name: user.name,
+        password: user.password,
+      },
     });
   }
 
   // 카테고리 생성 (upsert)
   const categoryData = [
-    { title: "Musical&Movie" },
-    { title: "Life" },
-    { title: "Cafe&Restraint" },
-    { title: "Sightseeing" },
+    { id: 1, title: "Musical&Movie" },
+    { id: 2, title: "Life" },
+    { id: 3, title: "Cafe&Restraint" },
+    { id: 4, title: "Sightseeing" },
   ];
   for (const category of categoryData) {
     await prisma.category.upsert({
-      where: { title: category.title },
-      update: { ...category },
-      create: { ...category },
+      where: { id: category.id },
+      update: { title: category.title },
+      create: { title: category.title },
     });
   }
 
   // 카테고리 id 매핑
-  const categories = await prisma.category.findMany();
+  const categories = await prisma.category.findMany({
+    select: {
+      id: true,
+      title: true,
+    },
+  });
   const categoryMap: Record<string, number> = {};
   categories.forEach((cat) => {
     categoryMap[cat.title] = Number(cat.id);
@@ -267,28 +279,37 @@ async function main() {
   for (let i = 0; i < subCategoryData.length; i++) {
     const sub = subCategoryData[i];
     await prisma.subCategory.upsert({
-      where: { id: i + 1 },
-      update: { ...sub },
-      create: { ...sub },
+      where: { id: sub.categoryId + i + 1 },
+      update: {
+        title: sub.title,
+        anonymousYn: sub.anonymousYn,
+        titleYn: sub.titleYn,
+        contentYn: sub.contentYn,
+        thumbnailYn: sub.thumbnailYn,
+        referencePlaceYn: sub.referencePlaceYn,
+        secretYn: sub.secretYn,
+        imagesYn: sub.imagesYn,
+        attachFilesYn: sub.attachFilesYn,
+        commentYn: sub.commentYn,
+        viewCntYn: sub.viewCntYn,
+        categoryId: sub.categoryId,
+      },
+      create: {
+        title: sub.title,
+        anonymousYn: sub.anonymousYn,
+        titleYn: sub.titleYn,
+        contentYn: sub.contentYn,
+        thumbnailYn: sub.thumbnailYn,
+        referencePlaceYn: sub.referencePlaceYn,
+        secretYn: sub.secretYn,
+        imagesYn: sub.imagesYn,
+        attachFilesYn: sub.attachFilesYn,
+        commentYn: sub.commentYn,
+        viewCntYn: sub.viewCntYn,
+        categoryId: sub.categoryId,
+      },
     });
   }
-
-  // 게시글 추가
-  await prisma.post.create({
-    data: {
-      title: "afsddfas",
-      publishedAt: new Date("2025-06-02T15:00:00.000Z"),
-      content: "<p>fdasadfsafdsafds</p>",
-      summary: "",
-      thumbnail: "https://s3-kuuu.s3.ap-northeast-2.amazonaws.com/506a0f63-91e0-4f48-9428-8906c649280b-c_373116_446195_2123.jpg",
-      referencePlace: "",
-      images: "",
-      attachFiles: "",
-      categoryId: 3,
-      subcategoryId: 10,
-      authorId: 1,
-    },
-  });
 
   console.log("Seeding finished.");
 }
