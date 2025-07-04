@@ -7,6 +7,9 @@ export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } },
 ) {
+  if (!params.id || isNaN(Number(params.id))) {
+    return NextResponse.json({ error: "Invalid category id" }, { status: 400 });
+  }
   try {
     const category = await prisma.category.findUnique({
       where: { id: BigInt(params.id) },
