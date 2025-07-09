@@ -1,6 +1,7 @@
 "use client";
 import { memo } from "react";
 import useWindowSize from "../../hooks/useWindowSize";
+import SafeArea from "./SafeArea";
 
 interface ResponsiveWrapperProps {
   WebComponent: React.ComponentType<any>;
@@ -13,7 +14,9 @@ const ResponsiveWrapper = memo(
     const { isTablet } = useWindowSize();
 
     return isTablet ? (
-      <MobileComponent {...props} />
+      <SafeArea className="flex h-screen flex-col bg-white">
+        <MobileComponent {...props} />
+      </SafeArea>
     ) : (
       <WebComponent {...props} />
     );

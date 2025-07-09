@@ -11,7 +11,7 @@ export default function CategoryButton({ title, color = "#16213E", isActive = fa
   return (
     <button
       id={`category-button-${title}`}
-      className="font-shippori"
+      className="font-ipaex"
       style={{
         backgroundColor: isActive ? color : "#555",
         color: "#fff",

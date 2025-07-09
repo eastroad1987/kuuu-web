@@ -16,7 +16,8 @@ export default function usePost(id: string) {
     boardName: "",
     title: post?.title || "",
     color: "",
-    date: post?.created_at || new Date(),
+    date: new Date(),
+    publishedAt: new Date(),
     post: post || null,
     isOpen: false,
   }), [id, post]);
@@ -53,7 +54,7 @@ export default function usePost(id: string) {
         boardName: boardName,
         color: color,
         title: post?.title || "",
-        date: post?.created_at || new Date(),
+        date: new Date(post?.publishedAt) || new Date(),
         post: post || null,
       });
       

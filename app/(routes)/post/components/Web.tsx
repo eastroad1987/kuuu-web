@@ -25,19 +25,19 @@ const PostWeb = {
         className={`flex h-[230px] w-full flex-row items-center justify-between bg-[${state.color}]`}
       >
         <div className="flex h-full w-1/3 flex-col items-start justify-start p-11">
-          <h1 className="font-shippori text-[24px] font-bold text-white">
+          <h1 className="font-ipaex text-[24px] font-bold text-white">
             {state.boardName}
           </h1>
         </div>
         <div className="flex w-1/3 items-center justify-center">
-          <h1 className="font-shippori text-center text-[24px] font-bold text-white">
+          <h1 className="font-ipaex text-center text-[24px] font-bold text-white">
             {state.title}
           </h1>
         </div>
         <div className="flex h-full w-1/3 flex-col items-end justify-between p-11">
           <Hamburger onClick={handlers.toggleSideMenu} color={"white"} />
-          <h1 className="font-shippori text-[24px] font-bold text-white">
-            {state.date.toLocaleDateString()}
+          <h1 className="font-ipaex text-[24px] font-bold text-white">
+            {state?.date?.toLocaleDateString()}
           </h1>
         </div>
       </header>
@@ -53,7 +53,7 @@ const PostWeb = {
     const { state } = usePostContext();
     return (
       <section className="flex h-full w-full flex-col items-center justify-between overflow-auto">
-        <div style={{ textAlign: "center" }}>
+        <div style={{ textAlign: "center", width: "100%" }}>
           {state.post && (
             <div className="content-container">
               <div className="relative h-96 w-full overflow-hidden">
@@ -61,7 +61,7 @@ const PostWeb = {
                   src={state.post?.thumbnail || ""}
                   alt={state.post?.title || "Post thumbnail"}
                   fill
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  sizes="100vw"
                   className="object-cover"
                   priority
                 />

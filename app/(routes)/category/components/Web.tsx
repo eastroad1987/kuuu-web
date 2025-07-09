@@ -25,7 +25,7 @@ const CategoryWeb = {
           style={{ backgroundColor: state.color || "#000" }}
           className={`flex h-full w-[60%] flex-row items-center justify-end pr-[50px]`}
         >
-          <h1 className="font-shippori text-[24px] font-bold text-white">
+          <h1 className="font-ipaex text-[24px] font-bold text-white">
             {state.title}
           </h1>
         </div>

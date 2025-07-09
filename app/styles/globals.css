@@ -12,12 +12,18 @@
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-rgb: 255, 255, 255;
-  --font-youngest: 'Youngest', sans-serif;
   --font-inter: 'Inter', sans-serif;
   --font-noto-sans-jp: 'Noto Sans JP', sans-serif;
   --font-noto-serif-jp: 'Noto Serif JP', serif;
   --font-tt-commons: 'TT Commons Pro', sans-serif;
-  --font-shippori-mincho: 'Shippori Mincho', serif;
+  --font-ipaex: 'IPAex', sans-serif;
+  --font-designhouse: 'Designhouse', sans-serif;
+  
+  /* Safe area insets - default values for non-supporting browsers */
+  --sat: 0px;  /* Safe Area Top */
+  --sar: 0px;  /* Safe Area Right */
+  --sab: 0px;  /* Safe Area Bottom */
+  --sal: 0px;  /* Safe Area Left */
 }
 
 @media (prefers-color-scheme: dark) {
@@ -34,7 +40,7 @@ body {
 }
 
 .title {
-  font-family: var(--font-youngest);
+  font-family: var(--font-ipaex);
   font-size: 2.5rem;
   line-height: 1.2;
   letter-spacing: -0.02em;
@@ -42,11 +48,15 @@ body {
 
 @layer base {
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-youngest);
+    font-family: var(--font-ipaex);
   }
 
-  .font-youngest {
-    font-family: var(--font-youngest);
+  .font-ipaex {
+    font-family: var(--font-ipaex);
+  }
+
+  .font-designhouse {
+    font-family: var(--font-designhouse);
   }
 
   .font-inter {
@@ -64,22 +74,45 @@ body {
   .font-tt-commons {
     font-family: var(--font-tt-commons);
   }
-
-  .font-shippori {
-    font-family: var(--font-shippori-mincho);
-  }
 }
 
 @layer components {
-  .youngest-title {
-    @apply font-youngest text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight;
+  .ipaex-title {
+    @apply font-ipaex text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight;
   }
 
-  .youngest-subtitle {
-    @apply font-youngest text-2xl md:text-3xl lg:text-4xl font-medium tracking-tight;
+  .ipaex-subtitle {
+    @apply font-ipaex text-2xl md:text-3xl lg:text-4xl font-medium tracking-tight;
   }
 
-  .youngest-heading {
-    @apply font-youngest text-xl md:text-2xl lg:text-3xl font-medium tracking-tight;
+  .ipaex-heading {
+    @apply font-ipaex text-xl md:text-2xl lg:text-3xl font-medium tracking-tight;
+  }
+  
+  /* Safe area utility classes */
+  .pt-safe {
+    padding-top: var(--sat);
+  }
+  
+  .pr-safe {
+    padding-right: var(--sar);
+  }
+  
+  .pb-safe {
+    padding-bottom: var(--sab);
+  }
+  
+  .pl-safe {
+    padding-left: var(--sal);
+  }
+  
+  .px-safe {
+    padding-left: var(--sal);
+    padding-right: var(--sar);
+  }
+  
+  .py-safe {
+    padding-top: var(--sat);
+    padding-bottom: var(--sab);
   }
 }

@@ -3,44 +3,47 @@ import Image from "next/image";
 import { usePostContext } from "../context/PostContext";
 import Hamburger from "@/components/common/Hamburger";
 import SideMenu from "@/components/common/SideMenu";
+import SafeArea from "@/components/common/SafeArea";
 
 const PostMobile = {
   Container: ({ children }: { children: React.ReactNode }) => {
     const { state } = usePostContext();
     return (
-      <div
+      <SafeArea
         className="flex h-screen w-full flex-col items-center justify-start"
         style={{ backgroundColor: state.color }}
       >
         <div className="flex h-full w-full flex-col items-center justify-start">
           {children}
         </div>
-      </div>
+      </SafeArea>
     );
   },
   Header: () => {
     const { state, handlers } = usePostContext();
     return (
-      <header
+      <SafeArea
+        top={true}
+        bottom={false}
         className={`stretch flex w-full flex-col justify-start bg-[${state.color}]`}
       >
         <div className="flex w-full flex-row items-center justify-between p-11">
-          <h1 className="font-shippori text-[24px] font-bold text-white">
+          <h1 className="font-ipaex text-[24px] font-bold text-white">
             {state.boardName}
           </h1>
           <Hamburger onClick={handlers.toggleSideMenu} color={"white"} />
         </div>
         <div className="flex w-full flex-row items-center justify-center">
-          <h1 className="font-shippori text-center text-[24px] font-bold text-white">
+          <h1 className="font-ipaex text-center text-[24px] font-bold text-white">
             {state.title}
           </h1>
         </div>
         <div className="flex w-full flex-row items-end justify-end p-11">
-          <h1 className="font-shippori text-[24px] font-bold text-white">
-            {state.date.toLocaleDateString()}
+          <h1 className="font-ipaex text-[24px] font-bold text-white">
+            {state?.date?.toLocaleDateString()}
           </h1>
         </div>
-      </header>
+      </SafeArea>
     );
   },
   SideMenu: () => {
@@ -53,7 +56,7 @@ const PostMobile = {
     const { state } = usePostContext();
     return (
       <section className="flex h-full w-full flex-col items-center justify-between overflow-auto">
-        <div style={{ textAlign: "center" }}>
+        <div style={{ textAlign: "center", width: "100%" }}>
           {state.post && (
             <div className="content-container">
               <div className="relative h-96 w-full overflow-hidden">
@@ -61,7 +64,7 @@ const PostMobile = {
                   src={state.post?.thumbnail || ""}
                   alt={state.post?.title || "Post thumbnail"}
                   fill
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  sizes="100vw"
                   className="object-cover"
                   priority
                 />

@@ -7,6 +7,7 @@ export interface CardStyle {
   opacity: number;
   yOffset: number;
   zIndex: number;
+  rotation: number;
 }
 
 export interface MainPageState {
@@ -26,6 +27,8 @@ export interface MainPageState {
   currentPostId: string;
   currentDate: Date;
   mounted: boolean;
+  isRotating: boolean;
+  rotationInterval: NodeJS.Timeout | null;
 }
 
 export interface UseMainType {
@@ -41,6 +44,9 @@ export interface UseMainType {
     onLeave: () => void;
     toggleSideMenu: () => void;
     getCardStyle: (arrayIndex: number) => CardStyle;
+    startRotation: () => void;
+    stopRotation: () => void;
+    toggleRotation: () => void;
   };
 }
 
@@ -73,7 +79,7 @@ export interface PostPageState {
   color: string;
   title: string;
   boardName: string;
-  date: Date;
+  date?: Date;
   post: Post;
 }
 

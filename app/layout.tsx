@@ -8,6 +8,7 @@ import AuthProvider from "./components/auth/AuthProvider";
 import AxiosProvider from "./components/provider/AxiosProvider";
 import ReactQueryProviders from "./components/provider/QueryProvider";
 import ReduxProvider from "./components/provider/redux";
+import SafeAreaProvider from "./components/common/SafeAreaProvider";
 
 import localFont from "next/font/local";
 
@@ -39,44 +40,39 @@ export const ttCommonsPro = localFont({
   preload: true,
 });
 
-export const shipporiMincho = localFont({
+export const designhouse = localFont({
   src: [
     {
-      path: "../public/fonts/ShipporiMincho-Regular.ttf",
-      weight: "400",
-      style: "normal",
-    },
-    {
-      path: "../public/fonts/ShipporiMincho-Medium.ttf",
-      weight: "500",
-      style: "normal",
-    },
-    {
-      path: "../public/fonts/ShipporiMincho-SemiBold.ttf",
-      weight: "600",
-      style: "normal",
-    },
-    {
-      path: "../public/fonts/ShipporiMincho-Bold.ttf",
+      path: "../public/fonts/designhouseBold.ttf",
       weight: "700",
       style: "normal",
     },
     {
-      path: "../public/fonts/ShipporiMincho-ExtraBold.ttf",
-      weight: "800",
+      path: "../public/fonts/designhouseLight.ttf",
+      weight: "500",
       style: "normal",
     },
   ],
-  variable: "--font-shippori-mincho",
   display: "swap",
   preload: true,
+  variable: "--font-designhouse",
 });
-
-export const youngest = localFont({
-  src: "../public/fonts/Youngest.woff",
+export const ipaex = localFont({
+  src: [
+    {
+      path: "../public/fonts/ipaexm.ttf",
+      weight: "700",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/ipaexg.ttf",
+      weight: "500",
+      style: "normal",
+    },
+  ],
   display: "swap",
   preload: true,
-  variable: "--font-youngest",
+  variable: "--font-ipaex",
 });
 
 const inter = Inter({
@@ -108,6 +104,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
+  viewportFit: "cover", // Enable safe area insets
 };
 
 export const metadata: Metadata = {
@@ -171,7 +168,7 @@ export default function RootLayout({
   return (
     <html
       lang="ja"
-      className={`${youngest.variable} ${inter.variable} ${notoSansJP.variable} ${notoSerifJP.variable} ${ttCommonsPro.variable} ${shipporiMincho.variable} text-base sm:text-sm md:text-base lg:text-lg`}
+      className={`${inter.variable} ${notoSansJP.variable} ${notoSerifJP.variable} ${ttCommonsPro.variable} ${designhouse.variable} ${ipaex.variable} text-base sm:text-sm md:text-base lg:text-lg`}
       style={{ height: "100%" }}
     >
       <head>
@@ -197,10 +194,12 @@ export default function RootLayout({
             <ReduxProvider>
               <AuthProvider>
                 <AxiosProvider>
-                  <main style={{ height: "100%", overflow: "auto" }}>
-                    {children}
-                  </main>
-                  {modal}
+                  <SafeAreaProvider>
+                    <main style={{ height: "100%", overflow: "auto" }}>
+                      {children}
+                    </main>
+                    {modal}
+                  </SafeAreaProvider>
                 </AxiosProvider>
               </AuthProvider>
             </ReduxProvider>
