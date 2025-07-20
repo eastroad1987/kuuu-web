@@ -1,28 +1,37 @@
-import { MainPageState } from "@/types/types";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import {
+  CardData,
+  MainPageState,
+  PostCardData,
+  postToCardData,
+} from "../../../types/types";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useScrollSections } from "../../../hooks/useScrollSections";
 import useWindowSize from "../../../hooks/useWindowSize";
 import { useGetCategories, useGetPostsByPeriod } from "../../../lib/api/apis";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { setBackgroundColor, setCategories } from "../../../redux/reducer";
 import { useRouter } from "next/navigation";
+import { Value } from "react-calendar/dist/cjs/shared/types";
 
+/**
+ * Custom hook for managing home page state and functionality
+ * @returns Home page context with state and handlers
+ */
 export default function useHome() {
-  const { isMobile, height } = useWindowSize();
-
+  const { height } = useWindowSize();
   const router = useRouter();
+  const dispatch = useAppDispatch();
 
+  // Constants
   const limitPages = 4;
+
+  // Section scrolling
   const { currentSection } = useScrollSections({
     totalSections: limitPages,
     animationDuration: 1500,
   });
 
-  const dispatch = useAppDispatch();
-  const categoriesList = useAppSelector(
-    (store) => (store as any).reducers.app.categories,
-  );
-
+  // API data fetching
   const {
     data: categories,
     isLoading: isCategoriesLoading,
@@ -30,268 +39,208 @@ export default function useHome() {
   } = useGetCategories();
 
   const [startDate, setStartDate] = useState<string>("");
-  const [endDate, setEndDate] = useState<string>("");
 
   const {
     data: posts,
     isLoading: isPostsLoading,
     isError: isPostsError,
     refetch: refetchPosts,
-  } = useGetPostsByPeriod(startDate, endDate);
+  } = useGetPostsByPeriod(startDate, "");
 
-  const initialState = useMemo<MainPageState>(
-    () => ({
-      isMobile,
-      isOpen: false,
-      timerRef: null,
-      maxVisibleBlogs: 5,
-      visibleBlogs: [],
-      arrayIndex: [],
-      currentIndex: -1,
-      windowHeight: height,
-      limit: limitPages,
-      currentSection: 0,
-      isScrolling: false,
-      posts: [],
-      isHover: false,
-      currentPostId: "",
-      currentDate: new Date(),
-      mounted: false,
-      isRotating: false,
-      rotationInterval: null,
-    }),
-    [limitPages, isMobile, height],
-  );
+  // Initialize with sample card data, will be replaced with API data when available
+  const initialState: MainPageState = {
+    isMobile: false,
+    isOpen: false,
+    limit: limitPages,
+    currentSection: 0,
+    isHover: false,
+    currentPostId: "",
+    currentDate: new Date(),
+    isRotating: false,
+    windowHeight: height,
+    cardHeight: height / 6 || 80,
+    activeCardIndex: 0,
+    cardData: [],
+  };
 
   const [state, setState] = useState<MainPageState>(initialState);
 
   const updateState = useCallback((updates: Partial<MainPageState>) => {
-    setState((prev: MainPageState) => ({ ...prev, ...updates }));
+    setState((prev) => ({ ...prev, ...updates }));
   }, []);
+
+  useEffect(() => {
+    if (
+      categories &&
+      categories.data &&
+      Array.isArray(categories.data) &&
+      categories.data.length > 0
+    ) {
+      dispatch(setCategories(categories.data));
+    }
+  }, [categories]);
+
+  // Update cardData when posts data is loaded from API
+  useEffect(() => {
+    if (
+      posts &&
+      posts.data &&
+      Array.isArray(posts.data) &&
+      posts.data.length > 0
+    ) {
+      // Convert API posts to CardData format
+      const apiCardData = posts.data.map((post: any) =>
+        postToCardData(post as PostCardData),
+      );
+
+      // 기존 샘플 데이터와 API 데이터 결합
+      updateState({
+        cardData: [...initialState.cardData, ...apiCardData],
+      });
+      console.log("Updated card data with API posts:", apiCardData.length);
+    }
+  }, [posts, updateState]);
+
+  // Update card height when window height changes
+  useEffect(() => {
+    if (height !== 0) {
+      updateState({
+        windowHeight: height,
+        cardHeight: height / 6 || 80,
+      });
+    }
+  }, [height, updateState]);
 
   useEffect(() => {
     dispatch(setBackgroundColor("#FFFFFF"));
   }, [dispatch]);
 
-  // Add a client-side only flag to prevent hydration mismatch
-  const [isClient, setIsClient] = useState(false);
-  
-  // This effect runs only once after client-side hydration is complete
+  // Separate effect for section changes
   useEffect(() => {
-    setIsClient(true);
-  }, []);
+    // Update state when section changes
+    updateState({ currentSection, isRotating: true });
 
-  useEffect(() => {
-    updateState({ currentSection });
+    // Debug information
+    console.log(`Section changed to: ${currentSection}`);
 
     // Auto-rotate cards when in blog section - only run on client side
-    if (isClient && currentSection === 3) {
-      // Start rotation when entering blog section
-      updateState({ isRotating: true });
-    } else if (isClient && state.isRotating) {
-      // Stop rotation when leaving blog section
-      if (state.rotationInterval) {
-        clearInterval(state.rotationInterval);
-      }
-      updateState({
-        isRotating: false,
-        rotationInterval: null,
-      });
-    }
-  }, [currentSection, updateState, state.isRotating, state.rotationInterval, isClient]);
-
-  // Rotate cards every 3 seconds when rotation is active
-  useEffect(() => {
-    // Only run rotation on client side after hydration
-    if (isClient && state.isRotating) {
-      const rotationTimer = setInterval(() => {
-        // Rotate the cards by shifting the first visible blog to the end
-        if (state.visibleBlogs.length > 0) {
-          const newVisibleBlogs = [...state.visibleBlogs];
-          const firstItem = newVisibleBlogs.shift();
-          if (firstItem) {
-            newVisibleBlogs.push(firstItem);
-            updateState({ visibleBlogs: newVisibleBlogs });
+    if (currentSection === 3) {
+      console.log("In blog section (3), preparing to start rotation");
+      if (state.isRotating) {
+        const rotationTimer = setInterval(() => {
+          // Rotate the cards by shifting the first visible blog to the end
+          if (state.cardData && state.cardData.length > 0) {
+            const nextIndex =
+              (state.activeCardIndex - 1) % state.cardData.length;
+            console.log(
+              `Rotating card: ${state.activeCardIndex} → ${nextIndex}`,
+            );
+            updateState({
+              activeCardIndex: nextIndex,
+              isRotating: true,
+            });
           }
-        }
-      }, 3000); // Rotate every 3 seconds
+        }, 3000); // Rotate every 3 seconds
 
-      return () => {
-        clearInterval(rotationTimer);
-      };
+        return () => {
+          clearInterval(rotationTimer);
+        };
+      }
     }
-    }, [isClient, state.isRotating, state.visibleBlogs, updateState]);
-
-  useEffect(() => {
-    if (categories?.data && (!categoriesList || categoriesList.length === 0)) {
-      dispatch(setCategories(categories.data));
-    }
-  }, [categories, categoriesList, dispatch]);
-
-  useEffect(() => {
-    if (state.currentDate) {
-      const start = new Date(state.currentDate);
-      start.setDate(start.getDate() - 14);
-      start.setHours(0, 0, 0, 0);
-
-      const end = new Date(state.currentDate);
-      end.setDate(end.getDate() + 14);
-      end.setHours(23, 59, 59, 999);
-
-      setStartDate(start.toISOString());
-      setEndDate(end.toISOString());
-    }
-  }, [state.currentDate]);
-
-  useEffect(() => {
-    if (posts?.data) {
-      updateState({
-        posts: posts.data as any,
-        visibleBlogs: posts?.data as any,
-      });
-    }
-  }, [posts, updateState]);
-
-  // We've consolidated the rotation logic in the useEffect above
+    return undefined;
+  }, [
+    currentSection,
+    state.isRotating,
+    updateState,
+    state.activeCardIndex,
+    state.cardData,
+  ]);
 
   const handlers = {
-    startRotation: useCallback(() => {
-      updateState({ isRotating: true });
-    }, [updateState]),
-
-    stopRotation: useCallback(() => {
-      if (state.rotationInterval) {
-        clearInterval(state.rotationInterval);
-      }
-      updateState({
-        isRotating: false,
-        rotationInterval: null,
-      });
-    }, [state.rotationInterval, updateState]),
-
-    toggleRotation: useCallback(() => {
-      if (state.isRotating) {
-        if (state.rotationInterval) {
-          clearInterval(state.rotationInterval);
-        }
-        updateState({
-          isRotating: false,
-          rotationInterval: null,
-        });
-      } else {
-        updateState({ isRotating: true });
-      }
-    }, [state.isRotating, state.rotationInterval, updateState]),
     onPageChange: useCallback(
-      (page: number) => {
+      (page: number): void => {
         updateState({ currentSection: page });
       },
       [updateState],
     ),
+
     onSelected: useCallback(
-      (postId: string) => {
+      (postId: string): void => {
         updateState({ currentPostId: postId });
         router.push(`/post/${postId}`);
       },
       [updateState, router],
     ),
-    onSelectedDate: useCallback(
-      (date: Date) => {
-        updateState({ currentDate: date });
-      },
-      [updateState],
-    ),
-    onChangeDate: useCallback(
-      (date: Date) => {
-        updateState({ currentDate: date });
-      },
-      [updateState],
-    ),
-    onSideMenuClose: useCallback(() => {
+
+    onSideMenuClose: useCallback((): void => {
       updateState({ isOpen: false });
     }, [updateState]),
-    toggleSideMenu: useCallback(() => {
-      updateState({ isOpen: !state.isOpen });
-    }, [updateState, state.isOpen]),
-    onEnter: useCallback(() => {
+
+    onEnter: useCallback((): void => {
       updateState({ isHover: true });
     }, [updateState]),
-    onLeave: useCallback(() => {
+
+    onLeave: useCallback((): void => {
       updateState({ isHover: false });
     }, [updateState]),
-    getCardStyle: useCallback(
-      (arrayIndex: number) => {
-        if (state.isMobile) {
-          // For mobile, we want the cards to be centered and animate from bottom to top
-          // Only the first card is fully visible, others are positioned below for animation
-          if (arrayIndex === 0) {
-            return {
-              scale: 1,
-              filter: "blur(0px)",
-              opacity: 1,
-              yOffset: 0,
-              zIndex: 10,
-              rotation: 0,
-            };
-          } else {
-            // Position other cards below the viewport for bottom-to-top animation
-            return {
-              scale: 0.95,
-              filter: "blur(1px)",
-              opacity: 0.8,
-              yOffset: height ? height * 0.5 : 300, // Position below the viewport
-              zIndex: 1,
-              rotation: 0,
-            };
-          }
-        } else {
-          let scale, blur, opacity, yOffset, zIndex, rotation;
-          const baseOffset = height ? height * 0.05 : 30;
-          if (arrayIndex === 0) {
-            // Front card
-            scale = 1;
-            blur = 0;
-            opacity = 1;
-            yOffset = 0;
-            zIndex = 10;
-            rotation = 0;
-          } else if (arrayIndex === 1) {
-            // Second card
-            scale = 0.9;
-            blur = 1.5;
-            opacity = 0.8;
-            yOffset = baseOffset * 1.5;
-            zIndex = 9;
-            rotation = -1;
-          } else if (arrayIndex === 2) {
-            // Third card
-            scale = 0.8;
-            blur = 3;
-            opacity = 0.6;
-            yOffset = baseOffset * 3;
-            zIndex = 8;
-            rotation = 1;
-          } else {
-            // Other cards
-            scale = Math.max(0.7, 0.75 - (arrayIndex - 3) * 0.05);
-            blur = arrayIndex * 1.5;
-            opacity = Math.max(0.3, 0.5 - (arrayIndex - 3) * 0.1);
-            yOffset = baseOffset * (3 + arrayIndex * 0.5);
-            zIndex = 7 - (arrayIndex - 3);
-            rotation = (arrayIndex % 2 === 0 ? -1 : 1) * (1 + arrayIndex * 0.2);
-          }
-          return {
-            scale,
-            filter: `blur(${blur}px)`,
-            opacity,
-            yOffset,
-            zIndex,
-            rotation,
-          };
+
+    toggleSideMenu: useCallback((): void => {
+      updateState({
+        isOpen: !state.isOpen,
+      });
+    }, [updateState, state.isOpen]),
+
+    /**
+     * Handle calendar date change with proper typing
+     * @param value - Value from react-calendar (Date | Date[] | [Date, Date] | null)
+     * @param event - Optional mouse event from calendar
+     */
+    calendarChange: useCallback(
+      (value: Value, event?: React.MouseEvent<HTMLButtonElement>): void => {
+        if (value instanceof Date) {
+          updateState({ currentDate: value });
+        } else if (
+          Array.isArray(value) &&
+          value.length > 0 &&
+          value[0] instanceof Date
+        ) {
+          updateState({ currentDate: value[0] }); // Use the first date in the range
         }
       },
-      [state.isMobile, height],
+      [updateState],
     ),
+
+    /**
+     * Calculate the appropriate visual position for card display
+     * Handles different layouts based on the number of available cards
+     * @param index - Current card index
+     * @param totalCards - Total number of cards
+     * @returns Visual position (0-4) for card display
+     */
+    /**
+     * Get the subset of cards that should be visible based on activeCardIndex
+     * Always returns exactly 5 cards or fewer if total cards < 5
+     * @returns Array of card data that should be visible
+     */
+    getVisibleCards: useCallback((): CardData[] => {
+      if (!state.cardData) return [];
+
+      const totalCards = state.cardData.length;
+      if (totalCards <= 5) return state.cardData;
+
+      // For more than 5 cards, return exactly 5 cards centered around activeCardIndex
+      // Shows 2 cards before and 2 cards after the active card (total of 5 cards)
+      const visibleCards: CardData[] = [];
+      for (let offset = -2; offset <= 2; offset++) {
+        // Calculate the actual index using modulo to wrap around
+        // Add totalCards before taking modulo to handle negative indices
+        const actualIndex =
+          (state.activeCardIndex + offset + totalCards) % totalCards;
+        visibleCards.push(state.cardData[actualIndex]);
+      }
+
+      return visibleCards;
+    }, [state.activeCardIndex, state.cardData]),
   };
 
   // We'll use state properties for loading and error status
@@ -300,6 +249,7 @@ export default function useHome() {
     isError: false, // Replace with actual error state when API integration is done
   };
 
+  // Return optimized object with all handlers consolidated
   return {
     state,
     updateState,

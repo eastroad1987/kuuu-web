@@ -40,7 +40,7 @@ const CategoryWeb = {
     return (
       <section className="flex w-full flex-row items-center justify-between pb-10 pt-10">
         <div className="grid grid-cols-1 items-center justify-items-start gap-5 sm:grid-cols-[400px_minmax(0,_1fr)] md:grid-cols-[400px_minmax(0,_1fr)] lg:grid-cols-[400px_minmax(0,_1fr)]">
-          <div className="w-[400px] flex-shrink-0 overflow-hidden text-center md:flex md:w-full md:justify-center">
+          <div className="max-h-[400px] w-[400px] flex-shrink-0 overflow-hidden text-center md:flex md:w-full md:justify-center">
             <Image
               src={state.mainImage || ""}
               alt="Main Image"

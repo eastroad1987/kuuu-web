@@ -1,6 +1,11 @@
 import { CreatePostDto, PostResponse } from "./dto";
 import { Category, Post, SubCategory } from "./entities";
+import { Value } from "react-calendar/dist/cjs/shared/types";
+import React from "react";
 
+/**
+ * Represents the style properties for a card component.
+ */
 export interface CardStyle {
   scale: number;
   filter: string;
@@ -10,46 +15,106 @@ export interface CardStyle {
   rotation: number;
 }
 
+/**
+ * Data structure for blog cards (manual data)
+ */
+export interface CardData {
+  image: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  badge: string;
+  badgeColor: string;
+}
+
+/**
+ * Post API response structure for card display
+ */
+export interface PostCardData {
+  id: string;
+  title: string;
+  content: string;
+  thumbnail: string;
+  viewCnt: number;
+  publishedAt: string;
+  categoryId: string;
+  subcategoryId: string;
+  category?: {
+    id: string;
+    title: string;
+  };
+  subcategory?: {
+    id: string;
+    title: string;
+  };
+}
+
+/**
+ * Convert a Post to CardData format
+ */
+export const postToCardData = (post: PostCardData): CardData => ({
+  image: post.thumbnail || "/images/default-thumbnail.jpg",
+  title: post.title,
+  subtitle: post.category?.title || "",
+  description: post.content.replace(/<[^>]*>/g, "").substring(0, 100) + "...",
+  badge: post.subcategory?.title || "",
+  badgeColor: getBadgeColorByCategory(post.categoryId),
+});
+
+/**
+ * Get badge color based on category ID
+ */
+const getBadgeColorByCategory = (categoryId: string): string => {
+  const colorMap: {[key: string]: string} = {
+    "1": "bg-blue-500",    // NEWS
+    "2": "bg-green-500",   // BLOG
+    "3": "bg-amber-500",   // CAFE/RESTRAINT
+    "4": "bg-indigo-500",  // TRAVEL
+    "5": "bg-rose-500",    // CULTURE
+  };
+  
+  return colorMap[categoryId] || "bg-gray-500";
+};
+
+/**
+ * Main page state interface with improved type safety
+ */
 export interface MainPageState {
   isMobile: boolean;
   isOpen: boolean;
-  timerRef: any;
-  maxVisibleBlogs: number;
-  visibleBlogs: any[];
-  arrayIndex: number[];
-  currentIndex: number;
   isHover: boolean;
   windowHeight: number;
-  posts: PostResponse[];
   limit: number;
-  isScrolling: boolean;
   currentSection: number;
   currentPostId: string;
   currentDate: Date;
-  mounted: boolean;
   isRotating: boolean;
-  rotationInterval: NodeJS.Timeout | null;
+  cardHeight: number;
+  activeCardIndex: number;
+  cardData: CardData[];
 }
 
+/**
+ * Main context interface for the home page
+ */
 export interface UseMainType {
   state: MainPageState;
   updateState: (updates: Partial<MainPageState>) => void;
   handlers: {
     onPageChange: (page: number) => void;
     onSelected: (postId: string) => void;
-    onChangeDate: (date: Date) => void;
-    onSelectedDate: (date: Date) => void;
     onSideMenuClose: () => void;
     onEnter: () => void;
     onLeave: () => void;
     toggleSideMenu: () => void;
-    getCardStyle: (arrayIndex: number) => CardStyle;
-    startRotation: () => void;
-    stopRotation: () => void;
-    toggleRotation: () => void;
+    getVisibleCards: () => CardData[];
+    calendarChange: (value: Value, event?: React.MouseEvent<HTMLButtonElement>) => void;
   };
 }
 
+/**
+ * Category page state interface
+ */
 export interface CategoryPageState {
   isOpen: boolean;
   title: string | null;
@@ -62,6 +127,9 @@ export interface CategoryPageState {
   posts: Post[];
 }
 
+/**
+ * Category page context interface
+ */
 export interface UseCategoryType {
   state: CategoryPageState;
   updateState: (updates: Partial<CategoryPageState>) => void;
@@ -73,6 +141,9 @@ export interface UseCategoryType {
   navigation: NavigationType;
 }
 
+/**
+ * Post page state interface
+ */
 export interface PostPageState {
   isOpen: boolean;
   id: string;
@@ -83,6 +154,9 @@ export interface PostPageState {
   post: Post;
 }
 
+/**
+ * Post page context interface
+ */
 export interface UsePostType {
   state: PostPageState;
   updateState: (updates: Partial<PostPageState>) => void;
@@ -92,6 +166,9 @@ export interface UsePostType {
   };
 }
 
+/**
+ * Admin writer page state interface
+ */
 export interface AdminWriterPageState {
   date: Date;
   form: CreatePostDto;
@@ -101,9 +178,12 @@ export interface AdminWriterPageState {
   subCategory: SubCategory;
   isUploading: boolean;
   progress: number;
-  thumbnailFile: any | null;
+  thumbnailFile: File | null; // Use File type instead of any
 }
 
+/**
+ * Admin writer page context interface
+ */
 export interface UseAdminWriterType {
   state: AdminWriterPageState;
   updateState: (updates: Partial<AdminWriterPageState>) => void;
@@ -119,10 +199,16 @@ export interface UseAdminWriterType {
   navigation: NavigationType;
 }
 
+/**
+ * Auth page state interface
+ */
 export interface AuthPageState {
-
+  // Add properties as needed
 }
 
+/**
+ * Auth page context interface
+ */
 export interface UseAuthType {
   state: AuthPageState;
   updateState: (updates: Partial<AuthPageState>) => void;
@@ -131,6 +217,9 @@ export interface UseAuthType {
   };
 }
 
+/**
+ * Navigation helper interface for page transitions
+ */
 export interface NavigationType {
   goToHome?: () => void;
   goToPost?: (postId: string) => void;

@@ -1,54 +1,56 @@
 "use client";
-import { PostResponse } from "@/types/dto";
-import { useAppSelector } from "../../../redux/hooks";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { useState } from "react";
 
-interface HorizontalCardProps {
-  post: PostResponse | null;
-  onSelected: (postId: string) => void;
+interface LeftImageCardProps {
+  image: string;
+  title: string;
+  subtitle?: string;
+  description?: string;
+  onClick?: () => void;
+  badge?: string;
+  badgeColor?: string;
+  height?: number;
 }
 
 export default function HorizontalCard({
-  post,
-  onSelected,
-}: HorizontalCardProps) {
-  const categories = useAppSelector(
-    (store) => (store as any).reducers.app.categories,
-  );
-
-  const category = categories.find(
-    (category: any) => category.id === post?.categoryId,
-  );
-
+  image,
+  title,
+  subtitle,
+  description,
+  onClick,
+  badge,
+  badgeColor = "bg-indigo-500",
+  height,
+}: LeftImageCardProps) {
   const [isHovered, setIsHovered] = useState(false);
 
   // Card animation variants
   const cardVariants = {
     initial: { opacity: 0, y: 20 },
     animate: { opacity: 1, y: 0 },
-    hover: { scale: 1.03, boxShadow: "0 10px 25px rgba(0, 0, 0, 0.15)" },
-    tap: { scale: 0.98 }
+    hover: { scale: 1.02, boxShadow: "0 10px 25px rgba(0, 0, 0, 0.12)" },
+    tap: { scale: 0.98 },
   };
 
   // Content animation variants
   const contentVariants = {
     initial: { opacity: 0 },
     animate: { opacity: 1, transition: { delay: 0.2 } },
-    hover: { x: 5 }
+    hover: { x: 5 },
   };
 
   // Image animation variants
   const imageVariants = {
     hover: { scale: 1.1 },
-    initial: { scale: 1 }
+    initial: { scale: 1 },
   };
 
   return (
-    <motion.button
-      className="mx-auto max-w-4xl overflow-hidden rounded-xl bg-white shadow-md md:flex"
-      onClick={() => onSelected(post?.id as any)}
+    <motion.div
+      className="flex h-full overflow-hidden rounded-xl bg-white shadow-md"
+      onClick={onClick}
       variants={cardVariants}
       initial="initial"
       animate="animate"
@@ -59,44 +61,62 @@ export default function HorizontalCard({
       onHoverEnd={() => setIsHovered(false)}
       layout
     >
-      <div className="relative md:flex-shrink-0 overflow-hidden">
+      {/* Left side - Image */}
+      <div className="relative w-1/3 overflow-hidden">
         <motion.div
           variants={imageVariants}
           transition={{ duration: 0.5 }}
+          className="h-full"
         >
           <Image
-            className="h-48 w-full object-cover md:w-48"
-            src={post?.thumbnail || "/images/default-thumbnail.jpg"}
-            alt="Card image"
-            width={192}
-            height={192}
+            className="h-full w-full object-cover"
+            src={image || "/images/default-thumbnail.jpg"}
+            alt={title}
+            width={300}
+            height={300}
           />
         </motion.div>
       </div>
-      <motion.div 
-        className="p-8"
+
+      {/* Right side - Content */}
+      <motion.div
+        className="flex w-2/3 flex-col justify-center p-6"
         variants={contentVariants}
       >
-        <motion.div 
-          className="text-sm font-semibold uppercase tracking-wide text-indigo-500"
-          animate={{ opacity: 1 }}
-          initial={{ opacity: 0.7 }}
-        >
-          {category?.title}
-        </motion.div>
-        <motion.h2 
-          className="mt-1 block text-lg font-medium leading-tight text-black hover:underline"
-        >
-          {post?.title}
+        {badge && (
+          <motion.div
+            className={`mb-2 inline-block rounded-full ${badgeColor} px-3 py-1 text-xs font-semibold text-white`}
+            animate={{ opacity: 1 }}
+            initial={{ opacity: 0.7 }}
+          >
+            {badge}
+          </motion.div>
+        )}
+
+        {subtitle && (
+          <motion.div
+            className="text-sm font-medium text-gray-600"
+            animate={{ opacity: 1 }}
+            initial={{ opacity: 0.7 }}
+          >
+            {subtitle}
+          </motion.div>
+        )}
+
+        <motion.h2 className="mt-1 text-xl font-bold text-gray-900">
+          {title}
         </motion.h2>
-        <motion.p 
-          className="mt-2 text-gray-500"
-          animate={{ opacity: isHovered ? 1 : 0.8 }}
-          transition={{ duration: 0.3 }}
-        >
-          {post?.summary}
-        </motion.p>
+
+        {description && (
+          <motion.p
+            className="mt-3 text-base text-gray-600"
+            animate={{ opacity: isHovered ? 1 : 0.9 }}
+            transition={{ duration: 0.3 }}
+          >
+            {description}
+          </motion.p>
+        )}
       </motion.div>
-    </motion.button>
+    </motion.div>
   );
 }

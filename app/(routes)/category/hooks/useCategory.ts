@@ -110,6 +110,7 @@ export default function useCategory(id: string) {
 
   useEffect(() => {
     if (category) {
+      console.log("category", category);
       updateState({
         title: category?.title || "",
         currentBoard: category || ({} as Category),
@@ -120,11 +121,15 @@ export default function useCategory(id: string) {
   useEffect(() => {
     if (subcategories?.data) {
       const typedSubcategories = subcategories.data as unknown as SubCategory[];
+      // Sort typedSubcategories by id
+      const sortedSubcategories = [...typedSubcategories].sort((a, b) => {
+        return Number(a.id) - Number(b.id);
+      });
       const defaultSubBoard = !state.currentSubBoard?.id
-        ? typedSubcategories[0]
+        ? sortedSubcategories[0]
         : state.currentSubBoard;
       updateState({
-        subBoards: typedSubcategories,
+        subBoards: sortedSubcategories,
         currentSubBoard: defaultSubBoard
           ? defaultSubBoard
           : ({ title: "" } as SubCategory),

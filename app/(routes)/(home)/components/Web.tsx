@@ -1,16 +1,17 @@
 "use client";
-import { Fragment, ReactNode, useEffect } from "react";
-import { useMainContext } from "../context/MainContext";
+import HorizontalCard from "@/components/common/Card/HorizontalCard";
 import Hamburger from "@/components/common/Hamburger";
+import NoData from "@/components/common/NoData/NoData";
 import SideMenu from "@/components/common/SideMenu";
+import VerticalDots from "@/components/common/VerticalDots";
+import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import VerticalDots from "@/components/common/VerticalDots";
+import { ReactNode, useEffect, useState } from "react";
 import Calendar from "react-calendar";
+import "react-calendar/dist/Calendar.css";
+import { useMainContext } from "../context/MainContext";
 import moment from "moment";
-import { AnimatePresence, motion } from "framer-motion";
-import HorizontalCard from "@/components/common/Card/HorizontalCard";
-import NoData from "@/components/common/NoData/NoData";
 
 const MainWeb = {
   Container: ({ children }: { children: ReactNode }) => {
@@ -69,87 +70,6 @@ const MainWeb = {
       </section>
     );
   },
-  CategoryContent: () => {
-    const { state } = useMainContext();
-    return (
-      <section className={`flex h-full items-center justify-center`}>
-        <div className="category-container">
-          <div className="category-top-container">
-            <div className="flex h-full w-[55%] flex-col items-center justify-center">
-              <div className="flex h-[35%] w-full flex-col items-center justify-center">
-                <h2 className={`font-designhouse text-4xl text-black`}>
-                  Category
-                </h2>
-              </div>
-              <Link
-                href="/category/0"
-                className={`flex h-[65%] w-full flex-col items-center justify-center bg-[#ffc212] ${state.currentSection == 1 ? "animate-slide-right" : ""}`}
-              >
-                <h2 className={`font-ipaex text-4xl font-bold text-white`}>
-                  Musical & Movie
-                </h2>
-              </Link>
-            </div>
-            <div className="flex h-full w-[45%] flex-row items-center justify-center">
-              <div className="flex h-full w-[45%] flex-col items-center justify-center">
-                <div className="relative h-full w-full">
-                  <Image
-                    src="/images/korea.png"
-                    alt="musical"
-                    fill
-                    className="object-cover" // 또는 object-contain
-                    sizes="100vw, 100vw"
-                    priority
-                  />
-                </div>
-              </div>
-              <Link
-                href="/category/1"
-                className={`flex h-full w-[55%] flex-col items-center justify-center bg-[#0b3b10] ${state.currentSection == 1 ? "animate-slide-down" : ""}`}
-              >
-                <h2 className={`font-ipaex text-4xl font-bold text-white`}>
-                  Life
-                </h2>
-              </Link>
-            </div>
-          </div>
-          <div className="category-bottom-container">
-            <div className="flex h-full w-[58%] flex-row items-center justify-center">
-              <Link
-                href="/category/2"
-                className={`flex h-full w-full flex-col items-center justify-center bg-[#1f2f57] ${state.currentSection == 1 ? "animate-slide-up" : ""}`}
-              >
-                <h2 className={`font-ipaex text-4xl font-bold text-white`}>
-                  Cafe & Restaurant
-                </h2>
-              </Link>
-
-              <div className="relative h-full w-[45%]">
-                <Image
-                  src="/images/life.png"
-                  alt="musical"
-                  fill
-                  className="object-cover" // 또는 object-contain
-                  sizes="100vw, 100vw"
-                  priority
-                />
-              </div>
-            </div>
-            <div className="flex h-full w-[43%] flex-row items-center justify-center">
-              <Link
-                href="/category/3"
-                className={`flex h-full w-full flex-col items-center justify-center bg-[#d62c28] ${state.currentSection == 1 ? "animate-slide-left" : ""}`}
-              >
-                <h2 className={`font-ipaex text-4xl font-bold text-white`}>
-                  Sightseeing
-                </h2>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-    );
-  },
   ProfileContent: () => {
     const { state, handlers } = useMainContext();
     return (
@@ -158,10 +78,10 @@ const MainWeb = {
           <div className="profile-left-container">
             <div className="profile-text">
               <h1 className="font-ipaex">Profile</h1>
-              <h2>프로필</h2>
+              <h2 className="font-designhouse">프로필</h2>
             </div>
             <div className="flex w-full flex-col items-center justify-center">
-              <h2 className={`font-tt-commons text-4xl`}>KURUMI</h2>
+              <h2 className={`font-inter text-4xl`}>KURUMI</h2>
               <div className="w-[40%]">
                 <Image
                   src="/images/line.svg"
@@ -179,25 +99,22 @@ const MainWeb = {
                 onMouseEnter={handlers.onEnter}
                 onMouseLeave={handlers.onLeave}
                 onClick={() => {
-                  window.open(
-                    "mailto:k_u.0626@icloud.com",
-                    "_blank",
-                  );
+                  window.open("mailto:k_u.0626@icloud.com", "_blank");
                 }}
               >
                 {state.isHover ? (
                   <Image
                     src="/images/open_letter.svg"
                     alt="Open Letter"
-                    width={200}
-                    height={200}
+                    width={50}
+                    height={50}
                   />
                 ) : (
                   <Image
                     src="/images/letter.svg"
                     alt="Letter"
-                    width={200}
-                    height={200}
+                    width={50}
+                    height={50}
                   />
                 )}
               </button>
@@ -205,17 +122,14 @@ const MainWeb = {
                 id="profile-prev-button"
                 className="icon"
                 onClick={() => {
-                  window.open(
-                    "https://www.instagram.com/hodu_963/",
-                    "_blank",
-                  );
+                  window.open("https://www.instagram.com/hodu_963/", "_blank");
                 }}
               >
                 <Image
                   src="/images/instar.svg"
                   alt="Open Letter"
-                  width={200}
-                  height={200}
+                  width={50}
+                  height={50}
                 />
               </button>
             </div>
@@ -238,136 +152,192 @@ const MainWeb = {
       </div>
     );
   },
-  BlogContent: () => {
-    const { state, handlers } = useMainContext();
-    
+  CategoryContent: () => {
+    const { state } = useMainContext();
     return (
-      <>
-        <div className="flex h-full w-full">
-          <div className="flex h-full w-1/2 items-center justify-center">
-            <div className="relative h-full w-full overflow-hidden p-4">
-              
-              <div className="flex h-full w-full flex-col items-center justify-center">
-                {state.posts && state.posts.length > 0 ? (
-                  state.isMobile ? (
-                    state.visibleBlogs.map((itemIndex, arrayIndex) => (
-                      <div key={`post-${itemIndex.id}-${arrayIndex}`} className="w-full p-4">
-                        <HorizontalCard
-                          post={itemIndex as any}
-                          onSelected={handlers.onSelected}
-                        />
-                      </div>
-                    ))
-                  ) : (
-                    <AnimatePresence mode="popLayout" initial={false}>
-                      {state.visibleBlogs.map((itemIndex, arrayIndex) => {
-                        const cardStyle = handlers.getCardStyle(arrayIndex);
-                        return (
-                          <motion.div
-                            key={`post-${itemIndex.id}-${arrayIndex}`}
-                            initial={{
-                              y: state.windowHeight,
-                              opacity: 0,
-                              scale: 0.3,
-                              zIndex: cardStyle.zIndex,
-                              rotate: 0
-                            }}
-                            animate={{
-                              y: cardStyle.yOffset,
-                              opacity: cardStyle.opacity,
-                              scale: cardStyle.scale,
-                              zIndex: cardStyle.zIndex,
-                              rotate: cardStyle.rotation
-                            }}
-                            exit={{
-                              y: -state.windowHeight * 0.3,
-                              opacity: 0,
-                              scale: 0.3,
-                              rotate: cardStyle.rotation * 2,
-                              transition: {
-                                duration: 0.4,
-                                ease: "easeInOut",
-                              },
-                              zIndex: cardStyle.zIndex,
-                            }}
-                            transition={{
-                              type: "spring",
-                              stiffness: 100,
-                              damping: 15,
-                              mass: 0.8,
-                              opacity: {
-                                duration: 0.6,
-                                ease: "easeInOut",
-                              },
-                              scale: {
-                                duration: 0.6,
-                                ease: [0.32, 0.72, 0, 1],
-                              },
-                              rotate: {
-                                duration: 0.8,
-                                ease: "easeInOut"
-                              }
-                            }}
-                            className="absolute w-[100%] p-4"
-                            style={{
-                              top: 0,
-                              filter: cardStyle.filter,
-                              transformOrigin: "center center",
-                              willChange: "transform, opacity",
-                              transform: `
-                          scale(${cardStyle.scale})
-                          translateY(-${cardStyle.yOffset}px)
-                          rotate(${cardStyle.rotation}deg)
-                          ${arrayIndex === 0 ? "translateZ(10px)" : ""}
-                        `,
-                              transition:
-                                "transform 0.6s cubic-bezier(0.32, 0.72, 0, 1)",
-                              zIndex: cardStyle.zIndex,
-                            }}
-                          >
-                            <motion.div
-                              initial={{ scale: 0.9 }}
-                              animate={{ scale: 1 }}
-                              exit={{ scale: 0.9 }}
-                              transition={{
-                                duration: 0.4,
-                                ease: "easeInOut",
-                              }}
-                              whileHover={{ scale: 1.05 }}
-                            >
-                              <HorizontalCard
-                                post={itemIndex as any}
-                                onSelected={handlers.onSelected}
-                              />
-                            </motion.div>
-                          </motion.div>
-                        );
-                      })}
-                    </AnimatePresence>
-                  )
-                ) : (
-                  <NoData />
-                )}
+      <section className={`flex h-full items-center justify-center`}>
+        <div className="category-container">
+          <div className="category-top-container">
+            <div className="flex h-full w-[55%] flex-col items-center justify-center">
+              <div className="flex h-[35%] w-full flex-col items-center justify-center">
+                <h2 className={`font-ipaex text-4xl text-black`}>CATEGORY</h2>
               </div>
+              <Link
+                href="/category/0"
+                className={`flex h-[65%] w-full flex-col items-center justify-center bg-[#ffc212] ${state.currentSection == 1 ? "animate-slide-right" : ""}`}
+              >
+                <h2 className={`font-ipaex text-4xl font-bold text-white`}>
+                  MUSICAL/MOVIE
+                </h2>
+              </Link>
+            </div>
+            <div className="flex h-full w-[45%] flex-row items-center justify-center">
+              <div className="flex h-full w-[45%] flex-col items-center justify-center">
+                <div className="relative h-full w-full">
+                  <Image
+                    src="/images/korea.png"
+                    alt="musical"
+                    fill
+                    className="object-cover" // 또는 object-contain
+                    sizes="100vw, 100vw"
+                    priority
+                  />
+                </div>
+              </div>
+              <Link
+                href="/category/1"
+                className={`flex h-full w-[55%] flex-col items-center justify-center bg-[#0b3b10] ${state.currentSection == 1 ? "animate-slide-down" : ""}`}
+              >
+                <h2 className={`font-ipaex text-4xl font-bold text-white`}>
+                  LIFE
+                </h2>
+              </Link>
             </div>
           </div>
-          <div className="flex h-full w-1/2 items-center justify-center">
-            <div className="font-ipaex calendar-container flex h-full w-full items-center justify-center">
-              <Calendar
-                onChange={(value) => handlers.onChangeDate(value as Date)}
-                formatDay={(locale, date) => moment(date).format("DD")}
-                value={state.currentDate}
-                minDetail="month"
-                maxDetail="month"
-                showNeighboringMonth={false}
-                className="h-full w-full border-b text-xs"
-              />
+          <div className="category-bottom-container">
+            <div className="flex h-full w-[58%] flex-row items-center justify-center">
+              <Link
+                href="/category/2"
+                className={`flex h-full w-full flex-col items-center justify-center bg-[#1f2f57] ${state.currentSection == 1 ? "animate-slide-up" : ""}`}
+              >
+                <h2 className={`font-ipaex text-4xl font-bold text-white`}>
+                  CAFE/RESTAURANT
+                </h2>
+              </Link>
+
+              <div className="relative h-full w-[45%]">
+                <Image
+                  src="/images/life.png"
+                  alt="musical"
+                  fill
+                  className="object-cover"
+                  sizes="100vw, 100vw"
+                  priority
+                />
+              </div>
+            </div>
+            <div className="flex h-full w-[43%] flex-row items-center justify-center">
+              <Link
+                href="/category/3"
+                className={`flex h-full w-full flex-col items-center justify-center bg-[#d62c28] ${state.currentSection == 1 ? "animate-slide-left" : ""}`}
+              >
+                <h2 className={`font-ipaex text-4xl font-bold text-white`}>
+                  SIGHTSEEING
+                </h2>
+              </Link>
             </div>
           </div>
         </div>
-      </>
+      </section>
     );
   },
+  BlogContent: () => {
+    const { state, handlers } = useMainContext();
+    const [isClient, setIsClient] = useState(false);
+    useEffect(() => {
+      setIsClient(true);
+    }, []);
+    if (!isClient) return null;
+    return (
+      <section className="flex h-full w-full p-8">
+        <div className="flex h-full w-full">
+          <div className="flex h-full w-[50%] flex-col justify-between pr-6">
+            <div className="relative flex h-full w-full flex-col items-center gap-5">
+              {state.cardData && state.cardData.length > 0 && (
+                <AnimatePresence>
+                  {handlers.getVisibleCards().map((card, index) => {
+                    // Get the visual position based on the index (0-4)
+                    const visualPosition = index;
+
+                    // Define card styling based on position
+                    let cardWidth = "w-full";
+                    let zIndex = 10; // Default z-index
+
+                    if (visualPosition === 0 || visualPosition === 4) {
+                      cardWidth = "w-[85%]"; // Smallest width for 1st and 5th
+                      zIndex = 10; // Back layer
+                    } else if (visualPosition === 1 || visualPosition === 3) {
+                      cardWidth = "w-[92%]"; // Medium width for 2nd and 4th
+                      zIndex = 20; // Middle layer
+                    } else if (visualPosition === 2) {
+                      zIndex = 30; // Front layer for middle card (full width)
+                    }
+
+                    // Position cards vertically based on index
+                    const yPosition = `${visualPosition * (100 / 5)}%`;
+
+                    // Get the original index for the key (important for animations)
+                    const originalIndex =
+                      (state.activeCardIndex + index) % state.cardData.length;
+
+                    return (
+                      <motion.div
+                        key={`card-${originalIndex}`}
+                        className={`${cardWidth} absolute mx-auto`}
+                        initial={false}
+                        animate={{
+                          top: yPosition,
+                          zIndex: zIndex,
+                        }}
+                        transition={{
+                          type: "spring",
+                          stiffness: 300,
+                          damping: 30,
+                        }}
+                        style={{ height: `${state.cardHeight}px` }}
+                      >
+                        <HorizontalCard
+                          image={card?.image}
+                          title={card?.title}
+                          subtitle={card?.subtitle}
+                          description={card?.description}
+                          badge={card?.badge}
+                          badgeColor={card?.badgeColor}
+                        />
+                      </motion.div>
+                    );
+                  })}
+                </AnimatePresence>
+              )}
+              {(!state.cardData || state.cardData.length === 0) && (
+                <div className="flex h-full w-full items-center justify-center">
+                  <NoData />
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Right side - Calendar */}
+          <div className="flex h-full w-[50%] items-center justify-center">
+            <div className="font-ipaex calendar-container mx-auto flex h-[90%] w-[90%] items-center justify-center">
+              <div className="flex flex-col h-full w-full items-center justify-center">
+                <Calendar
+                  className="w-full text-xs"
+                  value={state.currentDate}
+                  formatDay={(locale, date) => moment(date).format("D")}
+                  navigationLabel={({ date }) => (
+                    <div className="flex flex-col items-center mt-5">
+                      <div className="font-ipaex text-2xl">{date.getFullYear()}</div>
+                      <div className="font-ipaex text-xl">{date.getMonth() + 1}</div>
+                    </div>
+                  )}
+                  formatShortWeekday={(locale, date) =>
+                    ["S", "M", "T", "W", "T", "F", "S"][date.getDay()]
+                  }
+                  minDetail="month"
+                  maxDetail="month"
+                  showNeighboringMonth={false}
+                  onChange={handlers.calendarChange}
+                  // Tile 스타일은 calendar.css에서 관리됩니다
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  },
+
   VerticalDotButtons: () => {
     const { state, handlers } = useMainContext();
     return (
@@ -386,8 +356,8 @@ const WebWrapper = () => {
       <MainWeb.Header />
       <MainWeb.Container>
         <MainWeb.MainContent />
-        <MainWeb.CategoryContent />
         <MainWeb.ProfileContent />
+        <MainWeb.CategoryContent />
         <MainWeb.BlogContent />
       </MainWeb.Container>
       <MainWeb.VerticalDotButtons />

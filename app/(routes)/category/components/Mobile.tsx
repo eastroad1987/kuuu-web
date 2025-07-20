@@ -6,6 +6,8 @@ import NoData from "@/components/common/NoData/NoData";
 import SideMenu from "@/components/common/SideMenu";
 import Image from "next/image";
 import { useCategoryContext } from "../context/CategoryContext";
+import BasicCard from "@/components/common/Card/BasicCard";
+import HorizontalCard from "@/components/common/Card/HorizontalCard";
 
 const CategoryMobile = {
   Container: ({ children }: { children: React.ReactNode }) => {
@@ -69,12 +71,18 @@ const CategoryMobile = {
     const { state } = useCategoryContext();
     const boardName = `${state.currentBoard.title} - ${state.currentSubBoard.title}`;
     return (
-      <section className="mb-32 flex w-full h-full flex-col items-start justify-stretch bg-white">
+      <section className="mb-32 flex h-full w-full flex-col items-start justify-stretch bg-white">
         <div className="flex w-full flex-col items-center justify-start">
           {state.posts && state.posts.length > 0 ? (
             <div className="grid w-full grid-cols-1 items-center justify-items-center gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
               {state.posts.map((post, idx) => (
-                <HoverCard key={idx} post={post} boardName={boardName} />
+                // <HoverCard key={idx} post={post} boardName={boardName} />
+                <HorizontalCard
+                  key={idx}
+                  title={post.title}
+                  subtitle={post.summary}
+                  image={post?.thumbnail || ""}
+                />
               ))}
             </div>
           ) : (

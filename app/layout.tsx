@@ -2,101 +2,12 @@ import type { Metadata, Viewport } from "next";
 import { Suspense } from "react";
 
 import "@/styles/globals.css";
-import { Inter, Noto_Sans_JP, Noto_Serif_JP } from "next/font/google";
 
 import AuthProvider from "./components/auth/AuthProvider";
 import AxiosProvider from "./components/provider/AxiosProvider";
 import ReactQueryProviders from "./components/provider/QueryProvider";
 import ReduxProvider from "./components/provider/redux";
 import SafeAreaProvider from "./components/common/SafeAreaProvider";
-
-import localFont from "next/font/local";
-
-export const ttCommonsPro = localFont({
-  src: [
-    {
-      path: "../public/fonts/TT Commons Pro Trial Expanded Regular.ttf",
-      weight: "400",
-      style: "normal",
-    },
-    {
-      path: "../public/fonts/TT Commons Pro Trial Expanded Medium.ttf",
-      weight: "500",
-      style: "normal",
-    },
-    {
-      path: "../public/fonts/TT Commons Pro Trial Expanded Bold.ttf",
-      weight: "700",
-      style: "normal",
-    },
-    {
-      path: "../public/fonts/TT Commons Pro Trial Expanded Black.ttf",
-      weight: "900",
-      style: "normal",
-    },
-  ],
-  variable: "--font-tt-commons",
-  display: "swap",
-  preload: true,
-});
-
-export const designhouse = localFont({
-  src: [
-    {
-      path: "../public/fonts/designhouseBold.ttf",
-      weight: "700",
-      style: "normal",
-    },
-    {
-      path: "../public/fonts/designhouseLight.ttf",
-      weight: "500",
-      style: "normal",
-    },
-  ],
-  display: "swap",
-  preload: true,
-  variable: "--font-designhouse",
-});
-export const ipaex = localFont({
-  src: [
-    {
-      path: "../public/fonts/ipaexm.ttf",
-      weight: "700",
-      style: "normal",
-    },
-    {
-      path: "../public/fonts/ipaexg.ttf",
-      weight: "500",
-      style: "normal",
-    },
-  ],
-  display: "swap",
-  preload: true,
-  variable: "--font-ipaex",
-});
-
-const inter = Inter({
-  subsets: ["latin"],
-  display: "swap",
-  preload: true,
-  variable: "--font-inter",
-});
-
-const notoSansJP = Noto_Sans_JP({
-  subsets: ["latin"],
-  display: "swap",
-  preload: true,
-  variable: "--font-noto-sans-jp",
-  weight: ["400", "500", "700"],
-});
-
-const notoSerifJP = Noto_Serif_JP({
-  subsets: ["latin"],
-  display: "swap",
-  preload: true,
-  variable: "--font-noto-serif-jp",
-  weight: ["400", "500", "700"],
-});
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -168,7 +79,7 @@ export default function RootLayout({
   return (
     <html
       lang="ja"
-      className={`${inter.variable} ${notoSansJP.variable} ${notoSerifJP.variable} ${ttCommonsPro.variable} ${designhouse.variable} ${ipaex.variable} text-base sm:text-sm md:text-base lg:text-lg`}
+      className={`font-ipaex font-designhouse font-tt-commons text-base sm:text-sm md:text-base lg:text-lg`}
       style={{ height: "100%" }}
     >
       <head>
@@ -187,6 +98,7 @@ export default function RootLayout({
           overflow: "hidden",
           position: "fixed",
           width: "100%",
+          fontFamily: "var(--font-ipaex)",
         }}
       >
         <Suspense fallback={<div>Loading...</div>}>
