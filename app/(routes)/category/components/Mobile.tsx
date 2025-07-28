@@ -8,12 +8,17 @@ import Image from "next/image";
 import { useCategoryContext } from "../context/CategoryContext";
 import BasicCard from "@/components/common/Card/BasicCard";
 import HorizontalCard from "@/components/common/Card/HorizontalCard";
+import useWindowSize from "../../../hooks/useWindowSize";
 
 const CategoryMobile = {
   Container: ({ children }: { children: React.ReactNode }) => {
+    const { getDynamicVH } = useWindowSize();
     return (
       <div className="flex h-screen w-full flex-col items-center justify-start bg-white">
-        <div className="flex h-full w-full max-w-[1280px] flex-col items-center justify-start">
+        <div
+          className="flex h-full w-full max-w-[1280px] flex-col items-center justify-start"
+          style={{ height: getDynamicVH(100) }}
+        >
           {children}
         </div>
       </div>

@@ -12,7 +12,7 @@ const PostPage = ({ params }: { params: { id: string } }) => {
 
   return (
     <PostComponent value={usePostHook}>
-      <Suspense fallback={<div className="flex justify-center items-center h-screen">지원 페이지 로딩 중...</div>}>
+      <Suspense fallback={<div className="flex justify-center items-center" style={{ height: 'calc(var(--vh, 1vh) * 100)' }}>지원 페이지 로딩 중...</div>}>
         <ResponsiveWrapper
           WebComponent={PostComponent.Web}
           MobileComponent={PostComponent.Mobile}

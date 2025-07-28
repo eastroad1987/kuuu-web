@@ -1,10 +1,5 @@
 "use client";
-import {
-  Fragment,
-  ReactNode,
-  useEffect,
-  useState,
-} from "react";
+import { Fragment, ReactNode, useEffect, useState } from "react";
 import { useMainContext } from "../context/MainContext";
 import { useVerticalGesture } from "../../../hooks/useGesture";
 import Hamburger from "@/components/common/Hamburger";
@@ -18,11 +13,12 @@ import { AnimatePresence, motion } from "framer-motion";
 import HorizontalCard from "@/components/common/Card/HorizontalCard";
 import BasicCard from "@/components/common/Card/BasicCard";
 import NoData from "@/components/common/NoData/NoData";
+import useWindowSize from "../../../hooks/useWindowSize";
 
 const MainMobile = {
   Container: ({ children }: { children: ReactNode }) => {
     const { state, handlers } = useMainContext();
-    
+    const { getDynamicVH } = useWindowSize();
     // Handle swipe up - go to next section
     const handleSwipeUp = () => {
       if (state.currentSection < state.limit - 1) {
@@ -41,7 +37,7 @@ const MainMobile = {
     const { handleTouchStart, handleTouchEnd } = useVerticalGesture(
       handleSwipeUp,
       handleSwipeDown,
-      50 // minSwipeDistance
+      50, // minSwipeDistance
     );
 
     return (
@@ -50,7 +46,10 @@ const MainMobile = {
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
-        <main className="h-screen w-full max-w-[1280px] overflow-hidden">
+        <main
+          className="h-screen w-full max-w-[1280px] overflow-hidden"
+          style={{ height: getDynamicVH(100) }}
+        >
           <div
             className="h-full w-full transition-transform duration-1000 ease-in-out"
             style={{ transform: `translateY(-${state.currentSection * 100}%)` }}
@@ -276,12 +275,18 @@ const MainMobile = {
               value={state.currentDate}
               formatDay={(locale, date) => moment(date).format("D")}
               navigationLabel={({ date }) => (
-                <div className="flex flex-col items-center mt-5">
-                  <div className="font-ipaex text-2xl">{date.getFullYear()}</div>
-                  <div className="font-ipaex text-xl">{date.getMonth() + 1}</div>
+                <div className="mt-5 flex flex-col items-center">
+                  <div className="font-ipaex text-2xl">
+                    {date.getFullYear()}
+                  </div>
+                  <div className="font-ipaex text-xl">
+                    {date.getMonth() + 1}
+                  </div>
                 </div>
               )}
-              formatShortWeekday={(locale, date) => ["S", "M", "T", "W", "T", "F", "S"][date.getDay()]}
+              formatShortWeekday={(locale, date) =>
+                ["S", "M", "T", "W", "T", "F", "S"][date.getDay()]
+              }
               minDetail="month"
               maxDetail="month"
               showNeighboringMonth={false}

@@ -1,16 +1,22 @@
 "use client";
 import Image from "next/image";
 import { usePostContext } from "../context/PostContext";
+
 import Hamburger from "@/components/common/Hamburger";
 import SideMenu from "@/components/common/SideMenu";
+import useWindowSize from "../../../hooks/useWindowSize";
 
 const PostWeb = {
   Container: ({ children }: { children: React.ReactNode }) => {
     const { state } = usePostContext();
+    const { getDynamicVH } = useWindowSize();
     return (
       <div
-        className="flex h-screen w-full flex-col items-center justify-start"
-        style={{ backgroundColor: state.color }}
+        className="flex w-full flex-col items-center justify-start"
+        style={{ 
+          backgroundColor: state.color,
+          height: getDynamicVH(100)
+        }}
       >
         <div className="flex h-full w-full max-w-[1024px] flex-col items-center justify-start">
           {children}

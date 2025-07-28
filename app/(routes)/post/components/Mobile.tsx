@@ -4,16 +4,21 @@ import { usePostContext } from "../context/PostContext";
 import Hamburger from "@/components/common/Hamburger";
 import SideMenu from "@/components/common/SideMenu";
 import SafeArea from "@/components/common/SafeArea";
+import useWindowSize from "../../../hooks/useWindowSize";
 
 const PostMobile = {
   Container: ({ children }: { children: React.ReactNode }) => {
     const { state } = usePostContext();
+    const { getDynamicVH } = useWindowSize();
     return (
       <SafeArea
         className="flex h-screen w-full flex-col items-center justify-start"
         style={{ backgroundColor: state.color }}
       >
-        <div className="flex h-full w-full flex-col items-center justify-start">
+        <div
+          className="flex h-full w-full flex-col items-center justify-start"
+          style={{ height: getDynamicVH(100) }}
+        >
           {children}
         </div>
       </SafeArea>

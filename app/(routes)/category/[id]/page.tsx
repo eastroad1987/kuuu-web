@@ -17,7 +17,7 @@ const CategoryPage = ({ params }: { params: PageProps }) => {
     <CategoryComponent value={useCategoryHook}>
       <Suspense
         fallback={
-          <div className="flex h-screen items-center justify-center">
+          <div className="flex items-center justify-center" style={{ height: 'calc(var(--vh, 1vh) * 100)' }}>
             지원 페이지 로딩 중...
           </div>
         }

@@ -13,24 +13,28 @@ import "react-calendar/dist/Calendar.css";
 import { useMainContext } from "../context/MainContext";
 import { useVerticalGesture } from "../../../hooks/useGesture";
 import moment from "moment";
+import useWindowSize from "../../../hooks/useWindowSize";
 
 const MainWeb = {
   Container: ({ children }: { children: ReactNode }) => {
     const { state, handlers } = useMainContext();
+    const { getDynamicVH } = useWindowSize();
     const [isTablet, setIsTablet] = useState(false);
 
     // Detect tablet device
     useEffect(() => {
       const checkIsTablet = () => {
         const userAgent = navigator.userAgent.toLowerCase();
-        const isTabletDevice = /tablet|ipad|playbook|silk|(android(?!.*mobile))/i.test(userAgent);
-        const isTabletSize = window.innerWidth >= 768 && window.innerWidth <= 1024;
+        const isTabletDevice =
+          /tablet|ipad|playbook|silk|(android(?!.*mobile))/i.test(userAgent);
+        const isTabletSize =
+          window.innerWidth >= 768 && window.innerWidth <= 1024;
         setIsTablet(isTabletDevice || isTabletSize);
       };
 
       checkIsTablet();
-      window.addEventListener('resize', checkIsTablet);
-      return () => window.removeEventListener('resize', checkIsTablet);
+      window.addEventListener("resize", checkIsTablet);
+      return () => window.removeEventListener("resize", checkIsTablet);
     }, []);
 
     // Handle swipe up - go to next section
@@ -51,16 +55,19 @@ const MainWeb = {
     const { handleTouchStart, handleTouchEnd } = useVerticalGesture(
       isTablet ? handleSwipeUp : undefined,
       isTablet ? handleSwipeDown : undefined,
-      50 // minSwipeDistance
+      50, // minSwipeDistance
     );
 
     return (
-      <div 
+      <div
         className="flex h-screen w-full flex-col items-center justify-start bg-white"
         onTouchStart={isTablet ? handleTouchStart : undefined}
         onTouchEnd={isTablet ? handleTouchEnd : undefined}
       >
-        <main className="h-screen w-full max-w-[1280px] overflow-hidden">
+        <main
+          className="h-screen w-full max-w-[1280px] overflow-hidden"
+          style={{ height: getDynamicVH(100) }}
+        >
           <div
             className="h-full w-full transition-transform duration-1000 ease-in-out"
             style={{ transform: `translateY(-${state.currentSection * 100}%)` }}
@@ -353,15 +360,19 @@ const MainWeb = {
           {/* Right side - Calendar */}
           <div className="flex h-full w-[50%] items-center justify-center">
             <div className="font-ipaex calendar-container mx-auto flex h-[90%] w-[90%] items-center justify-center">
-              <div className="flex flex-col h-full w-full items-center justify-center">
+              <div className="flex h-full w-full flex-col items-center justify-center">
                 <Calendar
                   className="w-full"
                   value={state.currentDate}
                   formatDay={(locale, date) => moment(date).format("D")}
                   navigationLabel={({ date }) => (
-                    <div className="flex flex-col items-center mt-5">
-                      <div className="font-ipaex text-[1.5em]">{date.getFullYear()}</div>
-                      <div className="font-ipaex text-[1.25em]">{date.getMonth() + 1}</div>
+                    <div className="mt-5 flex flex-col items-center">
+                      <div className="font-ipaex text-[1.5em]">
+                        {date.getFullYear()}
+                      </div>
+                      <div className="font-ipaex text-[1.25em]">
+                        {date.getMonth() + 1}
+                      </div>
                     </div>
                   )}
                   formatShortWeekday={(locale, date) =>

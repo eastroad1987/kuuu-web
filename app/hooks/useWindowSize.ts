@@ -19,11 +19,32 @@ const useWindowSize = () => {
     return () => globalThis.removeEventListener("resize", handleResize);
   }, []);
 
+  // CSS custom property for dynamic viewport height
+  useEffect(() => {
+    const updateVH = () => {
+      const vh = globalThis.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+    };
+    
+    updateVH();
+    globalThis.addEventListener('resize', updateVH);
+    globalThis.addEventListener('orientationchange', updateVH);
+    
+    return () => {
+      globalThis.removeEventListener('resize', updateVH);
+      globalThis.removeEventListener('orientationchange', updateVH);
+    };
+  }, []);
+
   return {
     width: windowSize.width,
     height: windowSize.height,
     isTablet: windowSize.width < 768,
     isMobile: windowSize.width < 576,
+    // Helper functions for height fitting
+    getFullHeight: () => windowSize.height,
+    getViewportHeight: () => `${windowSize.height}px`,
+    getDynamicVH: (percentage: number = 100) => `calc(var(--vh, 1vh) * ${percentage})`,
   };
 };
 
