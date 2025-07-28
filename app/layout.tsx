@@ -106,12 +106,10 @@ export default function RootLayout({
             <ReduxProvider>
               <AuthProvider>
                 <AxiosProvider>
-                  <SafeAreaProvider>
-                    <main style={{ height: "100%", overflow: "auto" }}>
-                      {children}
-                    </main>
-                    {modal}
-                  </SafeAreaProvider>
+                  <main style={{ height: "100%", overflow: "auto" }}>
+                    {children}
+                  </main>
+                  {modal}
                 </AxiosProvider>
               </AuthProvider>
             </ReduxProvider>

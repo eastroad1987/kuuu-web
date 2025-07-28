@@ -14,9 +14,7 @@ const ResponsiveWrapper = memo(
     const { isTablet } = useWindowSize();
 
     return isTablet ? (
-      <SafeArea className="flex h-full flex-col bg-white">
-        <MobileComponent {...props} />
-      </SafeArea>
+      <MobileComponent {...props} />
     ) : (
       <WebComponent {...props} />
     );

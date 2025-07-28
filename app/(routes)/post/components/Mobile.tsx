@@ -11,27 +11,18 @@ const PostMobile = {
     const { state } = usePostContext();
     const { getDynamicVH } = useWindowSize();
     return (
-      <SafeArea
+      <div
         className="flex h-full w-full flex-col items-center justify-start"
-        style={{ backgroundColor: state.color }}
+        style={{ height: getDynamicVH(100), backgroundColor: state.color }}
       >
-        <div
-          className="flex h-full w-full flex-col items-center justify-start"
-          style={{ height: getDynamicVH(100) }}
-        >
-          {children}
-        </div>
-      </SafeArea>
+        {children}
+      </div>
     );
   },
   Header: () => {
     const { state, handlers } = usePostContext();
     return (
-      <SafeArea
-        top={true}
-        bottom={false}
-        className={`stretch flex w-full flex-col justify-start bg-[${state.color}]`}
-      >
+      <>
         <div className="flex w-full flex-row items-center justify-between p-11">
           <h1 className="font-ipaex text-[24px] font-bold text-white">
             {state.boardName}
@@ -48,7 +39,7 @@ const PostMobile = {
             {state?.date?.toLocaleDateString()}
           </h1>
         </div>
-      </SafeArea>
+      </>
     );
   },
   SideMenu: () => {
