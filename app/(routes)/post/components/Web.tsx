@@ -12,7 +12,7 @@ const PostWeb = {
     const { getDynamicVH } = useWindowSize();
     return (
       <div
-        className="flex w-full flex-col items-center justify-start"
+        className="flex h-full w-full flex-col items-center justify-start"
         style={{ 
           backgroundColor: state.color,
           height: getDynamicVH(100)

@@ -14,13 +14,11 @@ const CategoryMobile = {
   Container: ({ children }: { children: React.ReactNode }) => {
     const { getDynamicVH } = useWindowSize();
     return (
-      <div className="flex h-full w-full flex-col items-center justify-start bg-white">
-        <div
-          className="flex h-full w-full max-w-[1280px] flex-col items-center justify-start"
-          style={{ height: getDynamicVH(100) }}
-        >
-          {children}
-        </div>
+      <div
+        className="flex h-full w-full flex-col items-center justify-start bg-white"
+        style={{ height: getDynamicVH(100) }}
+      >
+        {children}
       </div>
     );
   },
@@ -45,7 +43,7 @@ const CategoryMobile = {
   Boards: () => {
     const { state, handlers } = useCategoryContext();
     return (
-      <section className="flex w-full flex-row items-center justify-between pb-10 pt-10">
+      <section className="flex w-full flex-row items-center justify-between pb-10 pt-10 ">
         <div className="grid grid-cols-1 items-center justify-items-start gap-5 sm:grid-cols-[400px_minmax(0,_1fr)] md:grid-cols-[400px_minmax(0,_1fr)] lg:grid-cols-[400px_minmax(0,_1fr)]">
           <div className="flex w-full items-center justify-center overflow-hidden text-center">
             <Image

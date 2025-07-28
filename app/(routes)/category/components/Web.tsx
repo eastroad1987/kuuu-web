@@ -12,13 +12,11 @@ const CategoryWeb = {
   Container: ({ children }: { children: React.ReactNode }) => {
     const { getDynamicVH } = useWindowSize();
     return (
-      <div className="flex h-full w-full flex-col items-center justify-start bg-white">
-        <div
-          className="flex h-full w-full max-w-[1280px] flex-col items-center justify-start"
-          style={{ height: getDynamicVH(100) }}
-        >
-          {children}
-        </div>
+      <div
+        className="flex h-full w-full flex-col items-center justify-start bg-white"
+        style={{ height: getDynamicVH(100) }}
+      >
+        {children}
       </div>
     );
   },
@@ -75,7 +73,7 @@ const CategoryWeb = {
     const { state } = useCategoryContext();
     const boardName = `${state.currentBoard.title} - ${state.currentSubBoard.title}`;
     return (
-      <section className="mb-32 flex w-full flex-col items-start justify-stretch">
+      <section className="mb-32 flex w-full flex-col items-start justify-stretch bg-white">
         <div className="flex w-full flex-col items-center justify-start">
           {state.posts && state.posts.length > 0 ? (
             <div className="grid w-full grid-cols-1 items-center justify-items-center gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
