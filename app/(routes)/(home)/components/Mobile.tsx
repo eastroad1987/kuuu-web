@@ -19,6 +19,26 @@ const MainMobile = {
   Container: ({ children }: { children: ReactNode }) => {
     const { state, handlers } = useMainContext();
     const { getDynamicVH } = useWindowSize();
+    const [isTablet, setIsTablet] = useState(false);
+
+    // Detect tablet device
+    useEffect(() => {
+      const checkIsTablet = () => {
+        const userAgent = navigator.userAgent.toLowerCase();
+        const isTabletDevice =
+          /tablet|ipad|ipad pro|ipad air|ipad mini|playbook|silk|(android(?!.*mobile))/i.test(
+            userAgent,
+          );
+        const isTabletSize =
+          window.innerWidth >= 768 && window.innerWidth <= 1024;
+        setIsTablet(isTabletDevice || isTabletSize);
+      };
+
+      checkIsTablet();
+      window.addEventListener("resize", checkIsTablet);
+      return () => window.removeEventListener("resize", checkIsTablet);
+    }, []);
+
     // Handle swipe up - go to next section
     const handleSwipeUp = () => {
       if (state.currentSection < state.limit - 1) {
@@ -33,18 +53,18 @@ const MainMobile = {
       }
     };
 
-    // Use the vertical gesture hook
+    // Use vertical gesture hook only for tablets
     const { handleTouchStart, handleTouchEnd } = useVerticalGesture(
-      handleSwipeUp,
-      handleSwipeDown,
+      isTablet ? handleSwipeUp : undefined,
+      isTablet ? handleSwipeDown : undefined,
       50, // minSwipeDistance
     );
 
     return (
       <div
         className="flex h-full w-full flex-col items-center justify-start bg-white"
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
+        onTouchStart={isTablet ? handleTouchStart : undefined}
+        onTouchEnd={isTablet ? handleTouchEnd : undefined}
       >
         <main
           className="h-full w-full max-w-[1280px] overflow-hidden"
