@@ -14,7 +14,7 @@
   width: 100% !important;
   color: #333 !important;
   background-color: #d6c7b6 !important;
-  font-family: 'IPAex Gothic', sans-serif !important;
+  font-family: "IPAex Gothic", sans-serif !important;
   line-height: 1.125em !important;
   border-radius: 10px !important;
   border: none !important;
@@ -45,11 +45,11 @@
 }
 
 .react-calendar__navigation button {
-  min-width: 32px !important;
+  min-width: 2em !important;
   background: none !important;
-  font-size: 1rem !important;
+  font-size: 1em !important;
   color: #333 !important;
-  padding: 5px !important;
+  padding: 0.3em !important;
 }
 
 .react-calendar__navigation button:enabled:hover,
@@ -65,20 +65,20 @@ abbr[title] {
 .react-calendar__month-view__weekdays {
   text-transform: uppercase !important;
   font-weight: normal !important;
-  font-size: 0.75rem !important;
+  font-size: 0.75em !important;
   color: #666 !important;
-  margin-bottom: 5px !important;
+  margin-bottom: 0.3em !important;
 }
 
 .react-calendar__month-view__weekdays__weekday {
   display: flex !important;
   justify-content: center !important;
   align-items: center !important;
-  padding: 5px 0 !important;
+  padding: 0.3em 0 !important;
 }
 
 .react-calendar__month-view__days {
-  margin-top: 5px !important;
+  margin-top: 0.3em !important;
 }
 
 .react-calendar__tile {
@@ -87,10 +87,21 @@ abbr[title] {
   justify-content: center !important;
   align-items: center !important;
   aspect-ratio: 1 !important;
-  font-size: 0.8rem !important;
+  font-size: 0.5em !important;
   color: #333 !important;
-  padding: 5px !important;
   position: relative !important;
+  padding: 0.2em !important;
+  width: 100% !important;
+  height: auto !important;
+}
+
+/* 특정 날짜 타일 크기 조정 */
+.react-calendar__month-view__days__day {
+  width: calc(100% / 7) !important;
+  height: calc(100% / 7) !important;
+  aspect-ratio: 1 !important;
+  margin: 0 !important;
+  padding: 0.1em !important;
 }
 /* 일반 타일 스타일 */
 .react-calendar__tile:enabled:hover,
@@ -162,9 +173,9 @@ abbr[title] {
   }
 
   .react-calendar__navigation button {
-    min-width: 20px !important;
-    font-size: 0.8rem !important;
-    padding: 3px !important;
+    min-width: 2em !important;
+    font-size: 0.8em !important;
+    padding: 0.3em !important;
   }
 
   .react-calendar__navigation__label {
@@ -182,7 +193,10 @@ abbr[title] {
 
   .react-calendar__tile {
     font-size: 0.65rem !important;
-    padding: 2px !important;
+    padding: 0.5em !important;
+    min-width: 2em !important;
+    width: 100% !important;
+    height: auto !important;
   }
 
   /* 모바일에서 캘린더 테두리와 간격 조정 */

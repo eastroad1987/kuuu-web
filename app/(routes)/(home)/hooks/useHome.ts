@@ -166,6 +166,7 @@ export default function useHome() {
 
     onSelected: useCallback(
       (postId: string): void => {
+        console.log(postId);
         updateState({ currentPostId: postId });
         router.push(`/post/${postId}`);
       },

@@ -19,6 +19,7 @@ export interface CardStyle {
  * Data structure for blog cards (manual data)
  */
 export interface CardData {
+  postId: string;
   image: string;
   title: string;
   subtitle: string;
@@ -53,6 +54,7 @@ export interface PostCardData {
  * Convert a Post to CardData format
  */
 export const postToCardData = (post: PostCardData): CardData => ({
+  postId: post.id,
   image: post.thumbnail || "/images/default-thumbnail.jpg",
   title: post.title,
   subtitle: post.category?.title || "",

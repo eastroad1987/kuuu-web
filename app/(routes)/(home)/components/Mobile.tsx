@@ -4,10 +4,9 @@ import {
   ReactNode,
   useEffect,
   useState,
-  useRef,
-  TouchEvent,
 } from "react";
 import { useMainContext } from "../context/MainContext";
+import { useVerticalGesture } from "../../../hooks/useGesture";
 import Hamburger from "@/components/common/Hamburger";
 import SideMenu from "@/components/common/SideMenu";
 import Image from "next/image";
@@ -23,43 +22,27 @@ import NoData from "@/components/common/NoData/NoData";
 const MainMobile = {
   Container: ({ children }: { children: ReactNode }) => {
     const { state, handlers } = useMainContext();
-    const touchStartRef = useRef<number | null>(null);
-    const touchEndRef = useRef<number | null>(null);
-    const minSwipeDistance = 50; // Minimum distance required for a swipe
-
-    // Handle touch start event
-    const handleTouchStart = (e: TouchEvent) => {
-      touchStartRef.current = e.touches[0].clientY;
-    };
-
-    // Handle touch end event
-    const handleTouchEnd = (e: TouchEvent) => {
-      if (touchStartRef.current === null) return;
-
-      const touchEnd = e.changedTouches[0].clientY;
-      touchEndRef.current = touchEnd;
-
-      const distance = touchStartRef.current - touchEnd;
-      const isSignificantSwipe = Math.abs(distance) > minSwipeDistance;
-
-      if (isSignificantSwipe) {
-        if (distance > 0) {
-          // Swiped up - go to next section
-          if (state.currentSection < state.limit - 1) {
-            handlers.onPageChange(state.currentSection + 1);
-          }
-        } else {
-          // Swiped down - go to previous section
-          if (state.currentSection > 0) {
-            handlers.onPageChange(state.currentSection - 1);
-          }
-        }
+    
+    // Handle swipe up - go to next section
+    const handleSwipeUp = () => {
+      if (state.currentSection < state.limit - 1) {
+        handlers.onPageChange(state.currentSection + 1);
       }
-
-      // Reset touch values
-      touchStartRef.current = null;
-      touchEndRef.current = null;
     };
+
+    // Handle swipe down - go to previous section
+    const handleSwipeDown = () => {
+      if (state.currentSection > 0) {
+        handlers.onPageChange(state.currentSection - 1);
+      }
+    };
+
+    // Use the vertical gesture hook
+    const { handleTouchStart, handleTouchEnd } = useVerticalGesture(
+      handleSwipeUp,
+      handleSwipeDown,
+      50 // minSwipeDistance
+    );
 
     return (
       <div

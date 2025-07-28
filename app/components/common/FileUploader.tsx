@@ -2,6 +2,7 @@
 
 import { useState, useRef } from "react";
 import { uploadFile, uploadMultipleFiles } from "../../lib/api/file";
+import { compressImage, CompressionOptions } from "../../lib/utils/imageCompression";
 
 interface FileUploaderProps {
   isUploading: boolean;
@@ -12,6 +13,8 @@ interface FileUploaderProps {
   maxSize?: number; // in bytes
   className?: string;
   children?: React.ReactNode;
+  compressionOptions?: CompressionOptions;
+  enableCompression?: boolean;
 }
 
 export default function FileUploader({
@@ -23,6 +26,13 @@ export default function FileUploader({
   maxSize = 5 * 1024 * 1024, // 5MB
   className = "",
   children,
+  compressionOptions = {
+    maxWidth: 1200,
+    maxHeight: 1200,
+    quality: 0.8,
+    format: 'image/jpeg'
+  },
+  enableCompression = true,
 }: FileUploaderProps) {
   
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -53,16 +63,33 @@ export default function FileUploader({
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    const files = e.dataTransfer ? e.dataTransfer.files : e.target.files;
+    const files = e.target.files;
     const validFiles = validateFiles(files);
     if (validFiles.length === 0) return;
     
     let result = [];
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
+    for (let i = 0; i < validFiles.length; i++) {
+      let file = validFiles[i];
+      
+      // Compress image if enabled and file is an image
+      if (enableCompression && file.type.startsWith('image/')) {
+        try {
+          file = await compressImage(file, compressionOptions);
+          console.log(`Image compressed: ${validFiles[i].name}`, {
+            originalSize: (validFiles[i].size / 1024 / 1024).toFixed(2) + 'MB',
+            compressedSize: (file.size / 1024 / 1024).toFixed(2) + 'MB',
+            reduction: ((1 - file.size / validFiles[i].size) * 100).toFixed(1) + '%'
+          });
+        } catch (error) {
+          console.error('Image compression failed:', error);
+          // Use original file if compression fails
+          file = validFiles[i];
+        }
+      }
+      
       readFile(file, (readed: any) => {
         result.push({ file: file, url: readed });
-        if (i == files.length - 1) {
+        if (i === validFiles.length - 1) {
           onChangeFiles(result as any);
         }
       });
