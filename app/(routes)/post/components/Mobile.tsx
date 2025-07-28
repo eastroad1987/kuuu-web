@@ -12,7 +12,7 @@ const PostMobile = {
     const { getDynamicVH } = useWindowSize();
     return (
       <SafeArea
-        className="flex h-screen w-full flex-col items-center justify-start"
+        className="flex h-full w-full flex-col items-center justify-start"
         style={{ backgroundColor: state.color }}
       >
         <div
@@ -76,7 +76,7 @@ const PostMobile = {
               </div>
               <div className="ql-show">
                 <div
-                  className="ql-editor h-screen w-full"
+                  className="ql-editor h-full w-full"
                   style={{
                     fontSize: 16,
                     fontWeight: 400,

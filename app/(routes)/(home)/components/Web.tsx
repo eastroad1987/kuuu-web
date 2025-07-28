@@ -60,12 +60,12 @@ const MainWeb = {
 
     return (
       <div
-        className="flex h-screen w-full flex-col items-center justify-start bg-white"
+        className="flex h-full w-full flex-col items-center justify-start bg-white"
         onTouchStart={isTablet ? handleTouchStart : undefined}
         onTouchEnd={isTablet ? handleTouchEnd : undefined}
       >
         <main
-          className="h-screen w-full max-w-[1280px] overflow-hidden"
+          className="h-full w-full max-w-[1280px] overflow-hidden"
           style={{ height: getDynamicVH(100) }}
         >
           <div

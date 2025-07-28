@@ -42,12 +42,12 @@ const MainMobile = {
 
     return (
       <div
-        className="flex h-screen w-full flex-col items-center justify-start bg-white"
+        className="flex h-full w-full flex-col items-center justify-start bg-white"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
         <main
-          className="h-screen w-full max-w-[1280px] overflow-hidden"
+          className="h-full w-full max-w-[1280px] overflow-hidden"
           style={{ height: getDynamicVH(100) }}
         >
           <div

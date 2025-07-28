@@ -5,7 +5,7 @@ import SafeArea from "@/components/common/SafeArea";
 
 const SafeAreaExample: React.FC = () => {
   return (
-    <SafeArea className="flex flex-col h-screen bg-white">
+    <SafeArea className="flex flex-col h-full bg-white">
       {/* Header with safe area at the top */}
       <SafeArea
         className="bg-blue-500 text-white p-4"

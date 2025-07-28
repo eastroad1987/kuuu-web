@@ -74,7 +74,7 @@ const PostWeb = {
               </div>
               <div className="ql-show">
                 <div
-                  className="ql-editor h-screen w-full"
+                  className="ql-editor h-full w-full"
                   style={{
                     fontSize: 16,
                     fontWeight: 400,
