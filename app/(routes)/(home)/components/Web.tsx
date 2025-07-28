@@ -26,7 +26,7 @@ const MainWeb = {
       const checkIsTablet = () => {
         const userAgent = navigator.userAgent.toLowerCase();
         const isTabletDevice =
-          /tablet|ipad|playbook|silk|(android(?!.*mobile))/i.test(userAgent);
+          /tablet|ipad|ipad pro|ipad air|ipad mini|playbook|silk|(android(?!.*mobile))/i.test(userAgent);
         const isTabletSize =
           window.innerWidth >= 768 && window.innerWidth <= 1024;
         setIsTablet(isTabletDevice || isTabletSize);
