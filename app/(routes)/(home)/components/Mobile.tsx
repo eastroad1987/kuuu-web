@@ -69,16 +69,16 @@ const MainMobile = {
 
     // Use vertical gesture hook only for tablets
     const { handleTouchStart, handleTouchEnd } = useVerticalGesture(
-      isTablet ? handleSwipeUp : undefined,
-      isTablet ? handleSwipeDown : undefined,
+      handleSwipeUp,
+      handleSwipeDown,
       50, // minSwipeDistance
     );
 
     return (
       <div
         className="flex h-full w-full flex-col items-center justify-start bg-white"
-        onTouchStart={isTablet ? handleTouchStart : undefined}
-        onTouchEnd={isTablet ? handleTouchEnd : undefined}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
       >
         <main
           className="h-full w-full max-w-[1280px] overflow-hidden"

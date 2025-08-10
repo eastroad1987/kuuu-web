@@ -90,7 +90,7 @@ export default function DateSelector({
     <div className={`relative ${className}`} ref={calendarRef}>
       {/* 날짜 선택 입력 필드 */}
       <div
-        className="flex cursor-pointer items-center justify-between rounded-md border bg-black p-3"
+        className="flex cursor-pointer items-center justify-between rounded-md border bg-white text-black p-3"
         onClick={toggle}
       >
         <span className={selectedDate ? "" : "text-gray-400"}>
@@ -114,7 +114,7 @@ export default function DateSelector({
 
       {/* 달력 팝업 */}
       {isOpen && (
-        <div className="absolute z-10 mt-1 w-64 rounded-md border bg-black shadow-lg">
+        <div className="absolute z-10 mt-1 w-64 rounded-md border bg-white text-black shadow-lg">
           {/* 달력 헤더 */}
           <div className="flex items-center justify-between border-b p-3">
             <button
@@ -166,7 +166,7 @@ export default function DateSelector({
           </div>
 
           {/* 요일 헤더 */}
-          <div className="grid grid-cols-7 border-b py-2 text-center text-xs">
+          <div className="grid grid-cols-7 border-b py-2 text-center text-xs text-black">
             {weekdays.map((day) => (
               <div key={day} className="px-1">
                 {day}
