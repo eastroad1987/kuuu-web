@@ -180,7 +180,7 @@ export default function DateSelector({
               <div
                 key={index}
                 onClick={() => handleDateChange(day.date)}
-                className={`mx-auto my-1 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-sm ${!day.isCurrentMonth ? "text-gray-300" : ""} ${day.isToday ? "border border-blue-400" : ""} ${day.isSelected ? "bg-blue-500 text-white hover:bg-blue-600" : "hover:bg-gray-100"} `}
+                className={`mx-auto my-1 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-white text-sm text-black ${!day.isCurrentMonth ? "text-gray-300" : ""} ${day.isToday || day.isSelected ? "border border-blue-400" : ""} hover:bg-gray-100`}
               >
                 {day.day}
               </div>
