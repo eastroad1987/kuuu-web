@@ -44,7 +44,12 @@ const CategoryMobile = {
     const { state, handlers } = useCategoryContext();
     return (
       <section className="flex w-full flex-row items-center justify-between pb-10 pt-10 ">
-        <div className="grid grid-cols-1 items-center justify-items-start gap-5 sm:grid-cols-[400px_minmax(0,_1fr)] md:grid-cols-[400px_minmax(0,_1fr)] lg:grid-cols-[400px_minmax(0,_1fr)]">
+        <div className="grid grid-cols-1 items-center justify-items-start gap-5 
+                       portrait:grid-cols-1 
+                       landscape:grid-cols-[300px_minmax(0,_1fr)] 
+                       sm:grid-cols-[400px_minmax(0,_1fr)] 
+                       md:grid-cols-[400px_minmax(0,_1fr)] 
+                       lg:grid-cols-[400px_minmax(0,_1fr)]">
           <div className="flex w-full items-center justify-center overflow-hidden text-center">
             <Image
               src={state.mainImage || ""}

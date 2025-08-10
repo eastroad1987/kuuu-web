@@ -21,7 +21,7 @@ const MainMobile = {
     const { getDynamicVH } = useWindowSize();
     const [isTablet, setIsTablet] = useState(false);
 
-    // Detect tablet device
+    // Enhanced device detection with orientation support
     useEffect(() => {
       const checkIsTablet = () => {
         const userAgent = navigator.userAgent.toLowerCase();
@@ -29,14 +29,28 @@ const MainMobile = {
           /tablet|ipad|ipad pro|ipad air|ipad mini|playbook|silk|(android(?!.*mobile))/i.test(
             userAgent,
           );
-        const isTabletSize =
-          window.innerWidth >= 768 && window.innerWidth <= 1024;
+        
+        // Enhanced tablet detection with orientation consideration
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+        const isLandscape = width > height;
+        
+        // Tablet size detection considering orientation
+        const isTabletSize = 
+          (width >= 768 && width <= 1024) || 
+          (height >= 768 && height <= 1024) ||
+          (isLandscape && width >= 1024 && width <= 1366);
+          
         setIsTablet(isTabletDevice || isTabletSize);
       };
 
       checkIsTablet();
       window.addEventListener("resize", checkIsTablet);
-      return () => window.removeEventListener("resize", checkIsTablet);
+      window.addEventListener("orientationchange", checkIsTablet);
+      return () => {
+        window.removeEventListener("resize", checkIsTablet);
+        window.removeEventListener("orientationchange", checkIsTablet);
+      };
     }, []);
 
     // Handle swipe up - go to next section

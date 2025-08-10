@@ -13,6 +13,7 @@
 @import "./writer.css";
 @import "./main.css";
 @import "./calendar.css";
+@import "./responsive.css";
 
 * {
   font-family: "font-ipaex", sans-serif;
@@ -29,10 +30,20 @@
   --font-noto-serif-jp: "Noto Serif JP", serif;
 
   /* Safe area insets - default values for non-supporting browsers */
-  --sat: 0px; /* Safe Area Top */
-  --sar: 0px; /* Safe Area Right */
-  --sab: 0px; /* Safe Area Bottom */
-  --sal: 0px; /* Safe Area Left */
+  --sat: env(safe-area-inset-top, 0px); /* Safe Area Top */
+  --sar: env(safe-area-inset-right, 0px); /* Safe Area Right */
+  --sab: env(safe-area-inset-bottom, 0px); /* Safe Area Bottom */
+  --sal: env(safe-area-inset-left, 0px); /* Safe Area Left */
+  
+  /* Responsive breakpoints */
+  --mobile-max: 767px;
+  --tablet-min: 768px;
+  --tablet-max: 1023px;
+  --desktop-min: 1024px;
+  
+  /* Dynamic viewport units */
+  --vh: 1vh;
+  --vw: 1vw;
 }
 
 @media (prefers-color-scheme: dark) {

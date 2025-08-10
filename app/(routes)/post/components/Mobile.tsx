@@ -23,19 +23,19 @@ const PostMobile = {
     const { state, handlers } = usePostContext();
     return (
       <>
-        <div className="flex w-full flex-row items-center justify-between p-11">
-          <h1 className="font-ipaex text-[24px] font-bold text-white">
+        <div className="flex w-full flex-row items-center justify-between p-4 sm:p-6 md:p-11">
+          <h1 className="font-ipaex text-lg sm:text-xl md:text-[24px] font-bold text-white">
             {state.boardName}
           </h1>
           <Hamburger onClick={handlers.toggleSideMenu} color={"white"} />
         </div>
-        <div className="flex w-full flex-row items-center justify-center">
-          <h1 className="font-ipaex text-center text-[24px] font-bold text-white">
+        <div className="flex w-full flex-row items-center justify-center px-4">
+          <h1 className="font-ipaex text-center text-lg sm:text-xl md:text-[24px] font-bold text-white break-words">
             {state.title}
           </h1>
         </div>
-        <div className="flex w-full flex-row items-end justify-end p-11">
-          <h1 className="font-ipaex text-[24px] font-bold text-white">
+        <div className="flex w-full flex-row items-end justify-end p-4 sm:p-6 md:p-11">
+          <h1 className="font-ipaex text-sm sm:text-base md:text-[24px] font-bold text-white">
             {state?.date?.toLocaleDateString()}
           </h1>
         </div>

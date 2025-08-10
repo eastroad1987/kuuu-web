@@ -1,0 +1,245 @@
+/* Responsive Design System for Mobile/Web/Tablet */
+
+/* Base responsive utilities */
+.responsive-container {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+/* Mobile-first approach */
+@media (max-width: 767px) {
+  .mobile-only {
+    display: block;
+  }
+  
+  .web-only,
+  .tablet-only {
+    display: none;
+  }
+  
+  /* Mobile spacing */
+  .responsive-padding {
+    padding: 1rem;
+  }
+  
+  .responsive-text-size {
+    font-size: 0.875rem;
+  }
+  
+  .responsive-title {
+    font-size: 1.25rem;
+  }
+  
+  /* Mobile grid adjustments */
+  .responsive-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+}
+
+/* Tablet styles */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .tablet-only {
+    display: block;
+  }
+  
+  .mobile-only {
+    display: none;
+  }
+  
+  .web-only {
+    display: block; /* Tablets can use web layout */
+  }
+  
+  /* Tablet spacing */
+  .responsive-padding {
+    padding: 1.5rem;
+  }
+  
+  .responsive-text-size {
+    font-size: 1rem;
+  }
+  
+  .responsive-title {
+    font-size: 1.5rem;
+  }
+  
+  /* Tablet grid adjustments */
+  .responsive-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+}
+
+/* Desktop/Web styles */
+@media (min-width: 1024px) {
+  .web-only {
+    display: block;
+  }
+  
+  .mobile-only,
+  .tablet-only {
+    display: none;
+  }
+  
+  /* Desktop spacing */
+  .responsive-padding {
+    padding: 2rem;
+  }
+  
+  .responsive-text-size {
+    font-size: 1rem;
+  }
+  
+  .responsive-title {
+    font-size: 1.5rem;
+  }
+  
+  /* Desktop grid adjustments */
+  .responsive-grid {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+/* Orientation-specific styles */
+@media (orientation: portrait) {
+  .portrait-only {
+    display: block;
+  }
+  
+  .landscape-only {
+    display: none;
+  }
+  
+  /* Portrait-specific card layout */
+  .responsive-card-container {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .responsive-card {
+    width: 90%;
+    max-width: 400px;
+  }
+}
+
+@media (orientation: landscape) {
+  .landscape-only {
+    display: block;
+  }
+  
+  .portrait-only {
+    display: none;
+  }
+  
+  /* Landscape-specific card layout */
+  .responsive-card-container {
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+  }
+  
+  .responsive-card {
+    width: 45%;
+    max-width: 300px;
+  }
+}
+
+/* Dynamic viewport height support */
+.full-height {
+  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
+}
+
+.half-height {
+  height: 50vh;
+  height: calc(var(--vh, 1vh) * 50);
+}
+
+/* Safe area support for mobile devices */
+.safe-area-top {
+  padding-top: var(--sat);
+}
+
+.safe-area-bottom {
+  padding-bottom: var(--sab);
+}
+
+.safe-area-left {
+  padding-left: var(--sal);
+}
+
+.safe-area-right {
+  padding-right: var(--sar);
+}
+
+.safe-area-all {
+  padding-top: var(--sat);
+  padding-right: var(--sar);
+  padding-bottom: var(--sab);
+  padding-left: var(--sal);
+}
+
+/* Responsive image handling */
+.responsive-image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+@media (max-width: 767px) {
+  .responsive-image {
+    max-height: 200px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .responsive-image {
+    max-height: 300px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .responsive-image {
+    max-height: 400px;
+  }
+}
+
+/* Touch-friendly interactive elements */
+@media (hover: none) and (pointer: coarse) {
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  .hover-effect:hover {
+    /* Disable hover effects on touch devices */
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+/* High DPI display support */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .high-dpi-image {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .animate-scale,
+  .animate-slide-up,
+  .animate-slide-right {
+    animation: none;
+  }
+  
+  * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
