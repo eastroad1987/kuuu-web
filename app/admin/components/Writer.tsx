@@ -109,7 +109,6 @@ const WriterComponents = {
     const quillModules = useMemo(() => modules, []);
     const quillFormats = useMemo(() => formats, []);
 
-
     return (
       <div className="flex max-w-lg flex-col items-center justify-start">
         <label htmlFor="title" className="mt-16">
@@ -124,13 +123,35 @@ const WriterComponents = {
         >
           <div className="rounded-lg border-2 border-dashed border-gray-300 p-4 transition-colors hover:border-blue-500">
             {state.thumbnailFile ? (
-              <Image
-                src={state.thumbnailFile?.url}
-                alt="Thumbnail"
-                width={500}
-                height={300}
-                className="h-48 w-full rounded object-cover"
-              />
+              <div className="relative">
+                <Image
+                  src={state.thumbnailFile?.url}
+                  alt="Thumbnail"
+                  width={500}
+                  height={300}
+                  className="h-48 w-full rounded object-cover"
+                />
+                <button
+                  type="button"
+                  onClick={handlers.deleteThumbnail}
+                  className="absolute right-2 top-2 rounded-full bg-red-500 p-1 text-white transition-colors hover:bg-red-600"
+                  aria-label="썸네일 삭제"
+                >
+                  <svg
+                    className="h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
+              </div>
             ) : (
               <div className="flex h-48 items-center justify-center text-gray-500">
                 클릭하여 썸네일 업로드

@@ -5,6 +5,8 @@ import { usePostContext } from "../context/PostContext";
 import Hamburger from "@/components/common/Hamburger";
 import SideMenu from "@/components/common/SideMenu";
 import useWindowSize from "../../../hooks/useWindowSize";
+import PostSEO from "./PostSEO";
+import { ProcessedContent } from "../utils/contentProcessor";
 
 const PostWeb = {
   Container: ({ children }: { children: React.ReactNode }) => {
@@ -74,14 +76,16 @@ const PostWeb = {
               </div>
               <div className="ql-show">
                 <div
-                  className="ql-editor h-full w-full"
+                  className="ql-editor h-full w-full font-noto-sans-jp"
                   style={{
                     fontSize: 16,
                     fontWeight: 400,
                     lineHeight: "24px",
+                    fontFamily: "'Noto Sans JP', 'Noto Sans KR', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'Meiryo', 'Malgun Gothic', sans-serif",
                   }}
-                  dangerouslySetInnerHTML={{ __html: state.post?.content }}
-                />
+                >
+                  <ProcessedContent content={state.post?.content || ""} />
+                </div>
               </div>
             </div>
           )}
@@ -92,8 +96,11 @@ const PostWeb = {
 };
 
 const WebWrapper = () => {
+  const { state } = usePostContext();
+  
   return (
     <PostWeb.Container>
+      {state.post && <PostSEO post={state.post} />}
       <PostWeb.Header />
       <PostWeb.Post />
       <PostWeb.SideMenu />

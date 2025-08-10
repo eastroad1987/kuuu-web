@@ -180,7 +180,7 @@ export interface AdminWriterPageState {
   subCategory: SubCategory;
   isUploading: boolean;
   progress: number;
-  thumbnailFile: File | null; // Use File type instead of any
+  thumbnailFile: any
 }
 
 /**
@@ -194,6 +194,7 @@ export interface UseAdminWriterType {
     changeCategory: (value: string) => void;
     changeSubCategory: (value: string) => void;
     changeFiles: (files: FileList | null) => void;
+    deleteThumbnail: () => void;
     changeTitle: (e: React.ChangeEvent<HTMLInputElement>) => void;
     changeContent: (value: string) => void;
     changeDate: (date: Date) => void;

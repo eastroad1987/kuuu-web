@@ -47,6 +47,8 @@ export default function useWriter() {
     thumbnailFile: null,
   }));
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const updateState = useCallback((updates: Partial<AdminWriterPageState>) => {
     setState((prevState) => ({ ...prevState, ...updates }));
   }, []);
@@ -73,6 +75,13 @@ export default function useWriter() {
       return;
     }
 
+    // 이미 제출 중인 경우 중복 제출 방지
+    if (isSubmitting) {
+      console.log("이미 제출 중입니다. 잠시 기다려주세요.");
+      return;
+    }
+
+    setIsSubmitting(true);
     updateState({ isUploading: true, progress: 0 });
 
     try {
@@ -113,6 +122,7 @@ export default function useWriter() {
     } catch (error) {
       console.error(error);
     } finally {
+      setIsSubmitting(false);
       updateState({
         isUploading: false,
         progress: 0,
@@ -120,7 +130,7 @@ export default function useWriter() {
         form: initialForm,
       });
     }
-  }, [state.form, state.thumbnailFile, state.date, updateState, createPost, initialForm]);
+  }, [state.form, state.thumbnailFile, state.date, updateState, createPost, initialForm, isSubmitting]);
 
   const handleChangeCategory = useCallback(
     (value: string) => {
@@ -172,6 +182,12 @@ export default function useWriter() {
     [updateState],
   );
 
+  const handleDeleteThumbnail = useCallback(() => {
+    updateState({
+      thumbnailFile: null,
+    });
+  }, [updateState]);
+
   const handleChangeTitle = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       updateState({
@@ -211,6 +227,7 @@ export default function useWriter() {
     changeCategory: handleChangeCategory,
     changeSubCategory: handleChangeSubCategory,
     changeFiles: handleChangeFiles,
+    deleteThumbnail: handleDeleteThumbnail,
     changeTitle: handleChangeTitle,
     changeContent: handleChangeContent,
     changeDate: handleChangeDate,

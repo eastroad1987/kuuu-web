@@ -5,6 +5,8 @@ import Hamburger from "@/components/common/Hamburger";
 import SideMenu from "@/components/common/SideMenu";
 import SafeArea from "@/components/common/SafeArea";
 import useWindowSize from "../../../hooks/useWindowSize";
+import PostSEO from "./PostSEO";
+import { ProcessedContent } from "../utils/contentProcessor";
 
 const PostMobile = {
   Container: ({ children }: { children: React.ReactNode }) => {
@@ -67,14 +69,16 @@ const PostMobile = {
               </div>
               <div className="ql-show">
                 <div
-                  className="ql-editor h-full w-full"
+                  className="ql-editor h-full w-full font-noto-sans-jp"
                   style={{
                     fontSize: 16,
                     fontWeight: 400,
                     lineHeight: "24px",
+                    fontFamily: "'Noto Sans JP', 'Noto Sans KR', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'Meiryo', 'Malgun Gothic', sans-serif",
                   }}
-                  dangerouslySetInnerHTML={{ __html: state.post?.content }}
-                />
+                >
+                  <ProcessedContent content={state.post?.content || ""} />
+                </div>
               </div>
             </div>
           )}
@@ -85,8 +89,11 @@ const PostMobile = {
 };
 
 const MobileWrapper = () => {
+  const { state } = usePostContext();
+  
   return (
     <PostMobile.Container>
+      {state.post && <PostSEO post={state.post} />}
       <PostMobile.Header />
       <PostMobile.Post />
       <PostMobile.SideMenu />

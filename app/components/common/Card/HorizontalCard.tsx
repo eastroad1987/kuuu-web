@@ -109,7 +109,7 @@ export default function HorizontalCard({
 
         {description && (
           <motion.p
-            className="mt-3 text-base text-gray-600"
+            className="mt-3 text-base text-gray-600 line-clamp-2"
             animate={{ opacity: isHovered ? 1 : 0.9 }}
             transition={{ duration: 0.3 }}
           >

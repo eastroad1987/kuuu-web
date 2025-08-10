@@ -44,6 +44,7 @@
     "next": "14.1.0",
     "next-auth": "4.24.11",
     "next-redux-wrapper": "^8.1.0",
+    "next-seo": "^7.0.0-alpha.0",
     "nodemailer": "^6.9.4",
     "prisma": "^6.10.1",
     "qs": "^6.14.0",
