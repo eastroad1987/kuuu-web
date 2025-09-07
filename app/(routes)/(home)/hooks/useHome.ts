@@ -5,20 +5,21 @@ import {
   postToCardData,
 } from "../../../types/types";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { setBackgroundColor, setCategories } from "../../../redux/reducer";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
+import { useGetCategories, useGetPostsByPeriod } from "../../../lib/api/apis";
+
+import { Value } from "react-calendar/dist/cjs/shared/types";
+import { useRouter } from "next/navigation";
 import { useScrollSections } from "../../../hooks/useScrollSections";
 import useWindowSize from "../../../hooks/useWindowSize";
-import { useGetCategories, useGetPostsByPeriod } from "../../../lib/api/apis";
-import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
-import { setBackgroundColor, setCategories } from "../../../redux/reducer";
-import { useRouter } from "next/navigation";
-import { Value } from "react-calendar/dist/cjs/shared/types";
 
 /**
  * Custom hook for managing home page state and functionality
  * @returns Home page context with state and handlers
  */
 export default function useHome() {
-  const { height } = useWindowSize();
+  const { height, isMobile } = useWindowSize();
   const router = useRouter();
   const dispatch = useAppDispatch();
 
@@ -106,10 +107,10 @@ export default function useHome() {
     if (height !== 0) {
       updateState({
         windowHeight: height,
-        cardHeight: height / 6 || 80,
+        cardHeight: height / 6 || isMobile ? 60 : 80,
       });
     }
-  }, [height, updateState]);
+  }, [height, updateState, isMobile]);
 
   useEffect(() => {
     dispatch(setBackgroundColor("#FFFFFF"));

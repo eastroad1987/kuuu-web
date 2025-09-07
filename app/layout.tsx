@@ -8,6 +8,8 @@ import AxiosProvider from "./components/provider/AxiosProvider";
 import ReactQueryProviders from "./components/provider/QueryProvider";
 import ReduxProvider from "./components/provider/redux";
 import SafeAreaProvider from "./components/common/SafeAreaProvider";
+import ChunkErrorBoundary from "./components/error/ChunkErrorBoundary";
+import ChunkErrorHandler from "./components/error/ChunkErrorHandler";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -101,20 +103,23 @@ export default function RootLayout({
           fontFamily: "var(--font-ipaex)",
         }}
       >
-        <Suspense fallback={<div>Loading...</div>}>
-          <ReactQueryProviders>
-            <ReduxProvider>
-              <AuthProvider>
-                <AxiosProvider>
-                  <main style={{ height: "100%", overflow: "auto" }}>
-                    {children}
-                  </main>
-                  {modal}
-                </AxiosProvider>
-              </AuthProvider>
-            </ReduxProvider>
-          </ReactQueryProviders>
-        </Suspense>
+        <ChunkErrorBoundary>
+          <ChunkErrorHandler />
+          <Suspense fallback={<div>Loading...</div>}>
+            <ReactQueryProviders>
+              <ReduxProvider>
+                <AuthProvider>
+                  <AxiosProvider>
+                    <main style={{ height: "100%", overflow: "auto" }}>
+                      {children}
+                    </main>
+                    {modal}
+                  </AxiosProvider>
+                </AuthProvider>
+              </ReduxProvider>
+            </ReactQueryProviders>
+          </Suspense>
+        </ChunkErrorBoundary>
       </body>
     </html>
   );

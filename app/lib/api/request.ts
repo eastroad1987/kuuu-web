@@ -1,11 +1,12 @@
 "use client";
-import { createContext, ReactNode } from "react";
-import Axios, { AxiosInstance, AxiosTransformer } from "axios";
 
-import { useContext } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import qs from "qs";
+import Axios, { AxiosInstance } from "axios";
+import { ReactNode, createContext } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
 import { eqOrLikeQuery } from "../../types/constants";
+import qs from "qs";
+import { useContext } from "react";
 
 export const axios = Axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL + "",
@@ -18,9 +19,11 @@ export const axios = Axios.create({
 
 axios.interceptors.request.use((config) => {
   // Read token for anywhere, in this case directly from localStorage
-  const token = localStorage.getItem("token");
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+  if (typeof window !== 'undefined') {
+    const token = localStorage.getItem("token");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
   }
 
   return config;
@@ -45,9 +48,10 @@ axios.interceptors.response.use(
       console.log("에러야 ");
       // TODO: 에러 Alert 처리
     } else if (response.status === 401) {
-      localStorage.removeItem("token");
-
-      window.location.href = "/login";
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem("token");
+        window.location.href = "/login";
+      }
     }
 
     return Promise.reject(new Error(response.statusText || "Error"));
@@ -56,7 +60,9 @@ axios.interceptors.response.use(
     console.log("err:", error); // for debug
     console.log("err:", error.response); // for debug
     if (error.response && error.response.status === 400) {
-      localStorage.removeItem("token");
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem("token");
+      }
     }
 
     const msg = "요청 오류";
@@ -69,16 +75,17 @@ axios.interceptors.response.use(
         // 401: 로그인하지 않음
         case 401:
           console.log("이게탓어");
-          localStorage.removeItem("token");
-
-          window.location.href = "/login";
+          if (typeof window !== 'undefined') {
+            localStorage.removeItem("token");
+            window.location.href = "/login";
+          }
           break;
         // 403 토큰 만료
         case 403:
           // TODO: 에러 Alert 처리
-
-          alert(error.response.data?.message);
-
+          if (typeof window !== 'undefined') {
+            alert(error.response.data?.message);
+          }
           // window.location.href = '/login';
           break;
         case 404:
@@ -89,7 +96,9 @@ axios.interceptors.response.use(
           break;
         default:
           // TODO: 에러 Alert 처리
-          alert(error);
+          if (typeof window !== 'undefined') {
+            alert(error);
+          }
           break;
       }
     }
@@ -194,7 +203,7 @@ const useGetList = <T>(
       params.filter = transformFilters(filters, url);
       params.order = transformSorter(sorter);
 
-      const transformRequest: AxiosTransformer = (data: any, headers: any) => {};
+      const transformRequest = (data: any, headers: any) => {};
       const data: T = await axios.get(`${url}`, {
         params,
         paramsSerializer: (params: any) => {

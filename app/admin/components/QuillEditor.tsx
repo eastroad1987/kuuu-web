@@ -16,6 +16,7 @@ const modules = {
     [{ list: "ordered" }, { list: "bullet" }],
     [{ align: [] }],
     ["link", "image"],
+    ["blockquote", "code-block"],
     ["clean"],
   ],
 };
@@ -33,6 +34,8 @@ const formats = [
   "align",
   "link",
   "image",
+  "blockquote",
+  "code-block",
 ];
 
 interface QuillEditorProps {
@@ -40,7 +43,10 @@ interface QuillEditorProps {
   onChange: (value: string) => void;
 }
 
-export default function QuillEditorComponent({ value, onChange }: QuillEditorProps) {
+export default function QuillEditorComponent({
+  value,
+  onChange,
+}: QuillEditorProps) {
   const quillModules = useMemo(() => modules, []);
   const quillFormats = useMemo(() => formats, []);
 
@@ -56,4 +62,4 @@ export default function QuillEditorComponent({ value, onChange }: QuillEditorPro
       />
     </div>
   );
-} 
+}

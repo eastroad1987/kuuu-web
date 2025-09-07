@@ -1,11 +1,15 @@
 "use client";
 
-import WriterLayout from "./context/WriterLayout";
+import { useSearchParams } from "next/navigation";
 import WriterComponents from "./components/Writer";
+import WriterLayout from "./context/WriterLayout";
 import useWriter from "./hooks/useWriter";
 
 const AdminPage = () => {
-  const useWriterHook = useWriter();
+  const searchParams = useSearchParams();
+  const postId = searchParams.get('id');
+  
+  const useWriterHook = useWriter(postId);
 
   return (
     <WriterLayout value={useWriterHook}>

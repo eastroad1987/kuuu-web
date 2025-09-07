@@ -1,10 +1,11 @@
-import { NextRequest, NextResponse } from "next/server";
-import prisma from "../../lib/prisma";
 import {
   ApiResponse,
-  PaginationParams,
   PaginatedResponse,
+  PaginationParams,
 } from "../../types/api";
+import { NextRequest, NextResponse } from "next/server";
+
+import prisma from "../../lib/prisma";
 import { serializeBigInt } from "../../lib/serializer";
 
 // GET /api/categories - 모든 카테고리 조회

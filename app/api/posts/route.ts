@@ -1,10 +1,11 @@
-import { NextRequest, NextResponse } from "next/server";
-import prisma from "../../lib/prisma";
 import {
   ApiResponse,
-  PaginationParams,
   PaginatedResponse,
+  PaginationParams,
 } from "../../types/api";
+import { NextRequest, NextResponse } from "next/server";
+
+import prisma from "../../lib/prisma";
 import { serializeBigInt } from "../../lib/serializer";
 
 // GET /api/posts - 모든 게시글 조회
@@ -84,7 +85,7 @@ export async function POST(request: NextRequest) {
       authorId,
     } = body;
 
-    if (!title || !content || !categoryId || !authorId || !publishedAt) {
+    if (!title || !content || !authorId || !publishedAt) {
       return NextResponse.json(
         { error: "Required fields are missing" },
         { status: 400 },
@@ -97,8 +98,8 @@ export async function POST(request: NextRequest) {
         content,
         summary,
         publishedAt,
-        categoryId: Number(categoryId),
-        subcategoryId: subcategoryId ? Number(subcategoryId) : null,
+        categoryId: categoryId ? Number(categoryId) : 1,
+        subcategoryId: subcategoryId ? Number(subcategoryId) : 4,
         thumbnail,
         referencePlace,
         images,

@@ -1,8 +1,8 @@
-import { getAccessToken, getRefreshToken, logout, tokenRefresh } from '@/apis/auth';
-import axios from 'axios';
 import { get, isEmpty } from 'lodash';
+import { getAccessToken, getRefreshToken, logout, tokenRefresh } from '@/apis/auth';
+
+import axios from 'axios';
 import { isExpires } from './token';
-import { signOut } from 'next-auth/react';
 
 const http = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -24,7 +24,9 @@ http.interceptors.request.use(
       const isExpired = isExpires(getRefreshToken());
       if (isExpired) {
         logout();
-        signOut({ redirect: false });
+        // Custom logout - remove token and redirect
+        localStorage.removeItem('token');
+        window.location.href = '/';
       } else {
         promiseList.push(
           new Promise((resolve, reject) => {
@@ -34,7 +36,9 @@ http.interceptors.request.use(
               })
               .catch(() => {
                 logout();
-                signOut({ redirect: false });
+                // Custom logout - remove token and redirect
+        localStorage.removeItem('token');
+        window.location.href = '/';
                 reject();
               })
               .finally(() => {

@@ -1,12 +1,15 @@
 "use client";
-import Image from "next/image";
-import { usePostContext } from "../context/PostContext";
 
+import DropdownMenu from "@/components/common/DropdownMenu";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Hamburger from "@/components/common/Hamburger";
-import SideMenu from "@/components/common/SideMenu";
-import useWindowSize from "../../../hooks/useWindowSize";
+import Image from "next/image";
 import PostSEO from "./PostSEO";
 import { ProcessedContent } from "../utils/contentProcessor";
+import SideMenu from "@/components/common/SideMenu";
+import { faPenSquare } from "@fortawesome/free-solid-svg-icons";
+import { usePostContext } from "../context/PostContext";
+import useWindowSize from "../../../hooks/useWindowSize";
 
 const PostWeb = {
   Container: ({ children }: { children: React.ReactNode }) => {
@@ -58,7 +61,7 @@ const PostWeb = {
     );
   },
   Post: () => {
-    const { state } = usePostContext();
+    const { state, handlers } = usePostContext();
     return (
       <section className="flex h-full w-full flex-col items-center justify-between overflow-auto">
         <div style={{ textAlign: "center", width: "100%" }}>
@@ -73,6 +76,21 @@ const PostWeb = {
                   className="object-cover"
                   priority
                 />
+                {/* Three-dot menu in top-right corner */}
+                <div className="absolute right-4 top-4">
+                  <DropdownMenu
+                    items={[
+                      {
+                        label: "수정하기",
+                        onClick: () => handlers.goEditPost(state.post?.id?.toString() || ""),
+                        icon: (
+                          <FontAwesomeIcon icon={faPenSquare} />
+                        ),
+                      },
+                    ]}
+                    iconColor="white"
+                  />
+                </div>
               </div>
               <div className="ql-show">
                 <div

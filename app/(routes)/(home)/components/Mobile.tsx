@@ -29,18 +29,18 @@ const MainMobile = {
           /tablet|ipad|ipad pro|ipad air|ipad mini|playbook|silk|(android(?!.*mobile))/i.test(
             userAgent,
           );
-        
+
         // Enhanced tablet detection with orientation consideration
         const width = window.innerWidth;
         const height = window.innerHeight;
         const isLandscape = width > height;
-        
+
         // Tablet size detection considering orientation
-        const isTabletSize = 
-          (width >= 768 && width <= 1024) || 
+        const isTabletSize =
+          (width >= 768 && width <= 1024) ||
           (height >= 768 && height <= 1024) ||
           (isLandscape && width >= 1024 && width <= 1366);
-          
+
         setIsTablet(isTabletDevice || isTabletSize);
       };
 
@@ -339,30 +339,22 @@ const MainMobile = {
                   // Get the visual position based on the index (0-4)
                   const visualPosition = index;
 
-                  // Set the card width to 1/6 of the container
-                  const cardWidth = "w-1/6";
-                  let scale = 0.85;
+                  // Define card styling based on position
+                  let cardWidth = "w-full";
                   let zIndex = 10; // Default z-index
 
-                  // Apply scaling based on position from the center
                   if (visualPosition === 0 || visualPosition === 4) {
-                    // Outer cards (smallest)
-                    scale = 0.65;
+                    cardWidth = "w-[85%]"; // Smallest width for 1st and 5th
                     zIndex = 10; // Back layer
                   } else if (visualPosition === 1 || visualPosition === 3) {
-                    // Middle layer cards
-                    scale = 0.75;
+                    cardWidth = "w-[92%]"; // Medium width for 2nd and 4th
                     zIndex = 20; // Middle layer
                   } else if (visualPosition === 2) {
-                    // Center card (largest)
-                    scale = 0.85;
-                    zIndex = 30; // Front layer for middle card
+                    zIndex = 30; // Front layer for middle card (full width)
                   }
 
-                  // Calculate horizontal position to avoid overlap
-                  // Increase the spread to ensure no overlapping
-                  const spread = 18; // distance between cards (%)
-                  const xPosition = `calc(50% + ${(visualPosition - 2) * spread}%)`;
+                  // Position cards vertically based on index
+                  const yPosition = `${visualPosition * (100 / 5)}%`;
 
                   // Get the original index for the key (important for animations)
                   const originalIndex =
@@ -371,24 +363,28 @@ const MainMobile = {
                   return (
                     <motion.div
                       key={`card-${originalIndex}`}
-                      className={`${cardWidth} absolute`}
+                      className={`${cardWidth} absolute mx-auto`}
                       initial={false}
                       animate={{
-                        left: xPosition,
-                        y: "0%", // Center vertically
-                        x: "-50%", // Center horizontally relative to position
-                        scale: scale,
+                        top: yPosition,
                         zIndex: zIndex,
-                        opacity: 1,
                       }}
                       transition={{
                         type: "spring",
                         stiffness: 300,
                         damping: 30,
-                        duration: 0.3, // Smooth transition
                       }}
+                      style={{ height: `${state.cardHeight}px` }}
                     >
-                      <BasicCard card={card} />
+                      <HorizontalCard
+                        image={card?.image}
+                        title={card?.title}
+                        subtitle={card?.subtitle}
+                        description={card?.description}
+                        badge={card?.badge}
+                        badgeColor={card?.badgeColor}
+                        onClick={() => handlers.onSelected(card.postId)}
+                      />
                     </motion.div>
                   );
                 })}

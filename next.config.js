@@ -3,12 +3,18 @@ const nextConfig = {
   // React strict mode 활성화
   reactStrictMode: true,
   // webpack 설정
-  webpack: (config) => {
-    config.experiments = {
-      ...config.experiments,
-      topLevelAwait: true,
-      layers: true,
-    };
+  webpack: (config, { isServer }) => {
+    // Fix for "self is not defined" error
+    const webpack = require('webpack');
+    
+    if (isServer) {
+      // Define self as global for server-side rendering
+      config.plugins.push(
+        new webpack.DefinePlugin({
+          self: 'globalThis',
+        })
+      );
+    }
 
     return config;
   },
@@ -67,10 +73,9 @@ const nextConfig = {
     ];
   },
   experimental: {
-    images: {
-      layoutRaw: true,
-    },
-    serverActions: true,
+    // Chunk loading 최적화
+    optimizePackageImports: ['@fortawesome/react-fontawesome', '@fortawesome/free-solid-svg-icons'],
+    esmExternals: 'loose',
   },
   images: {
     domains: process.env.RESOURCES_DOMAINS?.trim().split(',') || ['images.unsplash.com'],
@@ -88,8 +93,7 @@ const nextConfig = {
     // !! WARN !!
     // Dangerously allow production builds to successfully complete even if
     // your project has type errors.
-    // !! WARN !!
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: false,
   },
   // 성능 최적화
   swcMinify: true,

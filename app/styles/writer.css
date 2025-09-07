@@ -1,3 +1,23 @@
+.ql-font-serif {
+  font-family: Georgia, "Times New Roman", Times, serif;
+}
+
+.ql-font-monospace {
+  font-family:
+    Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+.ql-size-small {
+  font-size: 0.75em;
+}
+
+.ql-size-large {
+  font-size: 1.5em;
+}
+
+.ql-size-huge {
+  font-size: 2.5em;
+}
 .writer {
   background-color: #f8f8f8;
   margin-top: auto;

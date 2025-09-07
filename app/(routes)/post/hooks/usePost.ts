@@ -1,8 +1,10 @@
+import { useCallback, useEffect, useMemo, useState } from "react";
+
 import { PostPageState } from "@/types/types";
-import { useEffect, useState, useCallback, useMemo } from "react";
-import { useAppDispatch } from "../../../redux/hooks";
 import { setBackgroundColor } from "../../../redux/reducer";
+import { useAppDispatch } from "../../../redux/hooks";
 import { useGetPostById } from "../../../lib/api/apis";
+import { useRouter } from "next/navigation";
 
 export default function usePost(id: string) {
   const dispatch = useAppDispatch();
@@ -21,6 +23,8 @@ export default function usePost(id: string) {
     post: post || null,
     isOpen: false,
   }), [id, post]);
+
+  const router = useRouter();
 
   const [state, setState] = useState<PostPageState>(initialState);
 
@@ -71,8 +75,13 @@ export default function usePost(id: string) {
     setState((prevState) => ({ ...prevState, isOpen: false }));
   }, [updateState]);
 
+  const handleGoEditPost = useCallback(() => {
+    router.push(`/admin?id=${state.id}`);
+  }, [state.id]);
+
   // handlers 객체 구성
   const handlers = {
+    goEditPost: handleGoEditPost,
     toggleSideMenu: handleToggleSideMenu,
     onSideMenuClose: handleSideMenuClose,
   };

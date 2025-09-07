@@ -18,7 +18,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@fortawesome/react-fontawesome": "^0.2.2",
     "@prisma/client": "^6.10.1",
-    "@reduxjs/toolkit": "^1.9.5",
+    "@reduxjs/toolkit": "^2.0.0",
     "@tanstack/react-query": "^5.75.0",
     "@types/bcryptjs": "^2.4.6",
     "@types/dompurify": "^3.2.0",
@@ -37,17 +37,18 @@
     "eslint-config-next": "14.1.0",
     "flyonui": "^1.1.0",
     "framer-motion": "^11.16.3",
+    "global": "^4.4.0",
     "history": "^5.0.0",
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
     "moment": "^2.30.1",
     "next": "14.1.0",
-    "next-auth": "4.24.11",
     "next-redux-wrapper": "^8.1.0",
     "next-seo": "^7.0.0-alpha.0",
     "nodemailer": "^6.9.4",
     "prisma": "^6.10.1",
     "qs": "^6.14.0",
+    "quill-image-resize-module-react": "^3.0.0",
     "react": "^18.3.1",
     "react-calendar": "^5.1.0",
     "react-daum-postcode": "^3.1.0",
@@ -60,6 +61,7 @@
     "stringify": "^2.2.0",
     "tailwindcss": "^3.4.14",
     "typescript": "^5.6.3",
+    "uuid": "^12.0.0",
     "web-vitals": "^0.2.4"
   },
   "devDependencies": {
@@ -87,5 +89,6 @@
   },
   "prisma": {
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
-  }
+  },
+  "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610"
 }

@@ -1,42 +1,63 @@
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCreatePost, useGetPostById, useGetS3SignedUrl, useUpdatePost } from "../../lib/api/apis";
 
 import { AdminWriterPageState } from "@/types/types";
+import { setBackgroundColor } from "../../redux/reducer";
 import { useRouter } from "next/navigation";
 
-import { useCreatePost, useGetS3SignedUrl } from "../../lib/api/apis";
-
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { setBackgroundColor } from "../../redux/reducer";
-
-export default function useWriter() {
+export default function useWriter(postId?: string | null) {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const getSignedUrl = useGetS3SignedUrl();
+  
+  // Get post data if editing
+  const { data: existingPost } = useGetPostById(postId || "");
 
   const categories = useAppSelector(
     (store) => (store as any).reducers.app.categories,
   );
 
   const initialForm = useMemo(
-    () => ({
-      publishedAt: new Date().toISOString(),
-      title: "",
-      content: "",
-      summary: "",
-      thumbnail: "",
-      referencePlace: "",
-      images: "",
-      attachFiles: "",
-      categoryId: "1",
-      subcategoryId: "1",
-    }),
-    [],
+    () => {
+      console.log("existingPost", existingPost);
+      
+      if (existingPost?.data) {
+        const post = existingPost.data;
+        return {
+          publishedAt: post.publishedAt || new Date().toISOString(),
+          title: post.title || "",
+          content: post.content || "",
+          summary: post.summary || "",
+          thumbnail: post.thumbnail || "",
+          referencePlace: post.referencePlace || "",
+          images: post.images || "",
+          attachFiles: post.attachFiles || "",
+          categoryId: post.categoryId?.toString() || "1",
+          subcategoryId: post.subcategoryId?.toString() || "1",
+        };
+      }
+      return {
+        publishedAt: new Date().toISOString(),
+        title: "",
+        content: "",
+        summary: "",
+        thumbnail: "",
+        referencePlace: "",
+        images: "",
+        attachFiles: "",
+        categoryId: "1",
+        subcategoryId: "1",
+      };
+    },
+    [existingPost],
   );
 
   const { mutate: createPost } = useCreatePost();
+  const { mutate: updatePost } = useUpdatePost();
 
   const [state, setState] = useState<AdminWriterPageState>(() => ({
-    date: new Date(),
+    date: existingPost?.data?.publishedAt ? new Date(existingPost.data.publishedAt) : new Date(),
     form: initialForm,
     categories: categories,
     category: categories[0],
@@ -60,14 +81,31 @@ export default function useWriter() {
   useEffect(() => {
     if (categories?.length > 0) {
       console.log(categories);
-      updateState({
-        categories: categories,
-        category: categories[0],
-        subCategories: categories[0]?.subCategories,
-        subCategory: categories[0]?.subCategories[0],
-      });
+      
+      // If editing an existing post, find the correct category and subcategory
+      if (existingPost?.data) {
+        const post = existingPost.data;
+        const selectedCategory = categories.find((cat: any) => cat.id === post.categoryId?.toString());
+        const selectedSubCategory = selectedCategory?.subCategories?.find((subCat: any) => subCat.id === post.subcategoryId?.toString());
+        
+        updateState({
+          categories: categories,
+          category: selectedCategory || categories[0],
+          subCategories: selectedCategory?.subCategories || categories[0]?.subCategories,
+          subCategory: selectedSubCategory || selectedCategory?.subCategories?.[0] || categories[0]?.subCategories?.[0],
+          form: initialForm,
+          date: post.publishedAt ? new Date(post.publishedAt) : new Date(),
+        });
+      } else {
+        updateState({
+          categories: categories,
+          category: categories[0],
+          subCategories: categories[0]?.subCategories,
+          subCategory: categories[0]?.subCategories[0],
+        });
+      }
     }
-  }, [categories, updateState]);
+  }, [categories, existingPost, initialForm, updateState]);
 
   const handleClickSubmit = useCallback(async () => {
     if (!state.form.title || !state.form.content) {
@@ -85,7 +123,9 @@ export default function useWriter() {
     updateState({ isUploading: true, progress: 0 });
 
     try {
-      let thumbnailUrl = "";
+      let thumbnailUrl = state.form.thumbnail; // 기존 썸네일 URL 유지
+      
+      // 새로운 썸네일 파일이 있는 경우에만 업로드
       if (state.thumbnailFile) {
         const formData = new FormData();
         formData.append("file", state.thumbnailFile.file);
@@ -98,18 +138,17 @@ export default function useWriter() {
         if (!response.ok) {
           throw new Error(`Upload failed: ${response.statusText}`);
         }
-        // https://s3-kuuu.s3.ap-northeast-2.amazonaws.com/${signedUrlData.key
         const data = await response.json();
         console.log("data", data);
         thumbnailUrl = data.url;
       }
 
-      const post = {
+      const postData = {
         title: state.form.title,
         publishedAt: state.date.toISOString(),
         content: state.form.content,
         summary: state.form.summary || "",
-        thumbnail: thumbnailUrl,
+        thumbnail: thumbnailUrl || "",
         referencePlace: state.form.referencePlace || "",
         images: state.form.images || "",
         attachFiles: state.form.attachFiles || "",
@@ -117,8 +156,31 @@ export default function useWriter() {
         subcategoryId: Number(state.form.subcategoryId),
         authorId: 1,
       };
-      console.log("createPost", post);
-      await createPost(post);
+
+      // 편집 모드인지 새 글 작성 모드인지 확인
+      if (postId && existingPost?.data) {
+        // 업데이트 모드
+        console.log("updatePost", postData);
+        await updatePost({ 
+          id: postId, 
+          data: {
+            title: postData.title,
+            content: postData.content,
+            summary: postData.summary,
+            thumbnail: postData.thumbnail,
+            referencePlace: postData.referencePlace,
+            images: postData.images,
+            attachFiles: postData.attachFiles,
+            categoryId: postData.categoryId,
+            subcategoryId: postData.subcategoryId,
+          }
+        });
+      } else {
+        // 생성 모드
+        console.log("createPost", postData);
+        await createPost(postData);
+      }
+      router.push("/");
     } catch (error) {
       console.error(error);
     } finally {
@@ -130,7 +192,7 @@ export default function useWriter() {
         form: initialForm,
       });
     }
-  }, [state.form, state.thumbnailFile, state.date, updateState, createPost, initialForm, isSubmitting]);
+  }, [state.form, state.thumbnailFile, state.date, updateState, createPost, updatePost, initialForm, isSubmitting, postId, existingPost]);
 
   const handleChangeCategory = useCallback(
     (value: string) => {
@@ -185,8 +247,12 @@ export default function useWriter() {
   const handleDeleteThumbnail = useCallback(() => {
     updateState({
       thumbnailFile: null,
+      form: {
+        ...state.form,
+        thumbnail: "",
+      },
     });
-  }, [updateState]);
+  }, [updateState, state.form]);
 
   const handleChangeTitle = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {

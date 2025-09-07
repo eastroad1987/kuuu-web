@@ -1,9 +1,10 @@
 'use client'
+
 import { configureStore } from "@reduxjs/toolkit";
 import reducers from "./reducers";
+import { setupListeners } from "@reduxjs/toolkit/query";
 // import { createLogger } from 'redux-logger';
 
-import { setupListeners } from "@reduxjs/toolkit/dist/query";
 
 // const logger = createLogger();
 

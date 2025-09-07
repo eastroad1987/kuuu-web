@@ -1,7 +1,7 @@
 "use client";
 
-import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { ApiResponse, PaginatedResponse } from "@/types/api";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 // 카테고리 조회
 export const useGetCategories = () => {
@@ -14,7 +14,6 @@ export const useGetCategories = () => {
           "Content-Type": "application/json",
         },
       });
-      console.log(response);
       if (!response.ok) {
         throw new Error("Failed to fetch categories");
       }
@@ -55,7 +54,6 @@ export const useGetPosts = (params?: {
     queryFn: async () => {
       const response = await fetch(`/api/posts?${queryParams.toString()}`);
       if (!response.ok) {
-        console.log(response);
         throw new Error("Failed to fetch posts");
       }
       return response.json();
@@ -122,8 +120,6 @@ export const useCreatePost = () => {
       subcategoryId: number;
       authorId: number;
     }) => {
-      console.log("data", data);
-      console.log("json", JSON.stringify(data));
       const response = await fetch("/api/posts", {
         method: "POST",
         headers: {
@@ -132,6 +128,7 @@ export const useCreatePost = () => {
         body: JSON.stringify(data),
       });
 
+      console.log(response);
       if (!response.ok) {
         throw new Error("Failed to create post");
       }
@@ -140,6 +137,9 @@ export const useCreatePost = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["posts"] });
+    },
+    onError: (error) => {
+      console.error("Failed to create post:", error);
     },
   });
 };

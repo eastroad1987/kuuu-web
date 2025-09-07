@@ -1,7 +1,8 @@
-import { CreatePostDto, PostResponse } from "./dto";
 import { Category, Post, SubCategory } from "./entities";
-import { Value } from "react-calendar/dist/cjs/shared/types";
+import { CreatePostDto, PostResponse } from "./dto";
+
 import React from "react";
+import { Value } from "react-calendar/dist/cjs/shared/types";
 
 /**
  * Represents the style properties for a card component.
@@ -163,6 +164,7 @@ export interface UsePostType {
   state: PostPageState;
   updateState: (updates: Partial<PostPageState>) => void;
   handlers: {
+    goEditPost: (postId: string) => void;
     toggleSideMenu: () => void;
     onSideMenuClose: () => void;
   };

@@ -1,0 +1,21 @@
+.quill-image-resize-overlay {
+  box-sizing: border-box;
+  z-index: 100;
+  pointer-events: none;
+}
+
+.quill-resize-handle {
+  box-sizing: border-box;
+  pointer-events: all;
+  z-index: 101;
+  transition: opacity 0.2s;
+}
+
+.quill-resize-handle:hover {
+  opacity: 0.8;
+}
+
+.quill-image-size {
+  z-index: 102;
+  pointer-events: none;
+}

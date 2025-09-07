@@ -1,4 +1,5 @@
 import { PrismaClient, YnEnum } from "@prisma/client";
+
 import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
@@ -92,6 +93,20 @@ async function main() {
     },
     {
       title: "Movie",
+      anonymousYn: YnEnum.N,
+      titleYn: YnEnum.Y,
+      contentYn: YnEnum.Y,
+      thumbnailYn: YnEnum.N,
+      referencePlaceYn: YnEnum.N,
+      secretYn: YnEnum.N,
+      imagesYn: YnEnum.Y,
+      attachFilesYn: YnEnum.N,
+      commentYn: YnEnum.N,
+      viewCntYn: YnEnum.Y,
+      categoryId: categoryMap["Musical&Movie"],
+    },
+    {
+      title: "Musical",
       anonymousYn: YnEnum.N,
       titleYn: YnEnum.Y,
       contentYn: YnEnum.Y,
